@@ -1,0 +1,1635 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Academic Crescent | Hadith Chain Builder</title>
+  <style>
+    :root {
+      --bg: #020303;
+      --bg-soft: #09110a;
+      --panel: rgba(10, 14, 10, 0.88);
+      --panel-strong: rgba(14, 20, 14, 0.97);
+      --line: rgba(210, 255, 109, 0.16);
+      --line-strong: rgba(210, 255, 109, 0.32);
+      --text: #f7fff2;
+      --muted: #9fb38f;
+      --neon: #d9ff57;
+      --neon-soft: rgba(217, 255, 87, 0.12);
+      --white-soft: rgba(255, 255, 255, 0.08);
+      --shadow: 0 26px 60px rgba(0, 0, 0, 0.46);
+      --node-width: 220px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top, rgba(217, 255, 87, 0.08), transparent 28%),
+        radial-gradient(circle at bottom right, rgba(217, 255, 87, 0.06), transparent 24%),
+        linear-gradient(160deg, #000 0%, #030504 50%, #020302 100%);
+    }
+
+    button, input, textarea, select { font: inherit; }
+    .page { max-width: 1500px; margin: 0 auto; padding: 22px; }
+
+    .shell, .hero, .panel, .canvas-panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+    }
+
+    .shell {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 22px;
+      margin-bottom: 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .logo-badge {
+      width: 74px;
+      height: 74px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 1px solid var(--line-strong);
+      box-shadow: 0 0 24px rgba(217, 255, 87, 0.2);
+      flex: 0 0 auto;
+      background: #000;
+    }
+
+    .logo-badge svg { width: 100%; height: 100%; display: block; }
+
+    .brand h1, .brand p, .hero h2, .hero p, .panel h3, .small, .meta, .node p, .node small {
+      margin: 0;
+    }
+
+    .brand h1 {
+      font-size: 1.32rem;
+      letter-spacing: 0.03em;
+    }
+
+    .brand p, .small, .meta, .node p, .node small, .helper {
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; }
+
+    .btn, .btn-primary, .mini-btn {
+      min-height: 44px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      cursor: pointer;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--text);
+      transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
+    }
+
+    .btn:hover, .btn-primary:hover, .mini-btn:hover {
+      transform: translateY(-1px);
+      border-color: var(--line-strong);
+      box-shadow: 0 0 20px rgba(217, 255, 87, 0.12);
+    }
+
+    .btn-primary {
+      color: #020302;
+      font-weight: 700;
+      border-color: transparent;
+      background: linear-gradient(135deg, #f5ffca 0%, var(--neon) 55%, #b8f13c 100%);
+    }
+
+    .mini-btn {
+      min-height: 38px;
+      padding: 8px 12px;
+      font-size: 0.92rem;
+    }
+
+    .hero-wrap {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .hero, .panel, .canvas-panel { padding: 24px; }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      color: var(--neon);
+      background: var(--neon-soft);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 0.82rem;
+      box-shadow: inset 0 0 0 1px rgba(217, 255, 87, 0.12);
+    }
+
+    .hero h2 {
+      margin: 18px 0 12px;
+      font-size: clamp(2.5rem, 5vw, 4.6rem);
+      line-height: 0.93;
+      max-width: 10ch;
+    }
+
+    .hero p { max-width: 62ch; }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .stat, .highlight, .preview, .narrator-item {
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.015));
+    }
+
+    .stat {
+      padding: 16px;
+      box-shadow: inset 0 0 0 1px rgba(217, 255, 87, 0.03);
+    }
+
+    .stat strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 1.55rem;
+      color: var(--neon);
+      text-shadow: 0 0 18px rgba(217, 255, 87, 0.22);
+    }
+
+    .highlights, .controls, .field-stack, .chip-editor, .preview-grid, .narrator-list, .age-stack, .matn-grid, .tab-panels {
+      display: grid;
+      gap: 14px;
+    }
+
+    .highlight { padding: 16px 18px; }
+    .highlight strong, .preview strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--neon);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 560px minmax(0, 1fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .form-section {
+      padding: 20px;
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.015));
+    }
+
+    .section-title {
+      display: block;
+      margin-bottom: 10px;
+      color: var(--neon);
+      font-size: 0.92rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .date-card {
+      padding: 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(217, 255, 87, 0.12);
+      background: rgba(255, 255, 255, 0.025);
+    }
+
+    .date-card > span {
+      display: block;
+      margin-bottom: 10px;
+      color: var(--text);
+      font-size: 0.92rem;
+    }
+
+    .calendar-choice {
+      margin-bottom: 12px;
+    }
+
+    .date-row-labels {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 8px;
+      color: var(--muted);
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .date-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      align-items: start;
+    }
+
+    .preview-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+      margin-top: 8px;
+      margin-bottom: 10px;
+    }
+
+    .preview {
+      padding: 20px;
+      min-height: 120px;
+    }
+
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .tab-btn {
+      min-height: 46px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--text);
+      cursor: pointer;
+      transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
+    }
+
+    .tab-btn.active {
+      background: rgba(217, 255, 87, 0.12);
+      border-color: var(--line-strong);
+      box-shadow: 0 0 20px rgba(217, 255, 87, 0.12);
+    }
+
+    .tab-panel[hidden] {
+      display: none;
+    }
+
+    .matn-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-top: 18px;
+    }
+
+    .matn-card {
+      padding: 16px;
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.015));
+    }
+
+    .matn-card strong {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--neon);
+    }
+
+    .matn-text {
+      white-space: pre-wrap;
+      line-height: 1.7;
+      color: var(--text);
+    }
+
+    .matn-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+      margin-bottom: 6px;
+    }
+
+    .legend-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .legend-swatch {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      flex: 0 0 auto;
+    }
+
+    .matn-token {
+      display: inline;
+      padding: 2px 4px;
+      border-radius: 6px;
+    }
+
+    .matn-same {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .matn-added {
+      color: #081004;
+      background: rgba(217, 255, 87, 0.9);
+      box-shadow: 0 0 12px rgba(217, 255, 87, 0.18);
+    }
+
+    .matn-removed {
+      color: #ffd9d9;
+      background: rgba(255, 99, 99, 0.16);
+      text-decoration: line-through;
+      text-decoration-thickness: 1.5px;
+    }
+
+    label {
+      display: grid;
+      gap: 8px;
+      font-size: 0.96rem;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      min-height: 48px;
+      padding: 12px 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(217, 255, 87, 0.16);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text);
+      outline: none;
+      transition: border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
+    }
+
+    textarea { min-height: 130px; resize: vertical; }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--line-strong);
+      box-shadow: 0 0 0 4px rgba(217, 255, 87, 0.11), 0 0 24px rgba(217, 255, 87, 0.08);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .input-row { display: flex; gap: 10px; align-items: stretch; }
+    .input-row input { flex: 1; }
+    .chip-list, .node-meta, .node-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+
+    .chip, .badge, .node-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 11px;
+      border-radius: 999px;
+      border: 1px solid rgba(217, 255, 87, 0.14);
+      background: rgba(217, 255, 87, 0.08);
+      color: #f3ffd1;
+      font-size: 0.84rem;
+    }
+
+    .shape-pill {
+      border-radius: 999px;
+    }
+
+    .shape-square {
+      border-radius: 10px;
+    }
+
+    .shape-diamond {
+      border-radius: 10px;
+      transform: rotate(-8deg);
+    }
+
+    .shape-diamond > span {
+      display: inline-block;
+      transform: rotate(8deg);
+    }
+
+    .chip button {
+      border: 0;
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+      padding: 0;
+      min-height: auto;
+    }
+
+    .canvas-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: start;
+      margin-bottom: 14px;
+    }
+
+    .canvas {
+      position: relative;
+      min-height: 780px;
+      overflow: hidden;
+      border-radius: 28px;
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(90deg, rgba(217, 255, 87, 0.06) 1px, transparent 1px),
+        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+        radial-gradient(circle at top, rgba(21, 29, 18, 0.92), rgba(3, 4, 3, 0.98));
+      background-size: 24px 24px, 24px 24px, cover;
+    }
+
+    .canvas.mega {
+      min-height: 1180px;
+    }
+
+    .canvas-panel.maximized {
+      position: fixed;
+      inset: 10px;
+      z-index: 50;
+      padding: 20px;
+      background: rgba(4, 6, 4, 0.98);
+      border-color: var(--line-strong);
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.72);
+    }
+
+    .canvas-panel.maximized .canvas.mega {
+      min-height: calc(100vh - 120px);
+      height: calc(100vh - 120px) !important;
+      width: 100% !important;
+    }
+
+    body.map-maximized {
+      overflow: hidden;
+    }
+
+    .canvas::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, transparent 48%, rgba(217, 255, 87, 0.04) 100%);
+      pointer-events: none;
+    }
+
+    .canvas svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: visible;
+    }
+
+    .chain-path {
+      fill: none;
+      stroke: rgba(217, 255, 87, 0.72);
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-dasharray: 7 8;
+      filter: drop-shadow(0 0 12px rgba(217, 255, 87, 0.24));
+    }
+
+    .node {
+      position: absolute;
+      width: var(--node-width);
+      padding: 14px;
+      border-radius: 24px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(16, 20, 16, 0.96), rgba(6, 8, 6, 0.96));
+      box-shadow: 0 22px 38px rgba(0, 0, 0, 0.42);
+      cursor: grab;
+      user-select: none;
+      touch-action: none;
+      transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+    }
+
+    .node:hover {
+      transform: translateY(-2px);
+      border-color: var(--line-strong);
+      box-shadow: 0 24px 40px rgba(0, 0, 0, 0.5), 0 0 18px rgba(217, 255, 87, 0.08);
+    }
+
+    .node.dragging {
+      cursor: grabbing;
+      transition: none;
+      border-color: rgba(217, 255, 87, 0.46);
+      box-shadow: 0 30px 50px rgba(0, 0, 0, 0.58), 0 0 28px rgba(217, 255, 87, 0.14);
+      z-index: 5;
+    }
+
+    .node-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: start;
+      margin-bottom: 8px;
+    }
+
+    .node h4, .empty-state h3 { margin: 0; }
+    .node-tags, .node-meta { margin-top: 10px; }
+
+    .node-details[hidden] {
+      display: none;
+    }
+
+    .node-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 10px;
+    }
+
+    .node-toggle {
+      min-height: 32px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(217, 255, 87, 0.18);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 0.82rem;
+    }
+
+    .empty-state {
+      position: absolute;
+      inset: 22px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 24px;
+      border-radius: 22px;
+      border: 1px dashed rgba(217, 255, 87, 0.24);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .narrator-item { padding: 14px 16px; }
+    .narrator-item strong { display: block; margin-bottom: 4px; }
+    .helper { font-size: 0.9rem; }
+
+    @media (max-width: 1200px) {
+      .hero-wrap, .layout { grid-template-columns: 1fr; }
+      .canvas { min-height: 700px; }
+    }
+
+    @media (max-width: 760px) {
+      .page { padding: 14px; }
+      .shell { flex-direction: column; align-items: start; }
+      .stats, .field-grid, .preview-grid, .matn-grid { grid-template-columns: 1fr; }
+      .date-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .form-section { padding: 14px; }
+      .preview { min-height: auto; }
+      .node { width: min(270px, calc(100vw - 54px)); }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="shell">
+      <div class="brand">
+        <div class="logo-badge" aria-hidden="true">
+          <svg viewBox="0 0 100 100" role="img">
+            <rect width="100" height="100" fill="#000"></rect>
+            <circle cx="50" cy="50" r="47" fill="none" stroke="rgba(217,255,87,0.1)" stroke-width="0.8"></circle>
+            <path d="M61 25a25 25 0 1 0 0 50a20 20 0 1 1 0-50z" fill="none" stroke="#d9ff57" stroke-width="5" stroke-linecap="round"></path>
+            <text x="50" y="15" fill="#efffb4" text-anchor="middle" font-size="7.5" letter-spacing="0.8">ACADEMIC</text>
+            <text x="50" y="90" fill="#efffb4" text-anchor="middle" font-size="7.5" letter-spacing="0.8">CRESCENT</text>
+            <circle cx="12" cy="50" r="3.2" fill="#d9ff57"></circle>
+            <circle cx="88" cy="50" r="3.2" fill="#d9ff57"></circle>
+          </svg>
+        </div>
+        <div>
+          <h1>Academic Crescent Hadith Chain Builder</h1>
+          <p>Build sanad chains with neon contrast, live age math, and a draggable spider map.</p>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn" id="demoBtn" type="button">Load example</button>
+        <button class="btn" id="clearBtn" type="button">Clear chain</button>
+      </div>
+    </header>
+
+    <section class="hero-wrap">
+      <section class="hero">
+        <span class="eyebrow">Sanad Workspace</span>
+        <h2>Trace narrators across time, place, and chain order.</h2>
+        <p>
+          Add narrators one by one, enter dates in Hijri or Gregorian form, record the cities they
+          travelled to, attach tags and notes, and then move every narrator freely on a connected
+          spider-chain canvas.
+        </p>
+        <div class="stats">
+          <div class="stat"><strong id="narratorCount">0</strong><span>Narrators</span></div>
+          <div class="stat"><strong id="locationCount">0</strong><span>Locations</span></div>
+          <div class="stat"><strong id="tagCount">0</strong><span>Tags</span></div>
+        </div>
+      </section>
+
+      <section class="panel highlights">
+        <div class="highlight">
+          <strong>Automatic age system</strong>
+          <span class="small">The site calculates age from full birth and death dates, even when the two dates use different calendars.</span>
+        </div>
+        <div class="highlight">
+          <strong>Multiple cities and custom tags</strong>
+          <span class="small">Add as many places, tags, and notes as you need for each narrator profile.</span>
+        </div>
+        <div class="highlight">
+          <strong>Smooth drag movement</strong>
+          <span class="small">Cards move smoothly and connector lines redraw live while you drag them around.</span>
+        </div>
+      </section>
+    </section>
+
+    <div class="tabs" aria-label="Workspace tabs">
+      <button class="tab-btn active" id="detailsTabBtn" type="button" data-tab="details">Details & Matn</button>
+      <button class="tab-btn" id="mapTabBtn" type="button" data-tab="map">Spider Chain Map</button>
+    </div>
+
+    <div class="tab-panels">
+      <section class="tab-panel" id="detailsPanel">
+        <section class="layout">
+          <section class="panel">
+            <div class="controls">
+              <div>
+                <h3>Add Narrator</h3>
+                <p class="small">Fill in the narrator details below and submit them in sanad order.</p>
+              </div>
+
+              <div class="form-section">
+                <span class="section-title">Core Details</span>
+                <div class="field-stack">
+                  <label>
+                    Narrator name
+                    <input id="nameInput" type="text" placeholder="Example: Malik ibn Anas" />
+                  </label>
+
+                  <label>
+                    Narrator status
+                    <input id="statusInput" type="text" placeholder="Optional: Thiqah, Saduq, Da'if" />
+                  </label>
+                </div>
+              </div>
+
+          <div class="form-section">
+            <span class="section-title">Age Details</span>
+            <label>
+              <span>Age tracking</span>
+              <select id="ageMode">
+                <option value="off">No age details</option>
+                <option value="on">Add birth and death dates</option>
+              </select>
+            </label>
+
+            <div class="age-stack" id="ageFields" hidden>
+              <div class="date-card">
+                <span>Birth date</span>
+                <label class="calendar-choice">
+                  Calendar choice for birth
+                  <select id="birthCalendar">
+                    <option value="gregorian">Gregorian / normal calendar</option>
+                    <option value="hijri">Hijri calendar</option>
+                  </select>
+                </label>
+                <div class="date-row-labels">
+                  <span>Day</span>
+                  <span>Month</span>
+                  <span>Year</span>
+                </div>
+                <div class="date-grid">
+                  <input id="birthDay" type="number" min="1" max="31" placeholder="Day" />
+                  <input id="birthMonth" type="number" min="1" max="12" placeholder="Month" />
+                  <input id="birthYear" type="number" placeholder="Year" />
+                </div>
+              </div>
+
+              <div class="date-card">
+                <span>Death date</span>
+                <label class="calendar-choice">
+                  Calendar choice for death
+                  <select id="deathCalendar">
+                    <option value="gregorian">Gregorian / normal calendar</option>
+                    <option value="hijri">Hijri calendar</option>
+                  </select>
+                </label>
+                <div class="date-row-labels">
+                  <span>Day</span>
+                  <span>Month</span>
+                  <span>Year</span>
+                </div>
+                <div class="date-grid">
+                  <input id="deathDay" type="number" min="1" max="31" placeholder="Day" />
+                  <input id="deathMonth" type="number" min="1" max="12" placeholder="Month" />
+                  <input id="deathYear" type="number" placeholder="Year" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="preview-grid" id="agePreviewGrid" hidden>
+            <div class="preview">
+              <strong>Solar age</strong>
+              <div id="ageGregorianPreview">Enter full birth and death dates.</div>
+            </div>
+            <div class="preview">
+              <strong>Hijri age</strong>
+              <div id="ageHijriPreview">The app will compute this automatically.</div>
+            </div>
+          </div>
+
+          <div class="chip-editor form-section">
+            <span class="section-title">Locations</span>
+            <label>
+              Travel locations or cities
+              <div class="input-row">
+                <input id="locationInput" type="text" placeholder="Add one city, then press Add" />
+                <button class="mini-btn" id="addLocationBtn" type="button">Add city</button>
+              </div>
+            </label>
+            <div class="chip-list" id="locationChips"></div>
+          </div>
+
+          <div class="chip-editor form-section">
+            <span class="section-title">Tags</span>
+            <label>
+              Tags
+              <div class="input-row">
+                <input id="tagInput" type="text" placeholder="Write the tag name here" />
+                <select id="tagShapeSelect" style="max-width: 150px;">
+                  <option value="pill">Pill</option>
+                  <option value="square">Square</option>
+                  <option value="diamond">Diamond</option>
+                </select>
+                <button class="mini-btn" id="addTagBtn" type="button">Add tag</button>
+              </div>
+            </label>
+            <div class="chip-list" id="tagChips"></div>
+          </div>
+
+          <div class="form-section">
+            <span class="section-title">Matn</span>
+            <label>
+              Narrator matn
+              <textarea id="matnInput" placeholder="Add the matn or wording connected to this narrator..."></textarea>
+            </label>
+          </div>
+
+          <div class="form-section">
+            <span class="section-title">Notes</span>
+            <label>
+              Extra notes
+              <textarea id="notesInput" placeholder="Add source notes, biographical remarks, or relationship notes..."></textarea>
+            </label>
+          </div>
+
+              <div class="actions">
+                <button class="btn-primary" id="submitBtn" type="button">Add narrator to chain</button>
+                <button class="btn" id="resetFormBtn" type="button">Reset form</button>
+              </div>
+              <p class="helper">The first narrator starts the chain. Each new narrator connects to the narrator added right before it.</p>
+            </div>
+
+            <div class="controls" style="margin-top: 22px;">
+              <div>
+                <h3>Chain Summary</h3>
+                <p class="small">Narrators are listed here in the same order they are connected on the canvas.</p>
+              </div>
+              <div class="narrator-list" id="narratorList"></div>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div>
+              <h3>Matn Alignment System</h3>
+              <p class="small">Every narrator matn appears here so you can compare wording differences across the whole chain.</p>
+            </div>
+            <div class="matn-grid" id="matnAlignment"></div>
+          </section>
+        </section>
+      </section>
+
+      <section class="tab-panel" id="mapPanel" hidden>
+        <section class="canvas-panel" id="mapCanvasPanel">
+          <div class="canvas-head">
+            <div>
+              <h3>Spider Chain Map</h3>
+              <p class="small">This tab gives the chain its own much larger space so you can drag narrators around freely.</p>
+            </div>
+            <div class="actions">
+              <button class="btn" id="maximizeMapBtn" type="button">Max map</button>
+            </div>
+          </div>
+          <div class="canvas mega" id="canvas">
+            <svg id="chainSvg" aria-hidden="true"></svg>
+            <div class="empty-state" id="emptyState">
+              <div>
+                <h3 style="margin-bottom: 8px;">No narrators yet</h3>
+                <p class="small">Add your first narrator from the details tab to start the sanad map.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "hadith-chain-builder-v2";
+    const state = {
+      narrators: [],
+      draftLocations: [],
+      draftTags: []
+    };
+
+    const els = {
+      detailsTabBtn: document.getElementById("detailsTabBtn"),
+      mapTabBtn: document.getElementById("mapTabBtn"),
+      detailsPanel: document.getElementById("detailsPanel"),
+      mapPanel: document.getElementById("mapPanel"),
+      mapCanvasPanel: document.getElementById("mapCanvasPanel"),
+      maximizeMapBtn: document.getElementById("maximizeMapBtn"),
+      canvas: document.getElementById("canvas"),
+      chainSvg: document.getElementById("chainSvg"),
+      emptyState: document.getElementById("emptyState"),
+      narratorList: document.getElementById("narratorList"),
+      matnAlignment: document.getElementById("matnAlignment"),
+      narratorCount: document.getElementById("narratorCount"),
+      locationCount: document.getElementById("locationCount"),
+      tagCount: document.getElementById("tagCount"),
+      nameInput: document.getElementById("nameInput"),
+      statusInput: document.getElementById("statusInput"),
+      ageMode: document.getElementById("ageMode"),
+      ageFields: document.getElementById("ageFields"),
+      agePreviewGrid: document.getElementById("agePreviewGrid"),
+      birthCalendar: document.getElementById("birthCalendar"),
+      birthDay: document.getElementById("birthDay"),
+      birthMonth: document.getElementById("birthMonth"),
+      birthYear: document.getElementById("birthYear"),
+      deathCalendar: document.getElementById("deathCalendar"),
+      deathDay: document.getElementById("deathDay"),
+      deathMonth: document.getElementById("deathMonth"),
+      deathYear: document.getElementById("deathYear"),
+      ageGregorianPreview: document.getElementById("ageGregorianPreview"),
+      ageHijriPreview: document.getElementById("ageHijriPreview"),
+      locationInput: document.getElementById("locationInput"),
+      addLocationBtn: document.getElementById("addLocationBtn"),
+      locationChips: document.getElementById("locationChips"),
+      tagInput: document.getElementById("tagInput"),
+      tagShapeSelect: document.getElementById("tagShapeSelect"),
+      addTagBtn: document.getElementById("addTagBtn"),
+      tagChips: document.getElementById("tagChips"),
+      matnInput: document.getElementById("matnInput"),
+      notesInput: document.getElementById("notesInput"),
+      submitBtn: document.getElementById("submitBtn"),
+      resetFormBtn: document.getElementById("resetFormBtn"),
+      clearBtn: document.getElementById("clearBtn"),
+      demoBtn: document.getElementById("demoBtn")
+    };
+
+    let mapMaximized = false;
+
+    function switchTab(tabName) {
+      const showMap = tabName === "map";
+      els.detailsPanel.hidden = showMap;
+      els.mapPanel.hidden = !showMap;
+      els.detailsTabBtn.classList.toggle("active", !showMap);
+      els.mapTabBtn.classList.toggle("active", showMap);
+
+      if (showMap) {
+        requestAnimationFrame(() => {
+          renderCanvas();
+        });
+      }
+    }
+
+    function setMapMaximized(nextValue) {
+      mapMaximized = nextValue;
+      document.body.classList.toggle("map-maximized", mapMaximized);
+      els.mapCanvasPanel.classList.toggle("maximized", mapMaximized);
+      els.maximizeMapBtn.textContent = mapMaximized ? "Exit max map" : "Max map";
+      if (mapMaximized && els.mapCanvasPanel.requestFullscreen) {
+        els.mapCanvasPanel.requestFullscreen().catch(() => {});
+      } else if (!mapMaximized && document.fullscreenElement) {
+        document.exitFullscreen().catch(() => {});
+      }
+      requestAnimationFrame(() => {
+        renderCanvas();
+      });
+    }
+
+    function gregorianToJdn(year, month, day) {
+      const a = Math.floor((14 - month) / 12);
+      const y = year + 4800 - a;
+      const m = month + 12 * a - 3;
+      return day + Math.floor((153 * m + 2) / 5) + 365 * y + Math.floor(y / 4) - Math.floor(y / 100) + Math.floor(y / 400) - 32045;
+    }
+
+    function hijriToJdn(year, month, day) {
+      return day + Math.ceil(29.5 * (month - 1)) + (year - 1) * 354 + Math.floor((3 + 11 * year) / 30) + 1948439;
+    }
+
+    function jdnToGregorian(jdn) {
+      let a = jdn + 32044;
+      let b = Math.floor((4 * a + 3) / 146097);
+      let c = a - Math.floor((146097 * b) / 4);
+      let d = Math.floor((4 * c + 3) / 1461);
+      let e = c - Math.floor((1461 * d) / 4);
+      let m = Math.floor((5 * e + 2) / 153);
+      const day = e - Math.floor((153 * m + 2) / 5) + 1;
+      const month = m + 3 - 12 * Math.floor(m / 10);
+      const year = 100 * b + d - 4800 + Math.floor(m / 10);
+      return { year, month, day };
+    }
+
+    function jdnToHijri(jdn) {
+      const year = Math.floor((30 * (jdn - 1948439) + 10646) / 10631);
+      const first = hijriToJdn(year, 1, 1);
+      const rawMonth = Math.ceil((jdn - 29 - first) / 29.5) + 1;
+      const month = Math.max(1, Math.min(12, rawMonth));
+      const day = jdn - hijriToJdn(year, month, 1) + 1;
+      return { year, month, day };
+    }
+
+    function isValidDateParts(parts) {
+      return Number.isInteger(parts.year) && Number.isInteger(parts.month) && Number.isInteger(parts.day) &&
+        parts.month >= 1 && parts.month <= 12 && parts.day >= 1 && parts.day <= 31;
+    }
+
+    function parseDateParts(prefix) {
+      return {
+        calendar: els[prefix + "Calendar"].value,
+        day: Number.parseInt(els[prefix + "Day"].value, 10),
+        month: Number.parseInt(els[prefix + "Month"].value, 10),
+        year: Number.parseInt(els[prefix + "Year"].value, 10)
+      };
+    }
+
+    function hasAnyDateInput(prefix) {
+      return Boolean(
+        els[prefix + "Day"].value.trim() ||
+        els[prefix + "Month"].value.trim() ||
+        els[prefix + "Year"].value.trim()
+      );
+    }
+
+    function toJdn(parts) {
+      if (!isValidDateParts(parts)) {
+        return null;
+      }
+      return parts.calendar === "hijri"
+        ? hijriToJdn(parts.year, parts.month, parts.day)
+        : gregorianToJdn(parts.year, parts.month, parts.day);
+    }
+
+    function isGregorianLeapYear(year) {
+      return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
+    }
+
+    function getGregorianMonthLength(year, month) {
+      const monthLengths = [31, isGregorianLeapYear(year) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+      return monthLengths[month - 1] || 30;
+    }
+
+    function isHijriLeapYear(year) {
+      return ((11 * year) + 14) % 30 < 11;
+    }
+
+    function getHijriMonthLength(year, month) {
+      if (month === 12) {
+        return isHijriLeapYear(year) ? 30 : 29;
+      }
+      return month % 2 === 1 ? 30 : 29;
+    }
+
+    function diffYmd(start, end, monthLengthGetter) {
+      let years = end.year - start.year;
+      let months = end.month - start.month;
+      let days = end.day - start.day;
+      if (days < 0) {
+        months -= 1;
+        const borrowMonth = end.month === 1 ? 12 : end.month - 1;
+        const borrowYear = end.month === 1 ? end.year - 1 : end.year;
+        days += monthLengthGetter(borrowYear, borrowMonth);
+      }
+      if (months < 0) {
+        years -= 1;
+        months += 12;
+      }
+      return { years, months, days };
+    }
+
+    function formatAge(diff, unit) {
+      if (diff.years < 0 || diff.months < 0 || diff.days < 0) {
+        return "Death date must be after birth date.";
+      }
+      return diff.years + " " + unit + " years, " + diff.months + " months, " + diff.days + " days";
+    }
+
+    function calculateAges() {
+      const birth = parseDateParts("birth");
+      const death = parseDateParts("death");
+      const birthJdn = toJdn(birth);
+      const deathJdn = toJdn(death);
+      if (!birthJdn || !deathJdn) {
+        return null;
+      }
+      if (deathJdn < birthJdn) {
+        return {
+          gregorianText: "Death date must be after birth date.",
+          hijriText: "Death date must be after birth date."
+        };
+      }
+      const birthGregorian = jdnToGregorian(birthJdn);
+      const deathGregorian = jdnToGregorian(deathJdn);
+      const birthHijri = jdnToHijri(birthJdn);
+      const deathHijri = jdnToHijri(deathJdn);
+      return {
+        gregorianText: formatAge(diffYmd(birthGregorian, deathGregorian, getGregorianMonthLength), "solar"),
+        hijriText: formatAge(diffYmd(birthHijri, deathHijri, getHijriMonthLength), "Hijri"),
+        birthJdn,
+        deathJdn
+      };
+    }
+
+    function updateAgePreview() {
+      const ageEnabled = els.ageMode.value === "on";
+      els.ageFields.hidden = !ageEnabled;
+      els.agePreviewGrid.hidden = !ageEnabled;
+
+      if (!ageEnabled) {
+        els.ageGregorianPreview.textContent = "Age tracking is turned off for this narrator.";
+        els.ageHijriPreview.textContent = "Turn it on if you want to add birth and death dates.";
+        return;
+      }
+
+      const ages = calculateAges();
+      if (!ages) {
+        els.ageGregorianPreview.textContent = "Enter full birth and death dates.";
+        els.ageHijriPreview.textContent = "The app will compute this automatically.";
+        return;
+      }
+      els.ageGregorianPreview.textContent = ages.gregorianText;
+      els.ageHijriPreview.textContent = ages.hijriText;
+    }
+
+    function escapeHtml(value) {
+      return value
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+    }
+
+    function normalizeTag(tag) {
+      if (typeof tag === "string") {
+        return { label: tag, shape: "pill" };
+      }
+      return {
+        label: tag && typeof tag.label === "string" ? tag.label : "",
+        shape: tag && typeof tag.shape === "string" ? tag.shape : "pill"
+      };
+    }
+
+    function renderTagMarkup(tag, className) {
+      const normalized = normalizeTag(tag);
+      return `<span class="${className} shape-${escapeHtml(normalized.shape)}"><span>${escapeHtml(normalized.label)}</span></span>`;
+    }
+
+    function renderDraftChips(type) {
+      const target = type === "location" ? els.locationChips : els.tagChips;
+      const items = type === "location" ? state.draftLocations : state.draftTags;
+      target.innerHTML = "";
+      items.forEach((item, index) => {
+        const chip = document.createElement("span");
+        chip.className = "chip";
+        if (type === "tag") {
+          const tag = normalizeTag(item);
+          chip.classList.add("shape-" + tag.shape);
+          chip.innerHTML = '<span>' + escapeHtml(tag.label) + '</span><button type="button" data-type="' + type + '" data-index="' + index + '">x</button>';
+        } else {
+          chip.innerHTML = '<span>' + escapeHtml(item) + '</span><button type="button" data-type="' + type + '" data-index="' + index + '">x</button>';
+        }
+        target.appendChild(chip);
+      });
+    }
+
+    function addDraftItem(type) {
+      const input = type === "location" ? els.locationInput : els.tagInput;
+      const collection = type === "location" ? state.draftLocations : state.draftTags;
+      const value = input.value.trim();
+      if (!value) {
+        return;
+      }
+      if (type === "tag") {
+        collection.push({ label: value, shape: els.tagShapeSelect.value });
+      } else {
+        collection.push(value);
+      }
+      input.value = "";
+      renderDraftChips(type);
+      updateStats();
+    }
+
+    function removeDraftItem(type, index) {
+      const collection = type === "location" ? state.draftLocations : state.draftTags;
+      collection.splice(index, 1);
+      renderDraftChips(type);
+      updateStats();
+    }
+
+    function getDefaultPosition(index) {
+      const width = els.canvas.clientWidth || 900;
+      const laneWidth = Math.max(width - 340, 280);
+      return {
+        x: 36 + (index % 3) * (laneWidth / 2.25),
+        y: 42 + index * 122
+      };
+    }
+
+    function formatDate(parts) {
+      return parts.day + "/" + parts.month + "/" + parts.year + " " + (parts.calendar === "hijri" ? "AH" : "CE");
+    }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ narrators: state.narrators }));
+    }
+
+    function loadState() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) {
+        return;
+      }
+      try {
+        const parsed = JSON.parse(raw);
+        state.narrators = Array.isArray(parsed.narrators) ? parsed.narrators : [];
+      } catch (error) {
+        console.error("Unable to load chain", error);
+      }
+    }
+
+    function resetForm() {
+      els.nameInput.value = "";
+      els.statusInput.value = "";
+      els.ageMode.value = "off";
+      els.birthCalendar.value = "gregorian";
+      els.birthDay.value = "";
+      els.birthMonth.value = "";
+      els.birthYear.value = "";
+      els.deathCalendar.value = "gregorian";
+      els.deathDay.value = "";
+      els.deathMonth.value = "";
+      els.deathYear.value = "";
+      els.matnInput.value = "";
+      els.notesInput.value = "";
+      els.locationInput.value = "";
+      els.tagInput.value = "";
+      els.tagShapeSelect.value = "pill";
+      state.draftLocations = [];
+      state.draftTags = [];
+      renderDraftChips("location");
+      renderDraftChips("tag");
+      updateAgePreview();
+      updateStats();
+    }
+
+    function updateStats() {
+      const narratorTotal = state.narrators.length;
+      const locationTotal = state.narrators.reduce((sum, narrator) => sum + narrator.locations.length, 0) + state.draftLocations.length;
+      const tagTotal = state.narrators.reduce((sum, narrator) => sum + narrator.tags.length, 0) + state.draftTags.length;
+      els.narratorCount.textContent = String(narratorTotal);
+      els.locationCount.textContent = String(locationTotal);
+      els.tagCount.textContent = String(tagTotal);
+    }
+
+    function serializeForm() {
+      const name = els.nameInput.value.trim();
+      const status = els.statusInput.value.trim() || "Not specified";
+      const matn = els.matnInput.value.trim();
+      const notes = els.notesInput.value.trim();
+      const ageEnabled = els.ageMode.value === "on";
+      const birth = parseDateParts("birth");
+      const death = parseDateParts("death");
+      const ageData = ageEnabled ? calculateAges() : null;
+      if (!name) {
+        window.alert("Please enter the narrator name.");
+        return null;
+      }
+
+      if (ageEnabled) {
+        if (!hasAnyDateInput("birth") && !hasAnyDateInput("death")) {
+          window.alert("Add the birth and death dates, or switch age tracking off.");
+          return null;
+        }
+        if (!ageData) {
+          window.alert("Please enter complete birth and death dates.");
+          return null;
+        }
+        if (ageData.birthJdn > ageData.deathJdn) {
+          window.alert("Death date must be after birth date.");
+          return null;
+        }
+      }
+
+      const pos = getDefaultPosition(state.narrators.length);
+      return {
+        id: "narrator-" + Date.now() + "-" + Math.random().toString(16).slice(2),
+        name,
+        status,
+        matn,
+        notes,
+        birth: ageEnabled ? birth : null,
+        death: ageEnabled ? death : null,
+        locations: [...state.draftLocations],
+        tags: [...state.draftTags],
+        ages: ageEnabled ? {
+          gregorian: ageData.gregorianText,
+          hijri: ageData.hijriText
+        } : null,
+        x: pos.x,
+        y: pos.y
+      };
+    }
+
+    function clamp(value, min, max) {
+      return Math.min(Math.max(value, min), max);
+    }
+
+    function getNodeCenter(narrator) {
+      return {
+        x: narrator.x + 110,
+        y: narrator.y + 92
+      };
+    }
+
+    function updateCanvasSize() {
+      const minWidth = els.mapPanel.hidden ? 900 : Math.max(els.mapPanel.clientWidth - 48, 900);
+      const minHeight = 1180;
+      let maxRight = minWidth;
+      let maxBottom = minHeight;
+
+      state.narrators.forEach((narrator) => {
+        maxRight = Math.max(maxRight, narrator.x + 320);
+        maxBottom = Math.max(maxBottom, narrator.y + 320);
+      });
+
+      els.canvas.style.width = maxRight + "px";
+      els.canvas.style.minHeight = maxBottom + "px";
+      els.canvas.style.height = maxBottom + "px";
+    }
+
+    function renderConnections() {
+      updateCanvasSize();
+      const width = els.canvas.scrollWidth;
+      const height = els.canvas.scrollHeight;
+      els.chainSvg.setAttribute("viewBox", "0 0 " + width + " " + height);
+      els.chainSvg.setAttribute("width", width);
+      els.chainSvg.setAttribute("height", height);
+      els.chainSvg.innerHTML = "";
+      for (let i = 1; i < state.narrators.length; i += 1) {
+        const start = getNodeCenter(state.narrators[i - 1]);
+        const end = getNodeCenter(state.narrators[i]);
+        const dx = Math.max(100, Math.abs(end.x - start.x) * 0.42);
+        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        path.setAttribute("class", "chain-path");
+        path.setAttribute("d", "M " + start.x + " " + start.y + " C " + (start.x + dx) + " " + start.y + ", " + (end.x - dx) + " " + end.y + ", " + end.x + " " + end.y);
+        els.chainSvg.appendChild(path);
+      }
+    }
+
+    function enableDragging(node, narrator) {
+      let offsetX = 0;
+      let offsetY = 0;
+
+      function handleMove(event) {
+        const rect = els.canvas.getBoundingClientRect();
+        narrator.x = Math.max(12, event.clientX - rect.left - offsetX);
+        narrator.y = Math.max(12, event.clientY - rect.top - offsetY);
+        node.style.left = narrator.x + "px";
+        node.style.top = narrator.y + "px";
+        renderConnections();
+      }
+
+      function handleUp() {
+        node.classList.remove("dragging");
+        window.removeEventListener("pointermove", handleMove);
+        window.removeEventListener("pointerup", handleUp);
+        saveState();
+      }
+
+      node.addEventListener("pointerdown", (event) => {
+        if (event.button !== 0) {
+          return;
+        }
+        const rect = node.getBoundingClientRect();
+        offsetX = event.clientX - rect.left;
+        offsetY = event.clientY - rect.top;
+        node.classList.add("dragging");
+        window.addEventListener("pointermove", handleMove);
+        window.addEventListener("pointerup", handleUp, { once: true });
+      });
+    }
+
+    function buildNode(narrator, index) {
+      const node = document.createElement("article");
+      node.className = "node";
+      node.style.left = narrator.x + "px";
+      node.style.top = narrator.y + "px";
+      const isExpanded = narrator.expanded === true;
+      const ageMarkup = narrator.ages ? `
+        <p>${escapeHtml(narrator.ages.gregorian)}</p>
+        <div class="node-meta">
+          <span class="badge">${escapeHtml(formatDate(narrator.birth))}</span>
+          <span class="badge">${escapeHtml(formatDate(narrator.death))}</span>
+        </div>
+        <div class="node-meta">
+          <span class="badge">${escapeHtml(narrator.ages.hijri)}</span>
+        </div>
+      ` : `<p>No age details added.</p>`;
+      const matnMarkup = narrator.matn ? `<p style="margin-top: 12px;"><strong style="color: var(--neon); display: block; margin-bottom: 6px;">Matn</strong>${escapeHtml(narrator.matn)}</p>` : "";
+      node.innerHTML = `
+        <div class="node-top">
+          <div>
+            <small>#${index + 1} in chain</small>
+            <h4>${escapeHtml(narrator.name)}</h4>
+          </div>
+          <span class="badge">${escapeHtml(narrator.status)}</span>
+        </div>
+        <p>${narrator.locations.length} locations, ${narrator.tags.length} tags</p>
+        <div class="node-details" ${isExpanded ? "" : "hidden"}>
+          ${ageMarkup}
+          ${narrator.locations.length ? `<div class="node-meta">${narrator.locations.map((location) => `<span class="badge">${escapeHtml(location)}</span>`).join("")}</div>` : ""}
+          ${narrator.tags.length ? `<div class="node-tags">${narrator.tags.map((tag) => renderTagMarkup(tag, "node-tag")).join("")}</div>` : ""}
+          ${matnMarkup}
+          ${narrator.notes ? `<p style="margin-top: 12px;">${escapeHtml(narrator.notes)}</p>` : ""}
+        </div>
+        <div class="node-actions">
+          <button class="node-toggle" type="button">${isExpanded ? "Hide details" : "Show details"}</button>
+        </div>
+      `;
+      const toggle = node.querySelector(".node-toggle");
+      toggle.addEventListener("click", (event) => {
+        event.stopPropagation();
+        narrator.expanded = !narrator.expanded;
+        renderCanvas();
+      });
+      enableDragging(node, narrator);
+      return node;
+    }
+
+    function renderList() {
+      els.narratorList.innerHTML = "";
+      if (!state.narrators.length) {
+        els.narratorList.innerHTML = '<div class="narrator-item"><strong>Chain is empty</strong><span class="small">Your narrator list will appear here after you start adding entries.</span></div>';
+        return;
+      }
+      state.narrators.forEach((narrator, index) => {
+        const item = document.createElement("div");
+        item.className = "narrator-item";
+        item.innerHTML = `
+          <strong>${index + 1}. ${escapeHtml(narrator.name)}</strong>
+          <div class="small">Status: ${escapeHtml(narrator.status)}</div>
+          <div class="small">${narrator.ages ? "Solar age: " + escapeHtml(narrator.ages.gregorian) : "No age details added."}</div>
+          <div class="small">${narrator.ages ? "Hijri age: " + escapeHtml(narrator.ages.hijri) : "Dates were left optional for this narrator."}</div>
+          <div class="small">${narrator.matn ? "Matn added for comparison." : "No matn added."}</div>
+        `;
+        els.narratorList.appendChild(item);
+      });
+    }
+
+    function tokenizeMatn(text) {
+      return text.trim().split(/\s+/).filter(Boolean);
+    }
+
+    function buildMatnDiff(referenceText, currentText) {
+      const referenceTokens = tokenizeMatn(referenceText);
+      const currentTokens = tokenizeMatn(currentText);
+      const rows = Array.from({ length: referenceTokens.length + 1 }, () => Array(currentTokens.length + 1).fill(0));
+
+      for (let i = 1; i <= referenceTokens.length; i += 1) {
+        for (let j = 1; j <= currentTokens.length; j += 1) {
+          if (referenceTokens[i - 1] === currentTokens[j - 1]) {
+            rows[i][j] = rows[i - 1][j - 1] + 1;
+          } else {
+            rows[i][j] = Math.max(rows[i - 1][j], rows[i][j - 1]);
+          }
+        }
+      }
+
+      const segments = [];
+      let i = referenceTokens.length;
+      let j = currentTokens.length;
+
+      while (i > 0 && j > 0) {
+        if (referenceTokens[i - 1] === currentTokens[j - 1]) {
+          segments.unshift({ type: "same", text: currentTokens[j - 1] });
+          i -= 1;
+          j -= 1;
+        } else if (rows[i][j - 1] >= rows[i - 1][j]) {
+          segments.unshift({ type: "added", text: currentTokens[j - 1] });
+          j -= 1;
+        } else {
+          segments.unshift({ type: "removed", text: referenceTokens[i - 1] });
+          i -= 1;
+        }
+      }
+
+      while (j > 0) {
+        segments.unshift({ type: "added", text: currentTokens[j - 1] });
+        j -= 1;
+      }
+
+      while (i > 0) {
+        segments.unshift({ type: "removed", text: referenceTokens[i - 1] });
+        i -= 1;
+      }
+
+      return segments.map((segment) => `<span class="matn-token matn-${segment.type}">${escapeHtml(segment.text)}</span>`).join(" ");
+    }
+
+    function renderMatnAlignment() {
+      els.matnAlignment.innerHTML = "";
+      if (!state.narrators.length || !state.narrators.some((narrator) => narrator.matn)) {
+        els.matnAlignment.innerHTML = '<div class="matn-card"><strong>No matn added yet</strong><div class="small">Add matn under a narrator and it will appear here for comparison.</div></div>';
+        return;
+      }
+
+      const referenceNarrator = state.narrators.find((narrator) => narrator.matn);
+      const legend = document.createElement("div");
+      legend.className = "matn-card";
+      legend.innerHTML = `
+        <strong>Color Key</strong>
+        <div class="small">The first narrator with matn is used as the reference text for comparison.</div>
+        <div class="matn-legend">
+          <span class="legend-chip"><span class="legend-swatch" style="background: rgba(255,255,255,0.18);"></span>Same wording</span>
+          <span class="legend-chip"><span class="legend-swatch" style="background: rgba(217,255,87,0.9);"></span>Added or changed wording</span>
+          <span class="legend-chip"><span class="legend-swatch" style="background: rgba(255,99,99,0.42);"></span>Missing from this matn</span>
+        </div>
+        <div class="small">Reference narrator: ${escapeHtml(referenceNarrator.name)}</div>
+      `;
+      els.matnAlignment.appendChild(legend);
+
+      state.narrators.forEach((narrator, index) => {
+        const item = document.createElement("div");
+        item.className = "matn-card";
+        const matnBody = narrator.matn
+          ? buildMatnDiff(referenceNarrator.matn, narrator.matn)
+          : '<span class="small">No matn recorded for this narrator.</span>';
+        item.innerHTML = `
+          <strong>${index + 1}. ${escapeHtml(narrator.name)}</strong>
+          <div class="small">Status: ${escapeHtml(narrator.status)}</div>
+          <div class="matn-text">${matnBody}</div>
+        `;
+        els.matnAlignment.appendChild(item);
+      });
+    }
+
+    function renderCanvas() {
+      Array.from(els.canvas.querySelectorAll(".node")).forEach((node) => node.remove());
+      els.emptyState.hidden = state.narrators.length > 0;
+      state.narrators.forEach((narrator, index) => {
+        els.canvas.appendChild(buildNode(narrator, index));
+      });
+      renderConnections();
+      renderList();
+      renderMatnAlignment();
+      updateStats();
+      saveState();
+    }
+
+    function addNarrator() {
+      const narrator = serializeForm();
+      if (!narrator) {
+        return;
+      }
+      state.narrators.push(narrator);
+      resetForm();
+      renderCanvas();
+    }
+
+    function clearChain() {
+      state.narrators = [];
+      saveState();
+      renderCanvas();
+    }
+
+    function loadDemo() {
+      state.narrators = [
+        {
+          id: "demo-1",
+          name: "Nafi'",
+          status: "Thiqah",
+          matn: "Sample matn wording for the first narrator in the chain.",
+          notes: "A sample narrator to demonstrate the chain layout.",
+          birth: { calendar: "gregorian", day: 1, month: 1, year: 689 },
+          death: { calendar: "gregorian", day: 1, month: 1, year: 767 },
+          locations: ["Madinah", "Makkah"],
+          tags: [{ label: "Teacher", shape: "pill" }, { label: "Primary Link", shape: "square" }],
+          ages: { gregorian: "78 solar years, 0 months, 0 days", hijri: "80 Hijri years, 4 months, 13 days" },
+          x: 42,
+          y: 70
+        },
+        {
+          id: "demo-2",
+          name: "Malik ibn Anas",
+          status: "Imam, Hujjah",
+          matn: "A second matn version to compare wording and differences.",
+          notes: "Known for the Muwatta and the Madinan chain.",
+          birth: { calendar: "gregorian", day: 1, month: 1, year: 711 },
+          death: { calendar: "gregorian", day: 1, month: 1, year: 795 },
+          locations: ["Madinah"],
+          tags: [{ label: "Muwatta", shape: "diamond" }, { label: "Fiqh", shape: "pill" }],
+          ages: { gregorian: "84 solar years, 0 months, 0 days", hijri: "86 Hijri years, 7 months, 21 days" },
+          x: 360,
+          y: 214
+        },
+        {
+          id: "demo-3",
+          name: "Al-Shafi'i",
+          status: "Imam, Thiqah",
+          matn: "A third matn sample showing how the alignment system compares reports.",
+          notes: "Travel-based sample showing multi-city movement.",
+          birth: { calendar: "gregorian", day: 1, month: 1, year: 767 },
+          death: { calendar: "gregorian", day: 1, month: 1, year: 820 },
+          locations: ["Makkah", "Baghdad", "Egypt"],
+          tags: [{ label: "Usul", shape: "square" }, { label: "Travel", shape: "diamond" }],
+          ages: { gregorian: "53 solar years, 0 months, 0 days", hijri: "54 Hijri years, 7 months, 9 days" },
+          x: 144,
+          y: 416
+        }
+      ];
+      renderCanvas();
+    }
+
+    [
+      els.ageMode,
+      els.birthCalendar,
+      els.birthDay,
+      els.birthMonth,
+      els.birthYear,
+      els.deathCalendar,
+      els.deathDay,
+      els.deathMonth,
+      els.deathYear
+    ].forEach((element) => element.addEventListener("input", updateAgePreview));
+
+    els.addLocationBtn.addEventListener("click", () => addDraftItem("location"));
+    els.addTagBtn.addEventListener("click", () => addDraftItem("tag"));
+    els.locationInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        addDraftItem("location");
+      }
+    });
+    els.tagInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        addDraftItem("tag");
+      }
+    });
+    els.locationChips.addEventListener("click", (event) => {
+      const button = event.target.closest("button[data-type='location']");
+      if (button) {
+        removeDraftItem("location", Number.parseInt(button.dataset.index, 10));
+      }
+    });
+    els.tagChips.addEventListener("click", (event) => {
+      const button = event.target.closest("button[data-type='tag']");
+      if (button) {
+        removeDraftItem("tag", Number.parseInt(button.dataset.index, 10));
+      }
+    });
+    els.submitBtn.addEventListener("click", addNarrator);
+    els.resetFormBtn.addEventListener("click", resetForm);
+    els.clearBtn.addEventListener("click", clearChain);
+    els.demoBtn.addEventListener("click", loadDemo);
+    els.detailsTabBtn.addEventListener("click", () => switchTab("details"));
+    els.mapTabBtn.addEventListener("click", () => switchTab("map"));
+    els.maximizeMapBtn.addEventListener("click", () => setMapMaximized(!mapMaximized));
+    window.addEventListener("resize", renderConnections);
+
+    loadState();
+    resetForm();
+    switchTab("details");
+    renderCanvas();
+  </script>
+</body>
+</html>
