@@ -2,7 +2,7 @@
 
 ## Overview
 
-Riwaq (formerly Academic Crescent) is organized into two main tabs:
+Riwaq is an upgraded version of Academic Crescent, organized into two main tabs:
 - `Details & Matn`: data entry, chain summary, and text comparison
 - `Spider Chain Map`: spatial view of narrators and their links
 

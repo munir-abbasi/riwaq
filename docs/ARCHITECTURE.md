@@ -196,3 +196,9 @@ All analytics features are now implemented and verified:
 - E2E verification and determinism (Phase 6)
 
 The feature flags remain in index.html for potential A/B testing but are no longer the gating mechanism. Verification is now through the test suite (`npx vitest run` — 286/286 passing).
+
+---
+
+## Acknowledgments
+
+This project was inspired by the original [Academic Crescent Hadith Chain Builder](https://github.com/AcademicCrescent-spec/Isnad-builder~). Riwaq extends that foundation with automated CL/PCL analytics, evidence binding, and multi-format exports.

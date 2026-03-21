@@ -1,6 +1,6 @@
 # How Does Riwaq Work?
 
-**Formerly: Academic Crescent Hadith Chain Builder**
+**Inspired by:** Academic Crescent Hadith Chain Builder
 
 ## What is this app?
 

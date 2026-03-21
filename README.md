@@ -1,6 +1,6 @@
 # Riwaq | Hadith Chain Builder
 
-**Formerly: Academic Crescent Hadith Chain Builder**
+**Inspired by:** [Academic Crescent Hadith Chain Builder](https://github.com/AcademicCrescent-spec/Isnad-builder~)
 
 A research-grade browser-based tool for building, analyzing, and exporting Hadith narrator chains (isnad/sanad). Supports both manual chain construction and automated CL/PCL (Common Link / Partial Common Link) candidate analysis with evidence-based confidence scoring.
 
@@ -11,7 +11,15 @@ A research-grade browser-based tool for building, analyzing, and exporting Hadit
 
 ## Background
 
-Riwaq (formerly Academic Crescent) integrates Juynboll's CL/PCL methodology as a first-class analytical feature. The original Academic Crescent app provided manual chain-building capabilities; this upgraded version adds automated CL/PCL detection with evidence-based confidence scoring.
+Riwaq is an upgraded and vastly improved version of the original Academic Crescent app. While preserving all original chain-building features, Riwaq adds:
+
+- **Automated CL/PCL detection** with evidence-based confidence scoring
+- **Graph-based transmission analysis** using Juynboll's methodology
+- **Multi-variant family support** for modeling different transmission paths
+- **Evidence binding layer** linking analytical claims to classical biographical sources
+- **Anti-hallucination safeguards** that block unsupported claims from exports
+- **Multi-format publication exports** (Markdown, DOCX, PDF, JSON)
+- **Comprehensive test suite** (286 automated tests)
 
 ### Juynboll's CL/PCL Methodology
 
