@@ -1,0 +1,27 @@
+{
+  "name": "riwaq",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Riwaq (formerly Academic Crescent) — research-grade isnad analysis and CL/PCL detection",
+  "type": "module",
+  "scripts": {
+    "sync": "bash scripts/sync-academic.sh",
+    "verify:parity": "bash scripts/verify-parity.sh",
+    "smoke": "node scripts/smoke-test.cjs",
+    "postinstall": "npx playwright install chromium 2>/dev/null || true",
+    "test": "vitest run tests/node/",
+    "test:node": "vitest run tests/node/",
+    "test:coverage": "vitest run --coverage tests/node/"
+  },
+  "devDependencies": {
+    "@vitest/browser": "^4.1.0",
+    "@vitest/browser-playwright": "^4.1.0",
+    "@vitest/coverage-v8": "^4.1.0",
+    "playwright": "^1.49.1",
+    "vitest": "^4.1.0"
+  },
+  "dependencies": {
+    "ajv": "^8.18.0",
+    "ajv-formats": "^3.0.1"
+  }
+}

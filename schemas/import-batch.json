@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/07/schema#",
+  "$id": "https://isnad-builder.app/schemas/import-batch.json",
+  "title": "ImportBatch",
+  "description": "A batch import payload containing one or more hadith records, metadata, and optional narrator profiles.",
+  "type": "object",
+  "required": ["schema_version", "imported_at", "records"],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1,
+      "description": "Must be 1. Higher versions require migration."
+    },
+    "imported_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "import_id": {
+      "type": ["string", "null"],
+      "maxLength": 64
+    },
+    "source_batch_ref": {
+      "type": ["string", "null"],
+      "maxLength": 512
+    },
+    "records": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "hadith-record.json" }
+    },
+    "narrators": {
+      "type": "array",
+      "items": { "$ref": "narrator-profile.json" },
+      "default": []
+    }
+  }
+}

@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/07/schema#",
+  "$id": "https://isnad-builder.app/schemas/analysis-result.json",
+  "title": "AnalysisResult",
+  "description": "Output of a single candidate's CL/PCL analysis. Canonical output used by UI, analytics, and exports.",
+  "type": "object",
+  "required": ["analysis_id", "hadith_family_id", "narrator_id", "candidate_type", "profile", "final_confidence", "outcome", "status"],
+  "properties": {
+    "analysis_id": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9_-]+$",
+      "maxLength": 128
+    },
+    "hadith_family_id": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9_-]+$",
+      "maxLength": 128
+    },
+    "narrator_id": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9_-]+$",
+      "maxLength": 128
+    },
+    "candidate_type": {
+      "type": "string",
+      "enum": ["CL", "PCL"],
+      "description": "CL = Common Link candidate; PCL = Possible Common Link candidate."
+    },
+    "family_status": {
+      "type": "string",
+      "enum": ["cl_detected", "pcl_only", "insufficient_data"]
+    },
+    "profile": {
+      "type": "string",
+      "enum": ["structural_only", "reliability_weighted"]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["completed", "analysis_not_run", "insufficient_data", "unverified_claim"]
+    },
+    "final_confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Full-precision confidence score used for ranking. Stored as-is for reproducibility."
+    },
+    "display_confidence_4dp": {
+      "type": "string",
+      "pattern": "^0?\\.[0-9]{1,4}$",
+      "description": "4-decimal-place string for UI presentation only."
+    },
+    "outcome": {
+      "type": "string",
+      "enum": ["supported", "contested", "uncertain", "likely_weak_in_context"]
+    },
+    "structural_score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "feature_vector": {
+      "type": "object",
+      "properties": {
+        "fan_out": { "type": "number" },
+        "bundle_coverage": { "type": "number" },
+        "collector_diversity": { "type": "number" },
+        "pre_single_strand_ratio": { "type": "number" },
+        "bypass_ratio": { "type": "number" },
+        "chronology_conflict_ratio": { "type": "number" },
+        "matn_coherence": { "type": "number" },
+        "provenance_completeness_ratio": { "type": "number" }
+      }
+    },
+    "penalty_vector": {
+      "type": "object",
+      "properties": {
+        "P1_bypass": { "type": "number" },
+        "P2_chronology": { "type": "number" },
+        "P3_provenance": { "type": "number" }
+      }
+    },
+    "reliability_prior": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "maximum": 1
+    },
+    "contradiction_flag": {
+      "type": "boolean",
+      "default": false
+    },
+    "contradiction_cap_applied": {
+      "type": "boolean",
+      "default": false
+    },
+    "rank": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "1-based rank within the hadith family for this analysis run."
+    },
+    "tiebreak_order": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Order within tied confidence scores for deterministic sorting."
+    },
+    "evidence_links": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["evidence_id"],
+        "properties": {
+          "evidence_id": { "type": "string" },
+          "role": { "type": "string", "enum": ["supporting", "contradicting", "contextual"] }
+        }
+      },
+      "default": []
+    },
+    "run_at": {
+      "type": ["string", "null"],
+      "format": "date-time"
+    }
+  }
+}

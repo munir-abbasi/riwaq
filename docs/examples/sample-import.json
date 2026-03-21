@@ -1,0 +1,148 @@
+{
+  "_comment": "Sample import batch — valid canonical format (Phase 1)",
+  "schema_version": 1,
+  "imported_at": "2026-03-21T00:00:00.000Z",
+  "import_id": "sample-batch-001",
+  "source_batch_ref": "Manual entry from Sahih al-Bukhari",
+  "records": [
+    {
+      "hadith_id": "bukhari-001",
+      "family_id": "bukhari-imran-family",
+      "title": "Hadith of Gabriel — Revelation Duty",
+      "source_ref": {
+        "collection": "Sahih al-Bukhari",
+        "source_type": "print",
+        "source_locator": "ISBN 978-0-19-960224-2 / Vol. 1, No. 1",
+        "ingested_at": "2026-03-21T00:00:00.000Z",
+        "checksum": null
+      },
+      "variants": [
+        {
+          "variant_id": "bukhari-v1",
+          "isnad_chain": [
+            "hisham-ibn-urwah",
+            "urwah-ibn-al-zubayr",
+            "abu-bakr-ibn-abd-al-rahman",
+            "hasan-ibn-abi-hasan",
+            "aymen-unknown"
+          ],
+          "isnad_raw": "حَدَّثَنَا هِشَامُ بْنُ عُرْوَةَ عَنْ أَبِيهِ عَنْ أَبِي بَكْرِ بْنِ عَبْدِ الرَّحْمَنِ...",
+          "matn_raw": null,
+          "collector_note": null,
+          "provenance": null
+        }
+      ],
+      "matn_raw": "عَنْ عِمْرَانَ بْنِ حُسَيْنٍ عَنْ أَبِي بَكْرِ بْنِ أَبِي مُوسَى عَنْ عَبْدِ اللَّهِ بْنِ عَمْرٍو رَضِيَ اللَّهُ عَنْهُمَا أَنَّ رَسُولَ اللَّهِ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ قَالَ...",
+      "reliability_evidence": []
+    }
+  ],
+  "narrators": [
+    {
+      "narrator_id": "hisham-ibn-urwah",
+      "names": ["Hisham ibn Urwah"],
+      "kunya": "Abu al-Mundhir",
+      "layla": null,
+      "birth": { "jdn": null, "year": 153, "month": null, "day": null, "calendar": "hijri", "description": "circa 153 AH", "is_approximate": true },
+      "death": { "jdn": null, "year": 227, "month": 3, "day": null, "calendar": "hijri", "description": null, "is_approximate": false },
+      "biographical_notes": "A reliable narrator of Sahih al-Bukhari. Son of Urwah ibn al-Zubayr.",
+      "locations": ["Medina", "Baghdad"],
+      "tags": ["thiqah", "tabiin"],
+      "aliases": ["Hisham al-MadanI"],
+      "reliability_evidence": [
+        {
+          "evidence_id": "ev-hisham-001",
+          "narrator_id": "hisham-ibn-urwah",
+          "rating": "thiqah",
+          "rating_confidence": 0.9,
+          "scholar": "Ibn Hajar al-Asqalani",
+          "work": "Taqrib al-Tahdhib",
+          "citation_text": "ثقة حافظ",
+          "citation_span": "Vol. 2, p. 159",
+          "dissent_notes": null,
+          "date_layer": "reported",
+          "source_type": "print",
+          "source_ref": {
+            "collection": "Taqrib al-Tahdhib",
+            "source_type": "print",
+            "source_locator": "Dar al-Ma'rifah, Beirut / Vol. 2",
+            "ingested_at": "2026-03-21T00:00:00.000Z"
+          },
+          "ingested_at": "2026-03-21T00:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "narrator_id": "urwah-ibn-al-zubayr",
+      "names": ["Urwah ibn al-Zubayr"],
+      "kunya": "Abu al-Abbas",
+      "layla": null,
+      "birth": { "jdn": null, "year": null, "month": null, "day": null, "calendar": "hijri", "description": null, "is_approximate": false },
+      "death": { "jdn": null, "year": 94, "month": null, "day": null, "calendar": "hijri", "description": null, "is_approximate": false },
+      "biographical_notes": "Companion of Aisha. Learned from her directly.",
+      "locations": ["Medina"],
+      "tags": ["thiqah", "sahabi-associated"],
+      "aliases": [],
+      "reliability_evidence": []
+    },
+    {
+      "narrator_id": "abu-bakr-ibn-abd-al-rahman",
+      "names": ["Abu Bakr ibn Abd al-Rahman"],
+      "kunya": "Abu Muhammad",
+      "layla": null,
+      "birth": null,
+      "death": null,
+      "biographical_notes": null,
+      "locations": ["Medina"],
+      "tags": ["saduq"],
+      "aliases": ["Abu Bakr al-Hashimi"],
+      "reliability_evidence": []
+    },
+    {
+      "narrator_id": "hasan-ibn-abi-hasan",
+      "names": ["Hasan ibn Abi Hasan"],
+      "kunya": "Abu Sa'id",
+      "layla": null,
+      "birth": null,
+      "death": null,
+      "biographical_notes": null,
+      "locations": ["Medina"],
+      "tags": [],
+      "aliases": [],
+      "reliability_evidence": []
+    },
+    {
+      "narrator_id": "aymen-unknown",
+      "names": ["Aymen (unspecified)"],
+      "kunya": null,
+      "layla": null,
+      "birth": null,
+      "death": null,
+      "biographical_notes": "Identity debated. Possibly Aymen ibn Ubayy.",
+      "locations": [],
+      "tags": ["majhul"],
+      "aliases": [],
+      "reliability_evidence": [
+        {
+          "evidence_id": "ev-aymen-001",
+          "narrator_id": "aymen-unknown",
+          "rating": "majhul",
+          "rating_confidence": 0.5,
+          "scholar": null,
+          "work": null,
+          "citation_text": null,
+          "citation_span": null,
+          "dissent_notes": "Some scholars identify as thiqah; others maintain majhul status.",
+          "date_layer": "reported",
+          "source_type": "print",
+          "source_ref": {
+            "collection": "Mizan al-I'tidal",
+            "source_type": "print",
+            "source_locator": "Dar al-Kutub al-Ilmiyyah / Vol. 1",
+            "ingested_at": "2026-03-21T00:00:00.000Z"
+          },
+          "ingested_at": "2026-03-21T00:00:00.000Z"
+        }
+      ]
+    }
+  ]
+}
