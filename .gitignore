@@ -17,3 +17,8 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.temp
+
+# Local research documents (not for public repository)
+Riwaq_Research_Paper.md
+Riwaq_Research_Paper.pdf
+draft.md
