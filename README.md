@@ -5,7 +5,7 @@
 A research-grade browser-based tool for building, analyzing, and exporting Hadith narrator chains (isnad/sanad). Supports both manual chain construction and automated CL/PCL (Common Link / Partial Common Link) candidate analysis with evidence-based confidence scoring.
 
 **Author:** Munir Abbasi — [github.com/munir-abbasi](https://github.com/munir-abbasi) · [syntaxhouse.com](https://www.syntaxhouse.com)  
-**Published at:** [github.com/AcademicCrescent-spec/Isnad-builder~](https://github.com/AcademicCrescent-spec/Isnad-builder~)
+**Published at:** [github.com/munir-abbasi/riwaq](https://github.com/munir-abbasi/riwaq)
 
 ---
 
