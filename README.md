@@ -170,7 +170,7 @@ const md = exportMarkdown(report);
 
 ### Reliability-weighted analysis (opt-in)
 
-The reliability prior applies only when you explicitly construct and inject a `ReliabilityLayer` (decision D007 in `docs/DECISIONS.md`). Without it, the prior defaults to a neutral `0.50`. Evidence must be attached at the batch level (`narrators[].reliability_evidence`) to seed the layer:
+The reliability prior applies only when you explicitly construct and inject a `ReliabilityLayer`. Without it, the prior defaults to a neutral `0.50`. Evidence must be attached at the batch level (`narrators[].reliability_evidence`) to seed the layer:
 
 ```javascript
 import { ReliabilityLayer } from './scripts/reliability-layer.js';
@@ -182,7 +182,7 @@ const report = CanonicalReport.fromBatch(normalized, {
 });
 ```
 
-The CLI equivalent is `--with-reliability`. With a populated layer, the analyzer uses each candidate narrator's `derived_confidence`. Without it, it retains the neutral fallback (D014).
+The CLI equivalent is `--with-reliability`. With a populated layer, the analyzer uses each candidate narrator's `derived_confidence`. Without it, it retains the neutral fallback.
 
 ### Generate DOCX/PDF reports
 
@@ -324,14 +324,10 @@ Key test files are in `tests/node/` and `tests/browser/`. Use `npm test` for the
 ```
 index.html              — Main app source (canonical)
 academic/index.html     — Deployed artifact (synced with index.html)
-AGENTS.md               — Agent entry point, invariants, ownership, validation routing
 scripts/                — Analytics, export, CLI, and tooling modules
 schemas/                — Descriptive JSON schema mirrors (NOT loaded at runtime; see docs/ARCHITECTURE.md)
 tests/                  — Full test suite (Node + browser)
 docs/
-  AGENT-OPERATING-MODEL.md — Cross-layer abstraction tower, control surface, question routing
-  STATUS.md             — Implemented/designed/envisioned triage and open questions
-  DECISIONS.md          — Append-only durable architecture decisions
   ARCHITECTURE.md       — Internal structure, API reference, canonical numeric contracts
   USAGE.md              — End-user workflow guide
   SECURITY.md           — Security model and hardening
@@ -359,10 +355,6 @@ vitest.browser.config.js — Browser smoke test config
 
 | File | Description |
 |------|-------------|
-| `AGENTS.md` | Agent orientation, invariants, ownership, and validation entry points |
-| `docs/AGENT-OPERATING-MODEL.md` | Abstraction tower, control-surface matrix, question routing |
-| `docs/STATUS.md` | Implemented/designed/envisioned triage and open-questions register |
-| `docs/DECISIONS.md` | Durable architecture and agent-operating decisions (append-only) |
 | `docs/USAGE.md` | End-user workflow for chain building and analytics |
 | `docs/ARCHITECTURE.md` | Module boundaries, API reference, canonical numeric contracts, CLI |
 | `docs/SECURITY.md` | Threat model, escaping, date integrity, CI/CD hardening |
