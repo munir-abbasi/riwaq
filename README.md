@@ -265,6 +265,7 @@ Each record in the `records` array supports:
 - `reliability_evidence[].ingested_at` — ISO 8601 ingestion timestamp
 - `reliability_evidence[].rating_confidence` — optional confidence weight from 0.0 to 1.0
 - Optional descriptive fields include `scholar`, `work`, `citation_text`, `citation_span`, and `dissent_notes`
+- Optional curation fields: `edition`, `normalization_note`, `curated_by`, `revised_at` (ISO 8601), and `revision_note`
 
 Attach reliability evidence at the batch level (`narrators[].reliability_evidence`). Reliability scoring and claim-evidence binding read from there. Schema-v1 batches may contain record-level `records[].reliability_evidence`; binding accepts that location as a fallback, but it does not seed the reliability layer. See `docs/ARCHITECTURE.md` §Reliability-Wiring Contract.
 

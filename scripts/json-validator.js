@@ -17,7 +17,7 @@ import Ajv from 'ajv';
 import addFormats from 'ajv-formats';
 import { ImportErrorCollector, ERROR_CODE } from './import-errors.js';
 
-const SCHEMA_VERSION = 1;
+export const SCHEMA_VERSION = 1;
 const ID_PATTERN = '^[a-zA-Z0-9_-]+$';
 
 const SCHEMA = {
@@ -74,6 +74,11 @@ const SCHEMA = {
         citation_span: { type: ['string', 'null'] },
         dissent_notes: { type: ['string', 'null'], maxLength: 512 },
         date_layer: { type: ['string', 'null'], enum: ['reported', 'analytical', 'derived', null] },
+        edition: { type: ['string', 'null'], maxLength: 512 },
+        normalization_note: { type: ['string', 'null'], maxLength: 1024 },
+        curated_by: { type: ['string', 'null'], maxLength: 256 },
+        revised_at: { type: ['string', 'null'], format: 'date-time' },
+        revision_note: { type: ['string', 'null'], maxLength: 1024 },
         source_type: { type: 'string', enum: ['url', 'print', 'manuscript', 'oral_report'] },
         source_ref: { $ref: '#/$defs/SourceRef' },
         ingested_at: { type: 'string', format: 'date-time' },

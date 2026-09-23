@@ -53,6 +53,8 @@ Allowed imported ratings are `thiqah`, `saduq`, `majhul`, `daif`, `matruk`, and 
 
 The canonical evidence attachment point is `narrators[].reliability_evidence`. Both reliability derivation and claim binding consume it. Version 1 continues to accept `records[].reliability_evidence` as a binding-only compatibility location; retaining acceptance avoids invalidating existing batches and therefore does not require a schema-version increment. When an evidence ID appears in both locations, binding uses the narrator-level record.
 
+Optional evidence curation fields were added to `ReliabilityEvidence`: `edition`, `normalization_note`, and the curation block `curated_by`, `revised_at`, `revision_note` (all optional and nullable; `revised_at` is an ISO 8601 `date-time`). The change is additive-optional validation tightening: batches that do not use the new names are unaffected, so `schema_version` stays at `1`, following the same no-increment precedent as the record-level evidence location above. The fields survive normalization and appear in the report's dereferenced evidence projection (`evidence_refs[].evidence`).
+
 ## 3. Why the Schemas Stay Separate
 
 The browser schema answers “how is an interactive workspace persisted and upgraded?” The import schema answers “what external research data is acceptable input to the analytical pipeline?” They have different consumers, lifecycles, and compatibility risks.

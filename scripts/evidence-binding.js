@@ -53,6 +53,40 @@ const SYNTHETIC_PATTERNS = [
   /^auto_/i,
 ];
 
+export const EVIDENCE_PROJECTION_FIELDS = Object.freeze([
+  'scholar',
+  'work',
+  'rating',
+  'citation_text',
+  'citation_span',
+  'source_ref',
+  'edition',
+  'normalization_note',
+  'curated_by',
+  'revised_at',
+  'revision_note',
+]);
+
+/**
+ * Dereference an evidence record into a stable, export-safe subset.
+ * Every field in EVIDENCE_PROJECTION_FIELDS is always present (null when
+ * absent) so consumers see one predictable shape regardless of source.
+ * Returns null when there is no underlying record (missing evidence).
+ * Shared by ValidationResult.toReport() and CanonicalReport so both
+ * evidence_refs projections stay byte-identical by construction.
+ */
+export function projectEvidenceRecord(evidenceRecord) {
+  if (!evidenceRecord || typeof evidenceRecord !== 'object') return null;
+  const projected = {};
+  for (const field of EVIDENCE_PROJECTION_FIELDS) {
+    projected[field] = evidenceRecord[field] ?? null;
+  }
+  if (projected.source_ref && typeof projected.source_ref === 'object') {
+    projected.source_ref = { ...projected.source_ref };
+  }
+  return projected;
+}
+
 export class ClaimEvidenceBinding {
   constructor(claim) {
     this.claim = claim;
@@ -143,6 +177,7 @@ export class ValidationResult {
         evidence_refs: b.evidence_refs.map(e => ({
           evidence_id: e.evidence_id,
           has_provenance: !!(e.evidence_record?.source_ref),
+          evidence: projectEvidenceRecord(e.evidence_record),
         })),
         violations: b.violations,
         warnings: b.warnings,

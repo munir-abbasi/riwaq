@@ -275,6 +275,52 @@ describe('canonical-report.js', () => {
     assert.equal(json.all_explainability, undefined);
     assert.equal(json.all_artifacts, undefined);
   });
+
+  it('bound claims expose a stable dereferenced evidence object', () => {
+    const report = CanonicalReport.fromBatch(BATCH_SMALL, { profile: 'structural_only' });
+    const data = report.getReportData();
+
+    const boundRef = data.evidence_binding.bindings
+      .flatMap(binding => binding.evidence_refs)
+      .find(ref => ref.evidence !== null);
+    assert.ok(boundRef, 'expected at least one dereferenced evidence ref');
+    assert.equal(boundRef.has_provenance, true);
+
+    // Stable shape: every projection field always present, never undefined.
+    assert.equal(boundRef.evidence.scholar, 'Al-Mizzi');
+    assert.equal(boundRef.evidence.rating, 'thiqah');
+    assert.equal(boundRef.evidence.edition, null);
+    assert.equal(boundRef.evidence.normalization_note, null);
+    assert.equal(boundRef.evidence.curated_by, null);
+    assert.equal(boundRef.evidence.revised_at, null);
+    assert.equal(boundRef.evidence.revision_note, null);
+    assert.equal(boundRef.evidence.source_ref.collection, 'Tahdhib al-Kamal');
+    for (const value of Object.values(boundRef.evidence)) {
+      assert.notEqual(value, undefined, 'projection fields must be null, never undefined');
+    }
+  });
+
+  it('blocked reliability claims still refuse export while projecting evidence', () => {
+    // Failure path: evidence exists (refs get dereferenced) but its provenance
+    // is incomplete → binding must block, and the gate must refuse export.
+    const blockedBatch = structuredClone(BATCH_SMALL);
+    blockedBatch.records[0].reliability_evidence[0].source_ref = {};
+    const report = CanonicalReport.fromBatch(blockedBatch, { profile: 'reliability_weighted' });
+    const data = report.getReportData();
+
+    assert.equal(data.evidence_binding.valid, false);
+    assert.equal(data.evidence_binding.analysis_can_proceed, false);
+    assert.ok(data.evidence_binding.blocking_violations > 0);
+    assert.equal(report.canExport(), false);
+
+    const blockedRef = data.evidence_binding.bindings
+      .flatMap(binding => binding.evidence_refs)
+      .find(ref => ref.evidence_id === 'ev-tahdhib-001');
+    assert.ok(blockedRef, 'blocking must not suppress the evidence ref');
+    // The projection dereferences the record faithfully, even when incomplete.
+    assert.equal(blockedRef.evidence.rating, 'thiqah');
+    assert.deepEqual(blockedRef.evidence.source_ref, {});
+  });
 });
 
 describe('export-md.js', () => {

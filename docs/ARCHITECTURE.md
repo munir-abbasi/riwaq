@@ -221,6 +221,8 @@ Family status is one of `cl_detected`, `pcl_only`, or `insufficient_data`.
 
 The decisive operational field is `ValidationResult.analysis_can_proceed`.
 
+Both serial projections of a binding — `ValidationResult.toReport()` and the canonical report's `evidence_binding.bindings[].evidence_refs` — dereference each reference through the shared, exported `projectEvidenceRecord()`: a stable subset (`scholar`, `work`, `rating`, `citation_text`, `citation_span`, `source_ref`, plus the curation fields `edition`, `normalization_note`, `curated_by`, `revised_at`, `revision_note`) whose keys are always present with null defaults, `evidence` is null when the underlying record is missing, and `has_provenance` semantics are unchanged.
+
 ### Explainability
 
 `scripts/explainability.js` turns analysis and validation into candidate panels, audit-trail records, and an uncertainty section. It does not change candidate classification.
@@ -260,6 +262,8 @@ The decisive operational field is `ValidationResult.analysis_can_proceed`.
 - `scripts/generate-medium-fixture.js` — regenerates `tests/fixtures/phase1/medium-fixture.json` (1000-variant SLO fixture).
 - `scripts/sync-academic.sh`, `scripts/verify-parity.sh` — deploy-artifact synchronization and parity gate.
 - `scripts/smoke-test.cjs` — standalone Playwright browser smoke run.
+- `scripts/verify-golden.mjs` — regenerates the canonical report for `tests/fixtures/golden/input.json`, scrubs volatile ISO-8601 timestamps (same rule as the Phase-6 determinism test), and compares sorted-key canonical forms against `tests/fixtures/golden/expected.json`; `npm run verify:golden` (exit 0 + sha256 envelope on match, exit 1 + tmpdir dump on mismatch), `--update` re-baselines the expectation.
+- `scripts/release-evidence.mjs` — emits the release-evidence bundle from live sources: commit, dirty flag, tag (null when untagged), test command, test counts from a vitest JSON report (`--test-report`, required), `schema_version`, `engines.node`, SHA-256 of `academic/index.html`, both golden files, and `package-lock.json`, license, and repository URL; `generated_at` is the only volatile field (byte-identical otherwise).
 
 ## Schemas Directory Characterization (D006-adjacent)
 
@@ -304,5 +308,7 @@ Exact function locations inside `index.html` change over time; use symbol search
 ## Verification Boundaries
 
 Use existing tests around the layer changed. The default Node suite is `npm test` (run `npm install` first in a fresh checkout; the postinstall browser hook is best-effort). Combined gate: `npm run check` = parity + Node suite. Browser smoke validation is `node scripts/smoke-test.cjs` when UI behavior is in scope.
+
+CI (`.github/workflows/static.yml`) runs parity plus the Node suite on Node 22 and 24 (the declared `engines.node` range), uploads a JSON test report artifact per matrix leg (`vitest-report-node22`/`vitest-report-node24`), and gates the Pages deploy on both jobs; pull requests run the gates only. `npm run verify:golden` verifies the committed expected-output artifact, and `node scripts/release-evidence.mjs --test-report <file>` emits the release-evidence bundle.
 
 The test count is intentionally not part of the architecture contract because it changes as the suite evolves.

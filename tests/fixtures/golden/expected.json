@@ -1,0 +1,91 @@
+{
+  "analysis": {
+    "candidate_count": 0,
+    "family_status": "insufficient_data",
+    "methodology_note": "CL/PCL analysis is an interpretation layer. Map creation remains method-agnostic.",
+    "profile": "structural_only"
+  },
+  "artifacts": {
+    "chain_count": 1,
+    "graph_edges": 3,
+    "graph_nodes": 4
+  },
+  "audit_trail": [],
+  "batch_metadata": {
+    "family_count": 1,
+    "imported_at": "[TIMESTAMP]",
+    "schema_version": 1
+  },
+  "candidates": [],
+  "evidence_binding": {
+    "analysis_can_proceed": true,
+    "binding_count": 0,
+    "bindings": [],
+    "blocking_violations": 0,
+    "valid": true
+  },
+  "families": [
+    {
+      "analysis": {
+        "candidate_count": 0,
+        "family_status": "insufficient_data",
+        "methodology_note": "CL/PCL analysis is an interpretation layer. Map creation remains method-agnostic.",
+        "profile": "structural_only"
+      },
+      "artifacts": {
+        "chain_count": 1,
+        "graph_edges": 3,
+        "graph_nodes": 4
+      },
+      "audit_trail": [],
+      "candidates": [],
+      "evidence_binding": {
+        "analysis_can_proceed": true,
+        "binding_count": 0,
+        "bindings": [],
+        "blocking_violations": 0,
+        "valid": true
+      },
+      "family_id": "f-e2e",
+      "metadata": {
+        "family_id": "f-e2e",
+        "narrator_count": 0,
+        "record_count": 1,
+        "sources": [
+          "Test Collection:test-001"
+        ],
+        "variant_count": 1
+      },
+      "uncertainty": {
+        "blocking_violations": [],
+        "excluded_candidates": [],
+        "insufficient_data_families": [],
+        "total_uncertain_count": 0,
+        "unverified_evidence": []
+      }
+    }
+  ],
+  "family_ids": [
+    "f-e2e"
+  ],
+  "family_metadata": [
+    {
+      "family_id": "f-e2e",
+      "narrator_count": 0,
+      "record_count": 1,
+      "sources": [
+        "Test Collection:test-001"
+      ],
+      "variant_count": 1
+    }
+  ],
+  "generated_at": "[TIMESTAMP]",
+  "schema_version": 1,
+  "uncertainty": {
+    "blocking_violations": [],
+    "excluded_candidates": [],
+    "insufficient_data_families": [],
+    "total_uncertain_count": 0,
+    "unverified_evidence": []
+  }
+}

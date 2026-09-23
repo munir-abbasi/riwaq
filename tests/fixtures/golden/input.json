@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "imported_at": "2026-01-01T00:00:00.000Z",
+  "records": [
+    {
+      "hadith_id": "e2e-001",
+      "family_id": "f-e2e",
+      "source_ref": {
+        "collection": "Test Collection",
+        "source_type": "print",
+        "source_locator": "test-001",
+        "ingested_at": "2026-01-01T00:00:00.000Z"
+      },
+      "variants": [
+        {
+          "variant_id": "v-e2e",
+          "isnad_chain": [
+            "prophet",
+            "n1",
+            "n2",
+            "collector"
+          ],
+          "matn_raw": "Test matn text."
+        }
+      ],
+      "reliability_evidence": [],
+      "metadata": {
+        "test_fixture": true
+      }
+    }
+  ]
+}

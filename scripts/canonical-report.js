@@ -16,7 +16,7 @@
  *   report.toJSON() → object  (serializable report)
  */
 import { emitArtifacts } from './artifacts.js';
-import { ClaimEvidenceBinder } from './evidence-binding.js';
+import { ClaimEvidenceBinder, projectEvidenceRecord } from './evidence-binding.js';
 import { ExplainabilityReport } from './explainability.js';
 import { analyzeBatch } from './clpcl-analyzer.js';
 
@@ -69,6 +69,7 @@ export function buildReportData(batch, analysisResult, explainabilityResult, val
         evidence_refs: b.evidence_refs.map(e => ({
           evidence_id: e.evidence_id,
           has_provenance: !!(e.evidence_record?.source_ref),
+          evidence: projectEvidenceRecord(e.evidence_record),
         })),
         violations: b.violations.map(v => ({
           level: v.level,

@@ -206,6 +206,60 @@ describe('validateBatch — narrators array', () => {
   });
 });
 
+describe('validateBatch — evidence curation fields (edition, normalization_note, curation block)', () => {
+  const evidenceWithCurationFields = {
+    evidence_id: 'ev-curation-001',
+    narrator_id: 'narrator-x',
+    rating: 'thiqah',
+    source_type: 'print',
+    source_ref: {
+      collection: 'Tahdhib al-Kamal',
+      source_type: 'print',
+      source_locator: 'vol. 3, p. 100',
+      ingested_at: '2026-03-21T00:00:00.000Z',
+    },
+    ingested_at: '2026-03-21T00:00:00.000Z',
+    edition: 'Dar al-Fikr 1st ed.',
+    normalization_note: 'Mapped raw praise formula to thiqah per ICMA convention.',
+    curated_by: 'editor-a',
+    revised_at: '2026-04-01T00:00:00.000Z',
+    revision_note: 'Re-checked against printed edition.',
+  };
+
+  it('accepts optional curation fields and preserves them through normalization', () => {
+    const batch = structuredClone(VALID_BATCH);
+    batch.narrators[0].reliability_evidence.push(evidenceWithCurationFields);
+
+    const { valid, collector, normalized } = validateBatch(batch);
+    assert.isFalse(collector.hasErrors, collector.errors.map(e => e.message).join(', '));
+    assert.isTrue(valid);
+
+    const kept = normalized.narrators[0].reliability_evidence[0];
+    assert.equal(kept.edition, 'Dar al-Fikr 1st ed.');
+    assert.equal(kept.normalization_note, 'Mapped raw praise formula to thiqah per ICMA convention.');
+    assert.equal(kept.curated_by, 'editor-a');
+    assert.equal(kept.revised_at, '2026-04-01T00:00:00.000Z');
+    assert.equal(kept.revision_note, 'Re-checked against printed edition.');
+  });
+
+  it('rejects a wrong-typed normalization_note with a JSON Pointer path', () => {
+    const batch = structuredClone(VALID_BATCH);
+    batch.narrators[0].reliability_evidence.push({
+      ...evidenceWithCurationFields,
+      normalization_note: 123,
+    });
+
+    const { valid, collector, normalized } = validateBatch(batch);
+    assert.isTrue(collector.hasErrors);
+    assert.isFalse(valid);
+    assert.isNull(normalized);
+
+    const typeErr = collector.errors.find(e => e.instance_path.includes('normalization_note'));
+    assert.isOk(typeErr, 'expected an error naming normalization_note');
+    assert.equal(typeErr.code, 'INVALID_TYPE');
+  });
+});
+
 describe('normalizeBatch', () => {
   it('produces schema_version 1', () => {
     const { normalized } = validateBatch(VALID_BATCH);

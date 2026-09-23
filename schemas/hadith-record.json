@@ -167,6 +167,31 @@
           "type": ["string", "null"],
           "enum": ["reported", "analytical", "derived", null]
         },
+        "edition": {
+          "type": ["string", "null"],
+          "maxLength": 512,
+          "description": "Edition or witness this rating was drawn from."
+        },
+        "normalization_note": {
+          "type": ["string", "null"],
+          "maxLength": 1024,
+          "description": "Basis for the normalized rating."
+        },
+        "curated_by": {
+          "type": ["string", "null"],
+          "maxLength": 256,
+          "description": "Curator or editor responsible for this evidence record."
+        },
+        "revised_at": {
+          "type": ["string", "null"],
+          "format": "date-time",
+          "description": "Last revision timestamp."
+        },
+        "revision_note": {
+          "type": ["string", "null"],
+          "maxLength": 1024,
+          "description": "Note explaining the latest revision."
+        },
         "source_type": {
           "type": "string",
           "enum": ["url", "print", "manuscript", "oral_report"]
