@@ -8,7 +8,8 @@
  *
  * The binding model:
  *   - Each CL/PCL candidate claim must cite at least one evidence_id.
- *   - Each cited evidence_id must exist in the batch's reliability_evidence list.
+ *   - Each cited evidence_id must exist in canonical narrator-level evidence or
+ *     the backward-compatible record-level evidence location.
  *   - Evidence binding is computed post-analysis and stored in the ExplainabilityReport.
  *
  * Anti-hallucination rules enforced:
@@ -170,6 +171,11 @@ export class ClaimEvidenceBinder {
   _buildEvidenceMap() {
     for (const record of this._batch.records || []) {
       for (const ev of record.reliability_evidence || []) {
+        this._evidenceMap.set(ev.evidence_id, ev);
+      }
+    }
+    for (const narrator of this._batch.narrators || []) {
+      for (const ev of narrator.reliability_evidence || []) {
         this._evidenceMap.set(ev.evidence_id, ev);
       }
     }

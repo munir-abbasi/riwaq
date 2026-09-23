@@ -6,8 +6,8 @@
  * Provides alias mapping, manual merge/split controls, and history-preserving
  * identity operations over a normalized batch of hadith records.
  *
- * All operations are logged as immutable events. The current state can be
- * reconstructed by replaying the operation log from empty.
+ * All operations are logged as immutable events with durable receipts. The
+ * current state and its audit trail can be reconstructed by replaying the log.
  *
  * Design invariants (enforced by tests):
  *   1. No orphan narrator IDs — every isnad_chain reference resolves to a canonical ID.
@@ -21,7 +21,7 @@
  *   resolver.resolveName(name) → canonicalId | null
  *   resolver.merge(sourceId, targetId, evidenceRedistribute) → OperationRecord
  *   resolver.split(sourceId, targetA, targetB, evidenceRedistributeA, evidenceRedistributeB) → OperationRecord
- *   resolver.addAlias(alias, canonicalId) → void
+ *   resolver.addAlias(alias, canonicalId) → OperationRecord
  *   resolver.applyLog(log) → EntityResolver  (replay from empty)
  *   resolver.getState() → { aliases, idMap, log }
  *   resolver.getCanonicalIds() → Set<string>
@@ -33,13 +33,49 @@ export const OPERATION_TYPE = Object.freeze({
   SPLIT: 'SPLIT',
 });
 
-function makeOp(type, payload) {
+export const ENTITY_OPERATION_RECEIPT_VERSION = 1;
+
+function cloneRecord(value) {
+  return JSON.parse(JSON.stringify(value));
+}
+
+function makeOp(type, payload, receiptData) {
+  const operationId = `op-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+  const timestamp = new Date().toISOString();
+  const checks = receiptData.invariantChecks.map(check => ({ ...check }));
   return {
-    operation_id: `op-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+    operation_id: operationId,
     type,
     payload,
-    timestamp: new Date().toISOString(),
+    timestamp,
+    receipt: {
+      receipt_version: ENTITY_OPERATION_RECEIPT_VERSION,
+      operation_id: operationId,
+      operation_type: type,
+      inputs: cloneRecord(payload),
+      affected_ids: [...receiptData.affectedIds],
+      state_refs: {
+        before: `entity-resolution-log:${receiptData.stateVersion}`,
+        after: `entity-resolution-log:${receiptData.stateVersion + 1}`,
+      },
+      provenance: {
+        status: receiptData.movements.length > 0 ? 'retained_and_moved' : 'not_applicable',
+        movements: receiptData.movements.map(movement => ({ ...movement })),
+      },
+      invariant_checks: checks,
+      verification: {
+        status: checks.every(check => check.passed) ? 'passed' : 'failed',
+      },
+    },
   };
+}
+
+function evidenceMovements(evidence, fromId, toId) {
+  return evidence.map(item => ({
+    evidence_id: item.evidence_id,
+    from_id: fromId,
+    to_id: toId,
+  }));
 }
 
 /**
@@ -128,7 +164,13 @@ export class EntityResolver {
     }
     const key = normalizeAlias(alias);
     this._aliases.set(key, canonicalId);
-    this._log.push(makeOp(OPERATION_TYPE.ALIAS_ADD, { alias: key, canonicalId }));
+    return this._recordOperation(OPERATION_TYPE.ALIAS_ADD, { alias: key, canonicalId }, {
+      affectedIds: [canonicalId],
+      movements: [],
+      invariantChecks: [
+        { name: 'alias_resolves_to_canonical_id', passed: this.resolveName(key) === canonicalId },
+      ],
+    });
   }
 
   /**
@@ -137,7 +179,7 @@ export class EntityResolver {
    * @param {string} sourceId — the ID to retire (all refs will point to targetId after)
    * @param {string} targetId — the surviving ID
    * @param {Map<string, object[]>} evidenceMap — evidence_id → evidence[] for each narrator (see test fixtures for shape)
-   * @returns {object} operation record
+   * @returns {object} operation record with durable receipt
    */
   merge(sourceId, targetId, evidenceMap = new Map()) {
     if (!this._idMap.has(sourceId)) throw new Error(`Unknown sourceId: ${sourceId}`);
@@ -155,12 +197,20 @@ export class EntityResolver {
       evidenceRedistributed.push({ ...ev, narrator_id: targetId, merged_from: sourceId });
     }
 
-    const op = makeOp(OPERATION_TYPE.MERGE, {
+    const payload = {
       source_id: sourceId,
       target_id: targetId,
       evidence_redistributed_count: evidenceRedistributed.length,
+    };
+    const op = this._recordOperation(OPERATION_TYPE.MERGE, payload, {
+      affectedIds: [sourceId, targetId],
+      movements: evidenceMovements(evidenceRedistributed, sourceId, targetId),
+      invariantChecks: [
+        { name: 'source_is_retired', passed: this.isRetired(sourceId) },
+        { name: 'source_resolves_to_target', passed: this.resolveId(sourceId) === targetId },
+        { name: 'evidence_reassigned_to_target', passed: evidenceRedistributed.every(ev => ev.narrator_id === targetId) },
+      ],
     });
-    this._log.push(op);
 
     return { ...op, evidence_redistributed: evidenceRedistributed };
   }
@@ -189,16 +239,36 @@ export class EntityResolver {
     const redistributedA = evidenceForA.map(ev => ({ ...ev, narrator_id: targetA, split_from: sourceId }));
     const redistributedB = evidenceForB.map(ev => ({ ...ev, narrator_id: targetB, split_from: sourceId }));
 
-    const op = makeOp(OPERATION_TYPE.SPLIT, {
+    const payload = {
       source_id: sourceId,
       target_a: targetA,
       target_b: targetB,
       evidence_to_a_count: redistributedA.length,
       evidence_to_b_count: redistributedB.length,
+    };
+    const op = this._recordOperation(OPERATION_TYPE.SPLIT, payload, {
+      affectedIds: [sourceId, targetA, targetB],
+      movements: [
+        ...evidenceMovements(redistributedA, sourceId, targetA),
+        ...evidenceMovements(redistributedB, sourceId, targetB),
+      ],
+      invariantChecks: [
+        { name: 'source_is_retired', passed: this.isRetired(sourceId) },
+        { name: 'targets_are_canonical', passed: this.resolveId(targetA) === targetA && this.resolveId(targetB) === targetB },
+        { name: 'evidence_reassigned_to_targets', passed: redistributedA.every(ev => ev.narrator_id === targetA) && redistributedB.every(ev => ev.narrator_id === targetB) },
+      ],
     });
-    this._log.push(op);
 
     return { ...op, evidence_to_a: redistributedA, evidence_to_b: redistributedB };
+  }
+
+  _recordOperation(type, payload, receiptData) {
+    const operation = makeOp(type, payload, {
+      ...receiptData,
+      stateVersion: this._log.length,
+    });
+    this._log.push(operation);
+    return cloneRecord(operation);
   }
 
   /**
@@ -251,7 +321,7 @@ export class EntityResolver {
       aliases: Object.fromEntries(this._aliases),
       idMap: Object.fromEntries(this._idMap),
       retiredIds: [...this._retiredIds],
-      log: [...this._log],
+      log: cloneRecord(this._log),
     };
   }
 
@@ -260,7 +330,7 @@ export class EntityResolver {
    * @returns {object[]}
    */
   getLog() {
-    return [...this._log];
+    return cloneRecord(this._log);
   }
 
   /**
@@ -306,6 +376,8 @@ export class EntityResolver {
         r.split(payload.source_id, payload.target_a, payload.target_b, evA, evB);
       }
     }
+    const replayedLog = r._log;
+    r._log = log.map((op, index) => cloneRecord(op.receipt ? op : replayedLog[index]));
     return r;
   }
 

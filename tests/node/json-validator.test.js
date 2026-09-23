@@ -196,11 +196,13 @@ describe('validateBatch — JSON Pointer paths', () => {
 });
 
 describe('validateBatch — narrators array', () => {
-  it('warns on unresolved narrator IDs (auto-creatable)', () => {
-    const { valid, collector } = validateBatch(PARTIAL_MINIMAL);
+  it('warns without claiming or creating an unresolved narrator profile', () => {
+    const { valid, collector, normalized } = validateBatch(PARTIAL_MINIMAL);
     assert.isFalse(collector.hasErrors);
     const warn = collector.warnings.find(e => e.code === 'UNRESOLVED_REF');
     assert.isOk(warn);
+    assert.notMatch(warn.message, /auto-creat/i);
+    assert.notInclude(normalized.narrators.map(narrator => narrator.narrator_id), 'unknown-narrator');
   });
 });
 

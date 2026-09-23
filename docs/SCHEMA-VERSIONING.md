@@ -1,102 +1,72 @@
 # Schema Versioning
 
-## Principles
+Riwaq has two independent versioned schema domains. They intentionally use different version fields and compatibility rules.
 
-1. **Forward-only migrations** — a migration always goes from version N → N+1. No rollback migrations.
-2. **Idempotent migrations** — running the same migration twice on the same payload produces identical output.
-3. **Zero-loss upgrades** — existing `hadith-chain-builder-v2` state must survive the upgrade to family/variant format.
-4. **Version field lives at the top of the serialized payload** under key `_schema_version`.
+## 1. Browser Persisted Workspace Schema
 
-## Version Registry
+**Owner:** `scripts/compatibility-adapter.js` plus browser load/save logic in `index.html`
+**Storage key:** `hadith-chain-builder-v2`
+**Version field:** `_schema_version`
 
-| Version | Description | Migration |
-|---------|-------------|-----------|
-| `0` | Legacy single-chain format: `{ narrators: [...], draftLocations: [...], draftTags: [...] }` stored under key `hadith-chain-builder-v2` | None (origin) |
-| `1` | Canonical family/variant format: `{ _schema_version: 1, hadith_families: [...], workspace: {...}, _meta: {...} }` | `migrate-v0-to-v1()` in compatibility-adapter.js |
+### Principles
 
-## v0 → v1 Migration
+1. Migrations move forward from an older persisted representation to the current one.
+2. Migration functions must be idempotent for already-migrated state.
+3. Existing user-authored chain data must not be silently discarded.
+4. The serialized payload owns its `_schema_version` at the top level.
 
-The `migrateToV1(legacyPayload)` function in `scripts/compatibility-adapter.js` performs this upgrade. It is applied automatically on `loadState()` when the stored payload has no `_schema_version` field.
+### Registry
 
-### v0 → v1 Transformation Rules
+| Version | Meaning | Migration |
+|---|---|---|
+| `0` | Legacy single-chain workspace | origin |
+| `1` | Family/variant workspace representation | `migrateToV1(...)` |
 
-1. Each legacy chain becomes one `HadithFamily` with a single `IsnadVariant`.
-2. Each narrator becomes a `NarratorEntity` with the legacy fields mapped to canonical fields.
-3. All narrators in a variant are ordered by their `index` field → canonical `chain_order`.
-4. Dates, locations, tags, and biographical notes are preserved verbatim.
-5. `variant_id` is generated as `"legacy-variant-0"` for the single variant.
-6. `hadith_family_id` is generated as `"legacy-family-0"`.
-7. An `_meta.migration` block records migration metadata: `from_version: 0`, `migrated_at: <ISO8601>`.
+The v0 to v1 adapter converts legacy chain state into a family with a variant, maps narrators into canonical narrator entities, preserves user data, and records migration metadata.
 
-## v1 Format (Canonical — Locked)
+When changing this schema, update the compatibility adapter, its existing tests, and this document together.
 
-```json
-{
-  "_schema_version": 1,
-  "_meta": {
-    "created_at": "ISO8601",
-    "migrated_at": "ISO8601|null",
-    "from_version": 0|null,
-    "last_modified": "ISO8601"
-  },
-  "hadith_families": [
-    {
-      "hadith_family_id": "string",
-      "title": "string|null",
-      "source_ref": { "collection": "string", "source_type": "string", "source_locator": "string", "ingested_at": "ISO8601" },
-      "variants": [
-        {
-          "variant_id": "string",
-          "isnad_chain": ["narrator_id_0", "narrator_id_1", "..."],
-          "isnad_raw": "original text|null",
-          "matn_raw": "original text|null",
-          "metadata": { /* provenance, dates, etc. */ }
-        }
-      ],
-      "narrators": [
-        {
-          "narrator_id": "string",
-          "names": ["string"],
-          "kunya": "string|null",
-          "layla": "string|null",
-          "birth": { "jdn": "number|null", "description": "string|null" },
-          "death": { "jdn": "number|null", "description": "string|null" },
-          "biographical_notes": "string|null",
-          "locations": ["string"],
-          "tags": ["string"],
-          "reliability_evidence": [ /* ReliabilityEvidence[] */ ]
-        }
-      ],
-      "analyses": [
-        {
-          "analysis_id": "string",
-          "profile": "structural_only|reliability_weighted",
-          "status": "analysis_not_run|completed",
-           "results": [ /* AnalysisResult[] — see ARCHITECTURE.md and scripts/clpcl-analyzer.js */ ]
-        }
-      ]
-    }
-  ],
-  "workspace": {
-    "active_family_id": "string|null",
-    "ui_state": { /* tab, scroll, zoom, etc. */ }
-  }
-}
+## 2. Programmatic Import Batch Schema
+
+**Owner:** `scripts/json-validator.js`
+**Version field:** `schema_version`
+**Current version:** `1`
+
+This schema is the input contract for analysis. It is not the localStorage representation. A valid batch contains an import timestamp, one or more hadith records, family IDs, variants with ordered narrator IDs, source provenance, optional narrator profiles, and optional reliability evidence.
+
+**Authoritative representation:** the JSON files under `schemas/` are descriptive mirrors only; they are not loaded at runtime. The authoritative schema is the inline `SCHEMA` object inside `scripts/json-validator.js` (Ajv-compiled). When this schema evolves, update the inline schema, its tests, and (editorially) the mirrors together.
+
+`validateBatch(rawJson)` performs validation and returns `{ valid, collector, normalized }`. When blocking validation errors exist, `normalized` is null. Unknown narrator references are warnings; normalization does not generate narrator profiles for them.
+
+Reliability evidence records require these fields in the current import schema:
+
+```text
+evidence_id
+narrator_id
+rating
+source_type
+source_ref
+ingested_at
 ```
 
-## Future Migrations
+Allowed imported ratings are `thiqah`, `saduq`, `majhul`, `daif`, `matruk`, and `accused_fabrication`.
 
-When adding version 2:
-1. Add `migrateToV2(v1Payload)` function to `scripts/compatibility-adapter.js`.
-2. Register it in the `MIGRATIONS` registry.
-3. Document the transformation rules here.
-4. Add a test in `tests/node/compatibility-adapter.test.js`.
-5. Increment `_schema_version` in the app source.
+The canonical evidence attachment point is `narrators[].reliability_evidence`. Both reliability derivation and claim binding consume it. Version 1 continues to accept `records[].reliability_evidence` as a binding-only compatibility location; retaining acceptance avoids invalidating existing batches and therefore does not require a schema-version increment. When an evidence ID appears in both locations, binding uses the narrator-level record.
 
-## Rollback Policy
+## 3. Why the Schemas Stay Separate
 
-Rollback is not supported by the migration system. If a migration produces corrupted output, the user can:
-1. Clear browser localStorage (losing unsaved data).
-2. Re-load the last known-good state from a JSON export.
+The browser schema answers “how is an interactive workspace persisted and upgraded?” The import schema answers “what external research data is acceptable input to the analytical pipeline?” They have different consumers, lifecycles, and compatibility risks.
 
-No automated rollback is implemented; the system is designed for forward-only migration.
+The fact that both are currently version 1 is incidental. Never migrate one schema merely because the other changes version.
+
+## 4. Derived Data Is Not a Third Persistence Schema
+
+Narrator graphs, feature vectors, candidate scores, explainability output, canonical reports, and export artifacts are derivations from canonical input plus explicit analysis options. Prefer regenerating them after input or methodology changes rather than treating them as an independently authoritative persisted state.
+
+If a future feature persists a derived snapshot for reproducibility, it must include enough metadata to identify the source schema version, analysis profile, and methodology or code version needed to interpret it.
+
+Integrity manifests are optional sidecars rather than a third schema domain. They fingerprint normalized canonical records without changing the import payload or its `schema_version`.
+
+## 5. Rollback and Recovery
+
+There is no automated reverse migration for browser state. Recovery depends on a previously exported known-good state or clearing local storage and rebuilding the workspace. Any future migration that could destroy information therefore requires a tested forward migration path and an explicit backup or export strategy before release.

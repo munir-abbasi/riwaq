@@ -1,0 +1,182 @@
+{
+  "_comment": "Sample import batch — multi-variant family (synthetic demo data). Unlike sample-import.json (validity golden path), this batch exercises CL/PCL detection: a hub narrator with four downstream students across four collections. Run: node scripts/riwaq-cli.mjs pipeline docs/examples/sample-multi-variant.json — expect family_status=cl_detected, one CL candidate, can_export=true under the default structural_only profile.",
+  "schema_version": 1,
+  "imported_at": "2026-03-21T00:00:00.000Z",
+  "import_id": "sample-batch-002",
+  "source_batch_ref": "Synthetic demonstration family — not a real riwaya",
+  "records": [
+    {
+      "hadith_id": "demo-001",
+      "family_id": "demo-covenant-family",
+      "title": "Demo family — variant A",
+      "source_ref": {
+        "collection": "Sahih al-Bukhari (demo)",
+        "source_type": "print",
+        "source_locator": "Vol. 1, No. 1 (demo)",
+        "ingested_at": "2026-03-21T00:00:00.000Z",
+        "checksum": null
+      },
+      "variants": [
+        {
+          "variant_id": "demo-v-basra",
+          "isnad_chain": [
+            "urwah-ibn-al-zubayr",
+            "hisham-ibn-urwah",
+            "student-basra",
+            "collector-basra"
+          ],
+          "isnad_raw": null,
+          "matn_raw": "Demo matn text variant A.",
+          "collector_note": null,
+          "provenance": null
+        }
+      ],
+      "matn_raw": null,
+      "reliability_evidence": []
+    },
+    {
+      "hadith_id": "demo-002",
+      "family_id": "demo-covenant-family",
+      "title": "Demo family — variant B",
+      "source_ref": {
+        "collection": "Sahih Muslim (demo)",
+        "source_type": "print",
+        "source_locator": "Kitab al-Iman (demo)",
+        "ingested_at": "2026-03-21T00:00:00.000Z",
+        "checksum": null
+      },
+      "variants": [
+        {
+          "variant_id": "demo-v-kufa",
+          "isnad_chain": [
+            "urwah-ibn-al-zubayr",
+            "hisham-ibn-urwah",
+            "student-kufa",
+            "collector-kufa"
+          ],
+          "isnad_raw": null,
+          "matn_raw": "Demo matn text variant B.",
+          "collector_note": null,
+          "provenance": null
+        }
+      ],
+      "matn_raw": null,
+      "reliability_evidence": []
+    },
+    {
+      "hadith_id": "demo-003",
+      "family_id": "demo-covenant-family",
+      "title": "Demo family — variant C",
+      "source_ref": {
+        "collection": "Sunan al-Nasai (demo)",
+        "source_type": "print",
+        "source_locator": "Vol. 2, No. 7 (demo)",
+        "ingested_at": "2026-03-21T00:00:00.000Z",
+        "checksum": null
+      },
+      "variants": [
+        {
+          "variant_id": "demo-v-medina",
+          "isnad_chain": [
+            "urwah-ibn-al-zubayr",
+            "hisham-ibn-urwah",
+            "student-medina",
+            "collector-medina"
+          ],
+          "isnad_raw": null,
+          "matn_raw": "Demo matn text variant C.",
+          "collector_note": null,
+          "provenance": null
+        }
+      ],
+      "matn_raw": null,
+      "reliability_evidence": []
+    },
+    {
+      "hadith_id": "demo-004",
+      "family_id": "demo-covenant-family",
+      "title": "Demo family — variant D",
+      "source_ref": {
+        "collection": "Musnad Ahmad (demo)",
+        "source_type": "print",
+        "source_locator": "Vol. 2, p. 300 (demo)",
+        "ingested_at": "2026-03-21T00:00:00.000Z",
+        "checksum": null
+      },
+      "variants": [
+        {
+          "variant_id": "demo-v-mecca",
+          "isnad_chain": [
+            "urwah-ibn-al-zubayr",
+            "hisham-ibn-urwah",
+            "student-mecca",
+            "collector-mecca"
+          ],
+          "isnad_raw": null,
+          "matn_raw": "Demo matn text variant D.",
+          "collector_note": null,
+          "provenance": null
+        }
+      ],
+      "matn_raw": null,
+      "reliability_evidence": []
+    }
+  ],
+  "narrators": [
+    {
+      "narrator_id": "urwah-ibn-al-zubayr",
+      "names": ["Urwah ibn al-Zubayr"],
+      "kunya": "Abu al-Abbas",
+      "layla": null,
+      "birth": { "jdn": null, "year": null, "month": null, "day": null, "calendar": "hijri", "description": "circa 23 AH (demo)", "is_approximate": true },
+      "death": { "jdn": null, "year": 94, "month": null, "day": null, "calendar": "hijri", "description": null, "is_approximate": false },
+      "biographical_notes": "Demo profile.",
+      "locations": ["Medina"],
+      "tags": ["demo"],
+      "aliases": [],
+      "reliability_evidence": []
+    },
+    {
+      "narrator_id": "hisham-ibn-urwah",
+      "names": ["Hisham ibn Urwah"],
+      "kunya": "Abu al-Mundhir",
+      "layla": null,
+      "birth": { "jdn": null, "year": 153, "month": null, "day": null, "calendar": "hijri", "description": "circa 153 AH (demo)", "is_approximate": true },
+      "death": { "jdn": null, "year": 227, "month": null, "day": null, "calendar": "hijri", "description": null, "is_approximate": false },
+      "biographical_notes": "Demo hub narrator with four downstream students in this synthetic family.",
+      "locations": ["Medina", "Baghdad"],
+      "tags": ["demo"],
+      "aliases": [],
+      "reliability_evidence": [
+        {
+          "evidence_id": "ev-demo-hisham-001",
+          "narrator_id": "hisham-ibn-urwah",
+          "rating": "thiqah",
+          "rating_confidence": 0.9,
+          "scholar": "Demo scholar",
+          "work": "Demo rijal work",
+          "citation_text": "Demo citation (thiqa).",
+          "citation_span": null,
+          "dissent_notes": null,
+          "date_layer": "reported",
+          "source_type": "print",
+          "source_ref": {
+            "collection": "Demo rijal work",
+            "source_type": "print",
+            "source_locator": "Vol. 2, p. 159 (demo)",
+            "ingested_at": "2026-03-21T00:00:00.000Z"
+          },
+          "ingested_at": "2026-03-21T00:00:00.000Z"
+        }
+      ]
+    },
+    { "narrator_id": "student-basra", "names": ["Demo student of Basra"], "kunya": null, "layla": null, "birth": null, "death": null, "biographical_notes": null, "locations": ["Basra"], "tags": ["demo"], "aliases": [], "reliability_evidence": [] },
+    { "narrator_id": "student-kufa", "names": ["Demo student of Kufa"], "kunya": null, "layla": null, "birth": null, "death": null, "biographical_notes": null, "locations": ["Kufa"], "tags": ["demo"], "aliases": [], "reliability_evidence": [] },
+    { "narrator_id": "student-medina", "names": ["Demo student of Medina"], "kunya": null, "layla": null, "birth": null, "death": null, "biographical_notes": null, "locations": ["Medina"], "tags": ["demo"], "aliases": [], "reliability_evidence": [] },
+    { "narrator_id": "student-mecca", "names": ["Demo student of Mecca"], "kunya": null, "layla": null, "birth": null, "death": null, "biographical_notes": null, "locations": ["Mecca"], "tags": ["demo"], "aliases": [], "reliability_evidence": [] },
+    { "narrator_id": "collector-basra", "names": ["Demo collector (Basra)"], "kunya": null, "layla": null, "birth": null, "death": null, "biographical_notes": null, "locations": ["Basra"], "tags": ["demo"], "aliases": [], "reliability_evidence": [] },
+    { "narrator_id": "collector-kufa", "names": ["Demo collector (Kufa)"], "kunya": null, "layla": null, "birth": null, "death": null, "biographical_notes": null, "locations": ["Kufa"], "tags": ["demo"], "aliases": [], "reliability_evidence": [] },
+    { "narrator_id": "collector-medina", "names": ["Demo collector (Medina)"], "kunya": null, "layla": null, "birth": null, "death": null, "biographical_notes": null, "locations": ["Medina"], "tags": ["demo"], "aliases": [], "reliability_evidence": [] },
+    { "narrator_id": "collector-mecca", "names": ["Demo collector (Mecca)"], "kunya": null, "layla": null, "birth": null, "death": null, "biographical_notes": null, "locations": ["Mecca"], "tags": ["demo"], "aliases": [], "reliability_evidence": [] }
+  ]
+}

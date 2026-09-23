@@ -236,3 +236,54 @@ describe('EntityResolver — log replay', () => {
     assert.equal(r.getLog().length, 2);
   });
 });
+
+describe('EntityResolver — durable operation receipts', () => {
+  it('records replayable receipts for alias, merge, and split operations', () => {
+    const r = new EntityResolver().seedFromBatch(BATCH_PRE_MERGE);
+    const evidenceMap = new Map([
+      ['narr-x', [{ evidence_id: 'ev-x', narrator_id: 'narr-x', rating: 'thiqah' }]],
+      ['narr-z', [
+        { evidence_id: 'ev-z-a', narrator_id: 'narr-z', split_target: 'narr-z-a' },
+        { evidence_id: 'ev-z-b', narrator_id: 'narr-z', split_target: 'narr-z-b' },
+      ]],
+    ]);
+
+    r.addAlias('Narrator Y Alias', 'narr-y');
+    r.merge('narr-x', 'narr-y', evidenceMap);
+    r.split('narr-z', 'narr-z-a', 'narr-z-b', evidenceMap.get('narr-z').slice(0, 1), evidenceMap.get('narr-z').slice(1));
+
+    const log = r.getLog();
+    assert.deepEqual(log.map(op => op.type), [OPERATION_TYPE.ALIAS_ADD, OPERATION_TYPE.MERGE, OPERATION_TYPE.SPLIT]);
+    assert.deepEqual(log.map(op => op.receipt.state_refs), [
+      { before: 'entity-resolution-log:0', after: 'entity-resolution-log:1' },
+      { before: 'entity-resolution-log:1', after: 'entity-resolution-log:2' },
+      { before: 'entity-resolution-log:2', after: 'entity-resolution-log:3' },
+    ]);
+    assert.ok(log.every(op => op.receipt.verification.status === 'passed'));
+    assert.ok(log.every(op => op.receipt.invariant_checks.every(check => check.passed)));
+    assert.deepEqual(log[1].receipt.provenance.movements, [
+      { evidence_id: 'ev-x', from_id: 'narr-x', to_id: 'narr-y' },
+    ]);
+    assert.deepEqual(log[2].receipt.provenance.movements, [
+      { evidence_id: 'ev-z-a', from_id: 'narr-z', to_id: 'narr-z-a' },
+      { evidence_id: 'ev-z-b', from_id: 'narr-z', to_id: 'narr-z-b' },
+    ]);
+
+    const replayed = EntityResolver.fromLog(log, evidenceMap);
+    assert.deepEqual(replayed.getLog(), log);
+    assert.equal(replayed.resolveId('narr-x'), 'narr-y');
+    assert.isTrue(replayed.isRetired('narr-z'));
+  });
+
+  it('does not expose mutable references to stored receipts', () => {
+    const r = new EntityResolver();
+    r.registerNarrator('source', []);
+    r.registerNarrator('target', []);
+    const operation = r.merge('source', 'target');
+    operation.receipt.affected_ids.push('tampered-return');
+    const externalLog = r.getLog();
+    externalLog[0].receipt.affected_ids.push('tampered-log');
+
+    assert.deepEqual(r.getLog()[0].receipt.affected_ids, ['source', 'target']);
+  });
+});

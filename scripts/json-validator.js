@@ -263,7 +263,7 @@ function validateNarratorReferences(records, narrators, collector) {
       for (let ci = 0; ci < (variant.isnad_chain || []).length; ci++) {
         const nid = variant.isnad_chain[ci];
         if (!definedIds.has(nid)) {
-          collector.warn(ERROR_CODE.UNRESOLVED_REF, `Narrator ID "${nid}" in isnad_chain not defined in narrators array (will be auto-created)`, ['records', String(ri), 'variants', variant.variant_id, 'isnad_chain', String(ci)], ri);
+          collector.warn(ERROR_CODE.UNRESOLVED_REF, `Narrator ID "${nid}" in isnad_chain is not defined in narrators array; add an explicit narrator profile when metadata is required`, ['records', String(ri), 'variants', variant.variant_id, 'isnad_chain', String(ci)], ri);
         }
       }
     }

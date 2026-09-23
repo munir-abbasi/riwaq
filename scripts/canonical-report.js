@@ -50,6 +50,7 @@ export function buildReportData(batch, analysisResult, explainabilityResult, val
     profile: c.profile,
     structural_score: c.structural_score,
     reliability_prior: c.reliability_prior,
+    matn_coherence_basis: c.matn_coherence_basis,
     contradiction_cap: c.contradiction_cap_active || false,
     bundle_coverage: c.bundle_coverage,
     fan_out: c.fan_out,
@@ -129,6 +130,31 @@ export function buildReportData(batch, analysisResult, explainabilityResult, val
   };
 }
 
+function buildFamilyReportData(batch, familyId, analysisResult, explainabilityResult, validationResult, artifacts) {
+  const familyBatch = {
+    ...batch,
+    records: (batch.records || []).filter(record => record.family_id === familyId),
+  };
+  const data = buildReportData(
+    familyBatch,
+    analysisResult,
+    explainabilityResult,
+    validationResult,
+    artifacts
+  );
+
+  return {
+    family_id: familyId,
+    metadata: data.family_metadata[0] || null,
+    analysis: data.analysis,
+    candidates: data.candidates,
+    evidence_binding: data.evidence_binding,
+    artifacts: data.artifacts,
+    uncertainty: data.uncertainty,
+    audit_trail: data.audit_trail,
+  };
+}
+
 export class CanonicalReport {
   /**
    * @param {object} batch
@@ -194,6 +220,14 @@ export class CanonicalReport {
       artifactsPerFamily[primaryFamily]
     );
     this._reportData.family_ids = familyIds;
+    this._reportData.families = familyIds.map(fid => buildFamilyReportData(
+      this._batch,
+      fid,
+      analysisResults[fid],
+      explainabilityResults[fid],
+      validationResults[fid],
+      artifactsPerFamily[fid]
+    ));
     this._reportData.all_analysis = analysisResults;
     this._reportData.all_validation = validationResults;
     this._reportData.all_explainability = explainabilityResults;

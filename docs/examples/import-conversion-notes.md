@@ -44,9 +44,9 @@ For OCR output of printed texts:
 
 1. Parse each line for the pattern: `حدثنا X عن Y عن Z`
 2. Token-split on ` عن ` (Arabic "an")
-3. Reverse the order (raw OCR is bottom-to-top, our schema is bottom-to-top too — verify)
-4. Apply normalization: strip diacritics, normalize alif/ya variations
-5. Assign canonical IDs using `deriveNarratorId()` logic: `lowercase(arabic-to-latin(name))`
+3. Verify the chain orientation against the source before conversion; OCR order and source layout cannot be assumed
+4. Apply text normalization only to the extent needed for matching, while preserving the source wording separately
+5. Resolve each narrator to a persistent canonical ID using a maintained identity map
 
 ### 4. Markdown Tables
 
@@ -59,18 +59,9 @@ Narrator IDs must:
 - Be alphanumeric + hyphen/underscore only: `^[a-zA-Z0-9_-]+$`
 - Be stable across imports (same narrator = same ID)
 - Be ≤ 128 characters
+- Be collision-safe without depending on array position or import order
 
-Use this derivation strategy:
-
-```
-normalized = name.toLowerCase().trim()
-            .replace(/[^a-z0-9\s-]/g, '')  // strip non-Latin chars
-            .replace(/\s+/g, '-')
-base_id = normalized || `narrator-${index}`
-id = `${base_id}:i${index}`  // index ensures uniqueness
-```
-
-For Arabic names, also create a secondary ID with Arabic transliteration.
+The repository does not define a canonical narrator-ID generator for imports. `scripts/compatibility-adapter.js` contains browser-workspace migration logic and must not be treated as the import-ID authority. External conversion tooling should assign an ID once, persist the name-to-ID mapping, and reuse that ID on later imports. If two narrators normalize to the same slug, resolve the collision with a stable disambiguator that remains the same across imports.
 
 ## Provenance Requirements
 
@@ -97,8 +88,31 @@ Optional but recommended:
 
 ## Post-Conversion Validation
 
-1. Run the JSON validator: `node scripts/json-validator.js < your-import.json`
-2. Review `import_errors.json` for errors and warnings.
-3. Fix all blocking errors before importing.
-4. Address warnings for best analysis quality.
-5. Run preflight gates to see quality score.
+Fastest path — the control CLI (no code):
+
+```bash
+node scripts/riwaq-cli.mjs pipeline your-import.json
+```
+
+This validates, scores quality, runs the integrity sweep, and builds the report in one shot; the JSON envelope on stdout contains every stage's results and exit code is `0` only when the export gate is open.
+
+Programmatic path — `scripts/json-validator.js` is a module API. Call `validateBatch(rawJson)` and inspect the returned `valid`, `collector`, and `normalized` values. For example:
+
+```javascript
+import fs from 'node:fs';
+import { validateBatch } from '../../scripts/json-validator.js';
+
+const raw = fs.readFileSync('your-import.json', 'utf8');
+const { valid, collector, normalized } = validateBatch(raw);
+
+console.log(JSON.stringify(collector.toReport(), null, 2));
+if (!valid) process.exitCode = 1;
+```
+
+Then:
+
+1. Fix all blocking validation errors before importing.
+2. Review unresolved narrator and other warnings in context. Note: the standalone anti-hallucination sweep treats undeclared chain narrators as *blocking* even though the validator only warns (`cli hallucination`).
+3. Run the preflight gates on the normalized batch (`cli gates`).
+4. Treat quality score `<20` as blocking, `20–49` as warning-only, and `>=50` as a healthier target rather than a hard validity threshold (bands owned by `docs/ARCHITECTURE.md`).
+5. If your wrapper writes a report file, document that wrapper explicitly; the validator module itself does not create `import_errors.json`.

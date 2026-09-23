@@ -59,6 +59,7 @@ const RATING_PRIORS = Object.freeze({
 });
 
 const DEFAULT_MATN_COHERENCE = 0.50;
+const DEFAULT_MATN_COHERENCE_BASIS = 'default_constant_unmeasured';
 const CONTRADICTION_CAP = 0.70;
 const SUPPORTED_THRESHOLD = 0.75;
 const CONTESTED_LOW = 0.55;
@@ -354,8 +355,8 @@ function mapRatingToPrior(rating) {
 function computeReliabilityPrior(nid, reliabilityLayer) {
   if (!reliabilityLayer) return 0.50;
   const derived = reliabilityLayer.getDerived(nid);
-  if (!derived || derived.confidence === undefined) return 0.50;
-  return derived.confidence;
+  if (!derived || derived.derived_confidence === undefined) return 0.50;
+  return derived.derived_confidence;
 }
 
 function applyContradictionCap(confidence, contradictionFlag) {
@@ -436,14 +437,7 @@ export class CLPCLAnalyzer {
     for (const nid of clCandidates) {
       const f = this._features.get(nid);
       const structural_score = computeStructuralScore(f);
-      let p0 = 0.50;
-
-      if (reliabilityLayer) {
-        const derived = reliabilityLayer.getDerived(nid);
-        if (derived && derived.confidence !== undefined) {
-          p0 = derived.confidence;
-        }
-      }
+      const p0 = computeReliabilityPrior(nid, reliabilityLayer);
 
       let final_confidence;
       if (profile === ANALYSIS_PROFILE.RELIABILITY_WEIGHTED) {
@@ -469,6 +463,7 @@ export class CLPCLAnalyzer {
         outcome,
         contradiction_cap_active: contradictionFlag,
         profile,
+        matn_coherence_basis: DEFAULT_MATN_COHERENCE_BASIS,
         features: {
           fan_out: f.fan_out,
           bundle_coverage: Math.round(f.bundle_coverage * 1e12) / 1e12,
@@ -499,14 +494,7 @@ export class CLPCLAnalyzer {
     for (const { id: nid, mode } of pclCandidates) {
       const f = this._features.get(nid);
       const structural_score = computeStructuralScore(f);
-      let p0 = 0.50;
-
-      if (reliabilityLayer) {
-        const derived = reliabilityLayer.getDerived(nid);
-        if (derived && derived.confidence !== undefined) {
-          p0 = derived.confidence;
-        }
-      }
+      const p0 = computeReliabilityPrior(nid, reliabilityLayer);
 
       let final_confidence;
       if (profile === ANALYSIS_PROFILE.RELIABILITY_WEIGHTED) {
@@ -532,6 +520,7 @@ export class CLPCLAnalyzer {
         outcome,
         contradiction_cap_active: contradictionFlag,
         profile,
+        matn_coherence_basis: DEFAULT_MATN_COHERENCE_BASIS,
         features: {
           fan_out: f.fan_out,
           bundle_coverage: Math.round(f.bundle_coverage * 1e12) / 1e12,

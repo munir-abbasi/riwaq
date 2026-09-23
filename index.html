@@ -6,43 +6,43 @@
   <title>Riwaq | Hadith Chain Builder</title>
   <style>
     :root {
-      --bg: #020303;
-      --bg-soft: #09110a;
-      --panel: rgba(10, 14, 10, 0.88);
-      --panel-strong: rgba(14, 20, 14, 0.97);
-      --line: rgba(210, 255, 109, 0.16);
-      --line-strong: rgba(210, 255, 109, 0.32);
-      --text: #f7fff2;
-      --muted: #9fb38f;
-      --neon: #d9ff57;
-      --neon-soft: rgba(217, 255, 87, 0.12);
-      --white-soft: rgba(255, 255, 255, 0.08);
-      --shadow: 0 26px 60px rgba(0, 0, 0, 0.46);
+      --bg: #fbfaf8;
+      --bg-soft: #f2efe9;
+      --panel: #ffffff;
+      --panel-strong: #ffffff;
+      --line: #1a1c1e;
+      --line-strong: #1a1c1e;
+      --text: #1a1c1e;
+      --muted: #4a4e52;
+      --accent: #003366;
+      --accent-soft: #e6eef5;
+      --white-soft: #ffffff;
+      --shadow: none;
       --node-width: 220px;
+      --ui-font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --matn-font: Georgia, Charter, "Times New Roman", serif;
+      --radius: 0px;
     }
 
     * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: auto; }
     body {
       margin: 0;
       min-height: 100vh;
-      font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+      font-family: var(--ui-font);
       color: var(--text);
-      background:
-        radial-gradient(circle at top, rgba(217, 255, 87, 0.08), transparent 28%),
-        radial-gradient(circle at bottom right, rgba(217, 255, 87, 0.06), transparent 24%),
-        linear-gradient(160deg, #000 0%, #030504 50%, #020302 100%);
+      background: var(--bg);
+      line-height: 1.5;
     }
 
     button, input, textarea, select { font: inherit; }
-    .page { max-width: 1500px; margin: 0 auto; padding: 22px; }
+    .page { max-width: 1500px; margin: 0 auto; padding: 20px; }
 
     .shell, .hero, .panel, .canvas-panel {
       background: var(--panel);
       border: 1px solid var(--line);
-      border-radius: 28px;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(16px);
+      border-radius: var(--radius);
+      box-shadow: none;
     }
 
     .shell {
@@ -50,8 +50,8 @@
       justify-content: space-between;
       align-items: center;
       gap: 16px;
-      padding: 18px 22px;
-      margin-bottom: 18px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
     }
 
     .brand {
@@ -61,175 +61,187 @@
     }
 
     .logo-badge {
-      width: 74px;
-      height: 74px;
-      border-radius: 50%;
+      width: 70px;
+      height: 70px;
+      border-radius: var(--radius);
       overflow: hidden;
       border: 1px solid var(--line-strong);
-      box-shadow: 0 0 24px rgba(217, 255, 87, 0.2);
       flex: 0 0 auto;
-      background: #000;
+      background: var(--bg-soft);
+      display: grid;
+      place-items: center;
+      font-weight: bold;
+      color: var(--accent);
+      font-size: 1.2rem;
     }
-
-    .logo-badge svg { width: 100%; height: 100%; display: block; }
 
     .brand h1, .brand p, .hero h2, .hero p, .panel h3, .small, .meta, .node p, .node small {
       margin: 0;
     }
 
     .brand h1 {
-      font-size: 1.32rem;
-      letter-spacing: 0.03em;
+      font-size: 1.5rem;
+      letter-spacing: normal;
+      font-weight: 700;
     }
 
     .brand p, .small, .meta, .node p, .node small, .helper {
       color: var(--muted);
-      line-height: 1.65;
+      line-height: 1.5;
     }
 
-    .actions { display: flex; flex-wrap: wrap; gap: 10px; }
+    .actions { display: flex; flex-wrap: wrap; gap: 8px; }
 
     .btn, .btn-primary, .mini-btn {
-      min-height: 44px;
-      padding: 10px 16px;
-      border-radius: 999px;
+      min-height: 40px;
+      padding: 8px 16px;
+      border-radius: var(--radius);
       cursor: pointer;
       border: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.02);
+      background: var(--panel);
       color: var(--text);
-      transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
+      font-weight: 600;
     }
 
-    .btn:hover, .btn-primary:hover, .mini-btn:hover {
-      transform: translateY(-1px);
-      border-color: var(--line-strong);
-      box-shadow: 0 0 20px rgba(217, 255, 87, 0.12);
+    .btn:hover, .btn:active, .mini-btn:hover, .mini-btn:active {
+      background: var(--line);
+      color: var(--panel);
     }
 
     .btn-primary {
-      color: #020302;
-      font-weight: 700;
-      border-color: transparent;
-      background: linear-gradient(135deg, #f5ffca 0%, var(--neon) 55%, #b8f13c 100%);
+      color: var(--panel);
+      background: var(--line);
+    }
+
+    .btn-primary:hover, .btn-primary:active {
+      background: var(--accent);
+      border-color: var(--accent);
     }
 
     .mini-btn {
-      min-height: 38px;
-      padding: 8px 12px;
-      font-size: 0.92rem;
+      min-height: 32px;
+      padding: 4px 12px;
+      font-size: 0.9rem;
     }
 
     .hero-wrap {
       display: grid;
       grid-template-columns: 1.1fr 0.9fr;
-      gap: 18px;
-      margin-bottom: 18px;
+      gap: 20px;
+      margin-bottom: 20px;
     }
 
-    .hero, .panel, .canvas-panel { padding: 24px; }
+    .hero, .panel, .canvas-panel { padding: 20px; }
 
     .eyebrow {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 8px 14px;
-      border-radius: 999px;
-      color: var(--neon);
-      background: var(--neon-soft);
+      padding: 4px 8px;
+      border-radius: var(--radius);
+      color: var(--panel);
+      background: var(--line);
       text-transform: uppercase;
-      letter-spacing: 0.08em;
-      font-size: 0.82rem;
-      box-shadow: inset 0 0 0 1px rgba(217, 255, 87, 0.12);
+      font-size: 0.8rem;
+      font-weight: 700;
+      border: 1px solid var(--line);
     }
 
     .hero h2 {
-      margin: 18px 0 12px;
-      font-size: clamp(2.5rem, 5vw, 4.6rem);
-      line-height: 0.93;
-      max-width: 10ch;
+      margin: 16px 0 12px;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      line-height: 1.1;
+      max-width: 12ch;
+      font-weight: 800;
     }
 
-    .hero p { max-width: 62ch; }
+    .hero p { max-width: 60ch; }
 
     .stats {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
+      gap: 0;
       margin-top: 24px;
+      border: 1px solid var(--line);
     }
 
     .stat, .highlight, .preview, .narrator-item {
-      border-radius: 22px;
+      border-radius: var(--radius);
       border: 1px solid var(--line);
-      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.015));
+      background: var(--panel);
     }
 
     .stat {
       padding: 16px;
-      box-shadow: inset 0 0 0 1px rgba(217, 255, 87, 0.03);
+      border: none;
+      border-right: 1px solid var(--line);
+    }
+    .stat:last-child {
+      border-right: none;
     }
 
     .stat strong {
       display: block;
-      margin-bottom: 6px;
-      font-size: 1.55rem;
-      color: var(--neon);
-      text-shadow: 0 0 18px rgba(217, 255, 87, 0.22);
+      margin-bottom: 4px;
+      font-size: 1.5rem;
+      color: var(--line);
+      font-weight: 700;
     }
 
     .highlights, .controls, .field-stack, .chip-editor, .preview-grid, .narrator-list, .age-stack, .matn-grid, .tab-panels {
       display: grid;
-      gap: 14px;
+      gap: 16px;
     }
 
-    .highlight { padding: 16px 18px; }
+    .highlight { padding: 16px; }
     .highlight strong, .preview strong {
       display: block;
-      margin-bottom: 6px;
-      color: var(--neon);
+      margin-bottom: 4px;
+      color: var(--line);
+      font-weight: 700;
     }
 
     .layout {
       display: grid;
       grid-template-columns: 560px minmax(0, 1fr);
-      gap: 22px;
+      gap: 20px;
       align-items: start;
     }
 
     .field-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
+      gap: 16px;
     }
 
     .form-section {
       padding: 20px;
-      border-radius: 22px;
+      border-radius: var(--radius);
       border: 1px solid var(--line);
-      background: linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.015));
+      background: var(--bg-soft);
     }
 
     .section-title {
       display: block;
-      margin-bottom: 10px;
-      color: var(--neon);
-      font-size: 0.92rem;
-      letter-spacing: 0.04em;
+      margin-bottom: 12px;
+      color: var(--line);
+      font-size: 1rem;
+      font-weight: 700;
       text-transform: uppercase;
     }
 
     .date-card {
       padding: 16px;
-      border-radius: 18px;
-      border: 1px solid rgba(217, 255, 87, 0.12);
-      background: rgba(255, 255, 255, 0.025);
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: var(--panel);
     }
 
     .date-card > span {
       display: block;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       color: var(--text);
-      font-size: 0.92rem;
+      font-weight: 600;
     }
 
     .calendar-choice {
@@ -240,11 +252,11 @@
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 10px;
-      margin-bottom: 8px;
+      margin-bottom: 4px;
       color: var(--muted);
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       text-transform: uppercase;
-      letter-spacing: 0.06em;
+      font-weight: 600;
     }
 
     .date-grid {
@@ -269,25 +281,33 @@
     .tabs {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 18px;
+      gap: 0;
+      margin-bottom: 20px;
+      border-bottom: 2px solid var(--line);
     }
 
     .tab-btn {
-      min-height: 46px;
-      padding: 10px 18px;
-      border-radius: 999px;
-      border: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.02);
-      color: var(--text);
+      min-height: 40px;
+      padding: 8px 16px;
+      border-radius: var(--radius);
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--muted);
       cursor: pointer;
-      transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
+      font-weight: 600;
+      margin-bottom: -2px;
     }
 
     .tab-btn.active {
-      background: rgba(217, 255, 87, 0.12);
-      border-color: var(--line-strong);
-      box-shadow: 0 0 20px rgba(217, 255, 87, 0.12);
+      color: var(--line);
+      border: 2px solid var(--line);
+      border-bottom-color: var(--bg);
+      background: var(--bg);
+    }
+    
+    .tab-btn:hover:not(.active) {
+      color: var(--line);
+      background: var(--bg-soft);
     }
 
     .tab-panel[hidden] {
@@ -296,103 +316,109 @@
 
     .matn-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      margin-top: 18px;
+      margin-top: 20px;
     }
 
     .matn-card {
-      padding: 16px;
-      border-radius: 20px;
+      padding: 20px;
+      border-radius: var(--radius);
       border: 1px solid var(--line);
-      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.015));
+      background: var(--panel);
     }
 
     .matn-card strong {
       display: block;
       margin-bottom: 8px;
-      color: var(--neon);
+      color: var(--line);
+      font-weight: 700;
     }
 
     .matn-text {
       white-space: pre-wrap;
-      line-height: 1.7;
+      line-height: 1.8;
       color: var(--text);
+      font-family: var(--matn-font);
+      font-size: 1.1rem;
     }
 
     .matn-legend {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
-      margin-top: 10px;
-      margin-bottom: 6px;
+      margin-top: 12px;
+      margin-bottom: 8px;
     }
 
     .legend-chip {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 7px 10px;
-      border-radius: 999px;
+      padding: 4px 8px;
+      border-radius: var(--radius);
       border: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.03);
-      color: var(--muted);
-      font-size: 0.82rem;
+      background: var(--panel);
+      color: var(--line);
+      font-size: 0.8rem;
+      font-weight: 600;
     }
 
     .legend-swatch {
       width: 12px;
       height: 12px;
-      border-radius: 50%;
+      border-radius: var(--radius);
       flex: 0 0 auto;
+      border: 1px solid var(--line);
     }
 
     .matn-token {
       display: inline;
-      padding: 2px 4px;
-      border-radius: 6px;
+      padding: 0 4px;
+      border-radius: var(--radius);
+      border: 1px solid transparent;
     }
 
     .matn-same {
       color: var(--text);
-      background: rgba(255, 255, 255, 0.04);
     }
 
     .matn-added {
-      color: #081004;
-      background: rgba(217, 255, 87, 0.9);
-      box-shadow: 0 0 12px rgba(217, 255, 87, 0.18);
+      color: #000;
+      background: #e6e6e6;
+      border-color: var(--line);
+      font-weight: bold;
     }
 
     .matn-removed {
-      color: #ffd9d9;
-      background: rgba(255, 99, 99, 0.16);
+      color: var(--text);
+      background: transparent;
       text-decoration: line-through;
-      text-decoration-thickness: 1.5px;
+      opacity: 0.6;
     }
 
     label {
       display: grid;
-      gap: 8px;
-      font-size: 0.96rem;
+      gap: 4px;
+      font-size: 0.9rem;
+      font-weight: 600;
     }
 
     input, textarea, select {
       width: 100%;
-      min-height: 48px;
-      padding: 12px 14px;
-      border-radius: 18px;
-      border: 1px solid rgba(217, 255, 87, 0.16);
-      background: rgba(255, 255, 255, 0.03);
+      min-height: 44px;
+      padding: 10px 12px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: var(--panel);
       color: var(--text);
       outline: none;
-      transition: border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
     }
 
-    textarea { min-height: 130px; resize: vertical; }
+    textarea { min-height: 120px; resize: vertical; }
 
     input:focus, textarea:focus, select:focus {
-      border-color: var(--line-strong);
-      box-shadow: 0 0 0 4px rgba(217, 255, 87, 0.11), 0 0 24px rgba(217, 255, 87, 0.08);
-      background: rgba(255, 255, 255, 0.05);
+      outline: 2px solid var(--line);
+      outline-offset: -1px;
+      border-color: var(--line);
     }
 
     .input-row { display: flex; gap: 10px; align-items: stretch; }
@@ -402,31 +428,18 @@
     .chip, .badge, .node-tag {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 6px 11px;
-      border-radius: 999px;
-      border: 1px solid rgba(217, 255, 87, 0.14);
-      background: rgba(217, 255, 87, 0.08);
-      color: #f3ffd1;
-      font-size: 0.84rem;
+      gap: 6px;
+      padding: 4px 8px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: var(--bg-soft);
+      color: var(--line);
+      font-size: 0.8rem;
+      font-weight: 600;
     }
 
-    .shape-pill {
-      border-radius: 999px;
-    }
-
-    .shape-square {
-      border-radius: 10px;
-    }
-
-    .shape-diamond {
-      border-radius: 10px;
-      transform: rotate(-8deg);
-    }
-
-    .shape-diamond > span {
-      display: inline-block;
-      transform: rotate(8deg);
+    .shape-pill, .shape-square, .shape-diamond {
+      border-radius: var(--radius);
     }
 
     .chip button {
@@ -436,6 +449,11 @@
       cursor: pointer;
       padding: 0;
       min-height: auto;
+      font-weight: bold;
+    }
+
+    .chip button:hover {
+      color: var(--accent);
     }
 
     .canvas-head {
@@ -443,20 +461,16 @@
       justify-content: space-between;
       gap: 16px;
       align-items: start;
-      margin-bottom: 14px;
+      margin-bottom: 16px;
     }
 
     .canvas {
       position: relative;
       min-height: 780px;
       overflow: hidden;
-      border-radius: 28px;
+      border-radius: var(--radius);
       border: 1px solid var(--line);
-      background:
-        linear-gradient(90deg, rgba(217, 255, 87, 0.06) 1px, transparent 1px),
-        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
-        radial-gradient(circle at top, rgba(21, 29, 18, 0.92), rgba(3, 4, 3, 0.98));
-      background-size: 24px 24px, 24px 24px, cover;
+      background: var(--panel);
     }
 
     .canvas.mega {
@@ -468,9 +482,8 @@
       inset: 10px;
       z-index: 50;
       padding: 20px;
-      background: rgba(4, 6, 4, 0.98);
-      border-color: var(--line-strong);
-      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.72);
+      background: var(--bg);
+      border: 2px solid var(--line);
     }
 
     .canvas-panel.maximized .canvas.mega {
@@ -481,14 +494,6 @@
 
     body.map-maximized {
       overflow: hidden;
-    }
-
-    .canvas::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at center, transparent 48%, rgba(217, 255, 87, 0.04) 100%);
-      pointer-events: none;
     }
 
     .canvas svg {
@@ -502,39 +507,34 @@
 
     .chain-path {
       fill: none;
-      stroke: rgba(217, 255, 87, 0.72);
-      stroke-width: 3;
-      stroke-linecap: round;
-      stroke-dasharray: 7 8;
-      filter: drop-shadow(0 0 12px rgba(217, 255, 87, 0.24));
+      stroke: var(--line);
+      stroke-width: 2;
+      stroke-linecap: square;
+      stroke-dasharray: none;
     }
 
     .node {
       position: absolute;
       width: var(--node-width);
-      padding: 14px;
-      border-radius: 24px;
-      border: 1px solid var(--line);
-      background: linear-gradient(180deg, rgba(16, 20, 16, 0.96), rgba(6, 8, 6, 0.96));
-      box-shadow: 0 22px 38px rgba(0, 0, 0, 0.42);
+      padding: 16px;
+      border-radius: var(--radius);
+      border: 2px solid var(--line);
+      background: var(--panel);
       cursor: grab;
       user-select: none;
       touch-action: none;
-      transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
     }
 
     .node:hover {
-      transform: translateY(-2px);
-      border-color: var(--line-strong);
-      box-shadow: 0 24px 40px rgba(0, 0, 0, 0.5), 0 0 18px rgba(217, 255, 87, 0.08);
+      background: var(--bg-soft);
     }
 
     .node.dragging {
       cursor: grabbing;
-      transition: none;
-      border-color: rgba(217, 255, 87, 0.46);
-      box-shadow: 0 30px 50px rgba(0, 0, 0, 0.58), 0 0 28px rgba(217, 255, 87, 0.14);
+      background: var(--bg-soft);
       z-index: 5;
+      outline: 2px solid var(--line);
+      outline-offset: 2px;
     }
 
     .node-top {
@@ -542,10 +542,12 @@
       justify-content: space-between;
       gap: 10px;
       align-items: start;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 10px;
     }
 
-    .node h4, .empty-state h3 { margin: 0; }
+    .node h4, .empty-state h3 { margin: 0; font-weight: 700; }
     .node-tags, .node-meta { margin-top: 10px; }
 
     .node-details[hidden] {
@@ -555,35 +557,64 @@
     .node-actions {
       display: flex;
       justify-content: flex-end;
-      margin-top: 10px;
+      margin-top: 12px;
+      border-top: 1px solid var(--line);
+      padding-top: 10px;
     }
 
     .node-toggle {
-      min-height: 32px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(217, 255, 87, 0.18);
-      background: rgba(255, 255, 255, 0.04);
-      color: var(--text);
+      min-height: 28px;
+      padding: 4px 8px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--line);
       cursor: pointer;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    
+    .node-toggle:hover {
+      background: var(--line);
+      color: var(--panel);
     }
 
     .empty-state {
       position: absolute;
-      inset: 22px;
+      inset: 20px;
       display: grid;
       place-items: center;
       text-align: center;
       padding: 24px;
-      border-radius: 22px;
-      border: 1px dashed rgba(217, 255, 87, 0.24);
-      background: rgba(255, 255, 255, 0.02);
+      border-radius: var(--radius);
+      border: 2px dashed var(--line);
+      background: var(--bg-soft);
     }
 
-    .narrator-item { padding: 14px 16px; }
-    .narrator-item strong { display: block; margin-bottom: 4px; }
+    .narrator-item { padding: 16px; }
+    .narrator-item strong { display: block; margin-bottom: 4px; font-weight: 700; }
     .helper { font-size: 0.9rem; }
+
+    .app-footer {
+      text-align: center;
+      padding: 32px 16px;
+      margin-top: 40px;
+      border-top: 2px solid var(--line);
+      color: var(--text-dim);
+      font-size: 0.9rem;
+      background: var(--bg);
+    }
+    .app-footer a {
+      color: var(--line);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      font-weight: 700;
+    }
+    .app-footer a:hover {
+      background: var(--line);
+      color: var(--bg);
+      text-decoration: none;
+    }
 
     @media (max-width: 1200px) {
       .hero-wrap, .layout { grid-template-columns: 1fr; }
@@ -591,13 +622,13 @@
     }
 
     @media (max-width: 760px) {
-      .page { padding: 14px; }
+      .page { padding: 12px; }
       .shell { flex-direction: column; align-items: start; }
       .stats, .field-grid, .preview-grid, .matn-grid { grid-template-columns: 1fr; }
       .date-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .form-section { padding: 14px; }
+      .form-section { padding: 16px; }
       .preview { min-height: auto; }
-      .node { width: min(270px, calc(100vw - 54px)); }
+      .node { width: min(270px, calc(100vw - 40px)); }
     }
   </style>
 </head>
@@ -607,13 +638,13 @@
       <div class="brand">
         <div class="logo-badge" aria-hidden="true">
           <svg viewBox="0 0 100 100" role="img">
-            <rect width="100" height="100" fill="#000"></rect>
-            <circle cx="50" cy="50" r="47" fill="none" stroke="rgba(217,255,87,0.1)" stroke-width="0.8"></circle>
-            <path d="M61 25a25 25 0 1 0 0 50a20 20 0 1 1 0-50z" fill="none" stroke="#d9ff57" stroke-width="5" stroke-linecap="round"></path>
-            <text x="50" y="15" fill="#efffb4" text-anchor="middle" font-size="7.5" letter-spacing="0.8">RIWAQ</text>
-            <text x="50" y="90" fill="#efffb4" text-anchor="middle" font-size="7.5" letter-spacing="0.8">ISNAD LABS</text>
-            <circle cx="12" cy="50" r="3.2" fill="#d9ff57"></circle>
-            <circle cx="88" cy="50" r="3.2" fill="#d9ff57"></circle>
+            <rect width="100" height="100" fill="var(--line)"></rect>
+            <circle cx="50" cy="50" r="47" fill="none" stroke="var(--bg-soft)" stroke-width="0.8"></circle>
+            <path d="M61 25a25 25 0 1 0 0 50a20 20 0 1 1 0-50z" fill="none" stroke="var(--bg)" stroke-width="5" stroke-linecap="round"></path>
+            <text x="50" y="15" fill="var(--bg)" text-anchor="middle" font-size="7.5" letter-spacing="0.8">RIWAQ</text>
+            <text x="50" y="90" fill="var(--bg)" text-anchor="middle" font-size="7.5" letter-spacing="0.8">ISNAD LABS</text>
+            <circle cx="12" cy="50" r="3.2" fill="var(--bg)"></circle>
+            <circle cx="88" cy="50" r="3.2" fill="var(--bg)"></circle>
           </svg>
         </div>
         <div>
@@ -850,6 +881,12 @@
       </section>
     </div>
   </div>
+
+  <footer class="app-footer">
+    <div class="container">
+      <p>Riwaq by <a href="https://www.syntaxhouse.com" target="_blank" rel="noopener noreferrer">Munir Abbasi</a> | <a href="https://github.com/munir-abbasi/riwaq" target="_blank" rel="noopener noreferrer">GitHub Repository</a></p>
+    </div>
+  </footer>
 
   <script>
     const STORAGE_KEY = "hadith-chain-builder-v2";

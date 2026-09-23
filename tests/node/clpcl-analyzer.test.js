@@ -280,7 +280,7 @@ describe('Fixture 5: Profile-difference (structural_only vs reliability_weighted
         source_locator: 'p.100',
         ingested_at: '2026-03-21T00:00:00.000Z',
       },
-      confidence: 1.0,
+      rating_confidence: 1.0,
     });
 
     const resultWeighted = analyzeBatch(
@@ -289,11 +289,23 @@ describe('Fixture 5: Profile-difference (structural_only vs reliability_weighted
       reliabilityLayer
     );
 
+    const derived = reliabilityLayer.getDerived('cl-node');
     assert.equal(resultWeighted.candidates[0].profile, ANALYSIS_PROFILE.RELIABILITY_WEIGHTED);
+    assert.equal(resultWeighted.candidates[0].reliability_prior, derived.derived_confidence);
+    assert.notEqual(resultWeighted.candidates[0].reliability_prior, 0.50);
     assert.notEqual(
       resultWeighted.candidates[0].final_confidence,
       resultStructural.candidates[0].final_confidence
     );
+  });
+
+  it('reliability_weighted keeps the neutral prior when no layer is injected', () => {
+    const resultWeighted = analyzeBatch(
+      FIXTURE_PROFILE_DIFFERENCE,
+      ANALYSIS_PROFILE.RELIABILITY_WEIGHTED,
+      null
+    );
+    assert.equal(resultWeighted.candidates[0].reliability_prior, 0.50);
   });
 
   it('reliability_prior is null for structural_only', () => {

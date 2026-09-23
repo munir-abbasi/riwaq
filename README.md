@@ -2,80 +2,80 @@
 
 **Inspired by:** [Academic Crescent Hadith Chain Builder](https://github.com/AcademicCrescent-spec/Isnad-builder~)
 
-A research-grade browser-based tool for building, analyzing, and exporting Hadith narrator chains (isnad/sanad). Supports both manual chain construction and automated CL/PCL (Common Link / Partial Common Link) candidate analysis with evidence-based confidence scoring.
+A browser-based tool for building, analyzing, and exporting Hadith narrator chains (isnad/sanad). It handles manual chain construction and automated Common Link (CL) candidate analysis using evidence-backed confidence scoring.
 
 **Author:** Munir Abbasi — [github.com/munir-abbasi](https://github.com/munir-abbasi) · [syntaxhouse.com](https://www.syntaxhouse.com)  
 **Published at:** [github.com/munir-abbasi/riwaq](https://github.com/munir-abbasi/riwaq)
+
+**Current version:** `1.1.0`
 
 ---
 
 ## Background
 
-Riwaq is an upgraded and vastly improved version of the original Academic Crescent app. While preserving all original chain-building features, Riwaq adds:
+Riwaq extends the original Academic Crescent application. It keeps the original chain-building interface and adds automated graph analysis based on G.H.A. Juynboll's methodology.
 
-- **Automated CL/PCL detection** with evidence-based confidence scoring
-- **Graph-based transmission analysis** using Juynboll's methodology
-- **Multi-variant family support** for modeling different transmission paths
-- **Evidence binding layer** linking analytical claims to classical biographical sources
-- **Anti-hallucination safeguards** that block unsupported claims from exports
-- **Multi-format publication exports** (Markdown, DOCX, PDF, JSON)
-- **Comprehensive test suite** (286 automated tests)
+New capabilities include:
+- Automated CL/PCL detection with confidence scoring.
+- Multi-variant family support to model alternate transmission paths.
+- An evidence binding layer (`scripts/evidence-binding.js`) that drops reliability-weighted claims if they lack provenance.
+- Integrity gates (`json-validator.js`, `anti-hallucination.js`, `preflight-gates.js`) that block invalid exports.
+- A deterministic CLI (`scripts/riwaq-cli.mjs`) for validation, analysis, and exporting.
+- Markdown, DOCX, PDF, and JSON exports generated from a single canonical report.
+- An automated test suite covering the pipeline.
 
-### Juynboll's CL/PCL Methodology
+### CL/PCL Methodology
 
-The Common Link / Partial Common Link framework was developed by Dutch Orientalist G.H.A. Juynboll (1935–2010), who built critically on Joseph Schacht's foundational work in Western hadith scholarship. In this framework:
+Riwaq implements Juynboll's framework to map transmission convergence.
 
-- A **Common Link (CL)** is the earliest narrator in an isnad transmission family who receives from a single authority and transmits that material to multiple students. It represents the convergence point in a transmission network — the point at which a hadith "enters the public domain" of hadith transmission.
+- **Common Link (CL):** A narrator identified from the primary branching pattern of an isnad family. Detection maps the structural graph; it does not independently prove authorship or fabrication.
+- **Partial Common Link (PCL):** A downstream branching candidate within the same family. It identifies a sub-branch, distinct from reliability judgments.
 
-- A **Partial Common Link (PCL)** is a downstream node in the same transmission family that exhibits a similar but weaker convergence pattern — it too receives from one authority and transmits to several, but the convergence is less pronounced.
+Topology shows where lineages converge. Interpreting these patterns historically requires external chronological and textual evidence. See `docs/domain/ICMA-*.md` for methodological background.
 
-By analyzing the graph topology of isnad chains, scholars can identify where transmission lineages converge and diverge, which in turn informs judgments about the historical provenance of hadith texts. Jonathan A.C. Brown has described Juynboll's contributions to this methodology as "substantial and groundbreaking," and the approach remains a cornerstone of isnād-cum-matn analysis (ICMA) in contemporary Western hadith scholarship.
+### Workflow
 
-### How This Tool Supports Scholars
+Riwaq shifts CL/PCL analysis from manual diagramming to a reproducible pipeline:
 
-This upgraded application translates the CL/PCL methodology from manual analysis into a systematic, reproducible workflow:
-
-- **Graph-based CL/PCL detection** analyzes narrator convergence across entire hadith collections, producing ranked CL and PCL candidates with transparent confidence scores and feature breakdowns.
-- **Multi-variant family analysis** models different transmission chains for the same hadith, making fan-out and bundle-coverage patterns visible and comparable.
-- **Evidence binding** links every analytical claim to specific reliability records from classical biographical sources (Tahdhib al-Kamal, Taqrib al-Tahdhib, Mizan al-I'tidal, etc.), anchoring the analysis in established scholarship.
-- **Anti-hallucination safeguards** flag unknown narrator IDs, missing provenance, and synthetic references — blocking unsupported claims from reaching exports so that scholarly output remains defensible.
-- **Professional DOCX and PDF export** produces publication-ready reports directly from the canonical report object, enabling scholars to integrate findings into peer-reviewed work without manual reformatting.
+- **Detection:** Ranks CL and PCL candidates across collections and exposes the exact features driving their confidence scores.
+- **Modeling:** Groups multiple transmission chains for the same hadith to expose bundle-coverage patterns.
+- **Evidence binding:** Separates structural analysis from reliability-weighted analysis. Claims relying on reliability scores must provide provenance records.
+- **Safeguards:** Flags unknown narrator IDs and synthetic references. If an evidence violation occurs, the system blocks the export.
+- **Exporting:** Generates DOCX and PDF reports directly from the canonical data object.
 
 ---
 
 ## Features
 
-### Chain Building (original Academic Crescent)
-All original Academic Crescent features are preserved and fully functional:
-- Narrator-by-narrator entry in chain order
-- Optional age tracking with Gregorian and Hijri calendar support (full day/month/year validation)
-- Draggable spider-chain map canvas with live SVG connectors
-- Matn (text) alignment with word-level diff highlighting — unchanged, added, and missing wording
-- Location and tag management with multiple tag shapes (pill, square, diamond)
-- Auto-save to browser `localStorage`
+### Chain Building
+The original Academic Crescent features remain intact:
+- Sequential narrator entry.
+- Age tracking with validated Gregorian and Hijri calendars.
+- Draggable spider-chain maps with live SVG connectors.
+- Word-level matn (text) diff highlighting.
+- Tag and location management.
+- Auto-save to `localStorage`.
 
-### New in this upgraded version
-
-### CL/PCL Analytics
-Two analysis profiles:
+### Analytics
+The analyzer supports two profiles:
 
 | Profile | Description |
 |---------|-------------|
-| `structural_only` (default) | Graph topology features only. Works with no external data. |
-| `reliability_weighted` (opt-in) | 65% structural score + 35% reliability prior. Requires narrator evidence. |
+| `structural_only` (default) | Computes graph topology features. Requires no external reliability data. |
+| `reliability_weighted` (opt-in) | Combines a 65% structural score with a 35% reliability prior. Requires an explicit `ReliabilityLayer`. |
 
-Analytics produces:
-- Ranked CL (Common Link) and PCL (Partner Common Link) candidates
-- Confidence scores with transparent feature breakdowns
-- Outcome labels: `supported`, `contested`, `uncertain`, `likely_weak_in_context`
-- Contradiction cap: unresolved conflicts cap confidence at `0.70` and limit outcome to `contested`
-- Per-family explainability reports with audit trails
+The pipeline outputs:
+- Ranked CL and PCL candidates with exact feature breakdowns.
+- Outcome labels (`supported`, `contested`, `uncertain`, `likely_weak_in_context`).
+- A contradiction cap that limits unresolved conflict scores to `0.70` and forces a `contested` outcome.
+- Per-family audit trails.
 
-### Claim Evidence Binding and Anti-Hallucination
-- Every analytical claim is bound to at least one reliability evidence record
-- Unknown narrator IDs, missing provenance, and synthetic references are flagged and blocked
-- Families with insufficient data are marked explicitly (`analysis_not_run`) rather than omitted
-- Unsupported claims never reach exports as factual statements
+### Evidence Binding & Integrity
+- Reliability-weighted claims fail if they lack provenance.
+- Structural-only claims operate independently of reliability evidence.
+- The validator flags unknown narrator IDs, missing provenance, and invalid references.
+- Sparse families receive an explicit `insufficient_data` label.
+- Any blocking violation closes the export gate.
 
 ### Multi-Format Exports
 All exports derive from a single canonical report object for consistency:
@@ -88,15 +88,13 @@ All exports derive from a single canonical report object for consistency:
 | JSON artifacts | Native JS | normalized_chains, narrator_graph, cl_candidates, analysis_snapshot |
 
 ### JSON Import
-Import batches of hadith records with:
-- Schema validation (strict type enforcement)
-- Item-level error reports with JSON Pointer paths
-- Provenance enforcement on every record
-- Stable IDs (`hadith_id`, `variant_id`, `narrator_id`)
-- Support for multi-variant families (multiple transmission chains per hadith)
-- Narrator biographical profiles with dates, locations, and reliability evidence
-- Full matn (text) import per variant
-- See [Import Format](#import-format) below for field-by-field details
+The importer processes hadith batches using schema validation. It provides:
+- Strict type enforcement and JSON Pointer error paths.
+- Provenance enforcement per record.
+- Stable IDs (`hadith_id`, `variant_id`, `narrator_id`).
+- Multi-variant family grouping.
+- Narrator profiles (dates, locations, reliability ratings).
+- Matn text import per variant.
 
 ---
 
@@ -111,33 +109,80 @@ python -m http.server 8000
 # Then open http://localhost:8000
 ```
 
+### Drive the system from the CLI
+
+```bash
+npm install
+
+# One-shot: validate -> quality gates -> integrity sweep -> report + export gate
+node scripts/riwaq-cli.mjs pipeline docs/examples/sample-import.json
+
+# Discover callable boundaries and their authoritative signals
+node scripts/riwaq-cli.mjs manifest
+
+# Derive the minimum owner/doc/test set for proposed capability changes
+node scripts/riwaq-cli.mjs impact module.entityResolver cli.snapshot
+
+# Create and later verify a separately retained integrity manifest
+node scripts/riwaq-cli.mjs seal docs/examples/sample-import.json > seal-envelope.json
+node scripts/riwaq-cli.mjs verify-seal docs/examples/sample-import.json --manifest seal-envelope.json
+
+# Inspect compact cross-layer state; publication state is data.publication.can_export
+node scripts/riwaq-cli.mjs snapshot docs/examples/sample-import.json
+
+# Individual controls
+node scripts/riwaq-cli.mjs validate docs/examples/sample-import.json
+node scripts/riwaq-cli.mjs analyze docs/examples/sample-import.json --profile structural_only
+node scripts/riwaq-cli.mjs report docs/examples/sample-import.json
+node scripts/riwaq-cli.mjs export docs/examples/sample-import.json --format md --out report.md
+```
+
+Every command prints a JSON envelope and uses stable process exit codes. Use `pipeline` for a compact cross-layer observation and `report` when complete ordered family results are needed under `data.families`. The `snapshot` command is an observational inspection tool: after valid input, it exits `0`; inspect `data.publication.can_export` for publication state. The `verify-seal` command compares canonical records with a separately retained baseline. It detects tampering but does not prove authenticity or grant export permission. Exports refuse to run when `canExport()` returns false.
+
 ### Build and analyze with analytics
 
 ```bash
-# Install test tooling
-npm install
-
 # Run the full test suite
-npx vitest run
+npm test
+npm run check     # parity + tests combined
 ```
 
 ### Programmatic analysis
 
 ```javascript
+import { validateBatch } from './scripts/json-validator.js';
 import { analyzeBatch, ANALYSIS_PROFILE } from './scripts/clpcl-analyzer.js';
-import { emitArtifacts } from './scripts/artifacts.js';
+import { CanonicalReport } from './scripts/canonical-report.js';
 import { exportMarkdown } from './scripts/export-md.js';
 
-// Analyze a batch
-const result = analyzeBatch(batch, ANALYSIS_PROFILE.STRUCTURAL_ONLY);
+// Validate and normalize first
+const { valid, collector, normalized } = validateBatch(rawBatchJson);
+if (!valid) throw new Error(JSON.stringify(collector.toReport(), null, 2));
 
-// Export as Markdown
-const report = CanonicalReport.fromBatch(batch, { profile: 'structural_only' });
+// Analyze a family
+const result = analyzeBatch(normalized, ANALYSIS_PROFILE.STRUCTURAL_ONLY);
+
+// Build the canonical report and export Markdown
+const report = CanonicalReport.fromBatch(normalized, { profile: 'structural_only' });
+const families = report.getReportData().families;
 const md = exportMarkdown(report);
-
-// Get JSON artifacts
-const artifacts = emitArtifacts(batch, result, 'family-id');
 ```
+
+### Reliability-weighted analysis (opt-in)
+
+The reliability prior applies only when you explicitly construct and inject a `ReliabilityLayer` (decision D007 in `docs/DECISIONS.md`). Without it, the prior defaults to a neutral `0.50`. Evidence must be attached at the batch level (`narrators[].reliability_evidence`) to seed the layer:
+
+```javascript
+import { ReliabilityLayer } from './scripts/reliability-layer.js';
+
+const layer = new ReliabilityLayer().seedFromBatch(normalized);
+const report = CanonicalReport.fromBatch(normalized, {
+  profile: 'reliability_weighted',
+  reliabilityLayer: layer,
+});
+```
+
+The CLI equivalent is `--with-reliability`. With a populated layer, the analyzer uses each candidate narrator's `derived_confidence`. Without it, it retains the neutral fallback (D014).
 
 ### Generate DOCX/PDF reports
 
@@ -152,11 +197,13 @@ const docxBytes = await exportDOCX(report);
 const pdfBytes = await exportPDF(report);
 ```
 
+Both exporters derive from the canonical report. When `report.canExport()` is false, publication is blocked.
+
 ---
 
 ## Import Format
 
-Import hadith batches using canonical JSON schema v1. See `docs/examples/sample-import.json` for a complete annotated example.
+Import hadith batches using canonical JSON schema v1. See `docs/examples/sample-import.json` for a complete example.
 
 ### Minimal Valid Batch
 
@@ -210,15 +257,20 @@ Each record in the `records` array supports:
 - `matn_raw` at record level — shared matn text (optional)
 
 **Reliability evidence (for `reliability_weighted` analysis):**
-- `reliability_evidence[].narrator_id` — which narrator this evidence concerns
-- `reliability_evidence[].rating` — scholarly assessment: `thiqah`, `saduq`, `majhur`, `daif`, `matruk`
-- `reliability_evidence[].source_ref` — provenance of the evidence itself
-- `reliability_evidence[].scholar` — name of the classical scholar
-- `reliability_evidence[].confidence` — confidence weight (0.0–1.0)
+- `reliability_evidence[].evidence_id` — stable evidence identifier
+- `reliability_evidence[].narrator_id` — narrator this evidence concerns
+- `reliability_evidence[].rating` — `thiqah`, `saduq`, `majhul`, `daif`, `matruk`, or `accused_fabrication`
+- `reliability_evidence[].source_type` — `url`, `print`, `manuscript`, or `oral_report`
+- `reliability_evidence[].source_ref` — provenance object containing `collection`, `source_type`, `source_locator`, and `ingested_at`
+- `reliability_evidence[].ingested_at` — ISO 8601 ingestion timestamp
+- `reliability_evidence[].rating_confidence` — optional confidence weight from 0.0 to 1.0
+- Optional descriptive fields include `scholar`, `work`, `citation_text`, `citation_span`, and `dissent_notes`
+
+Attach reliability evidence at the batch level (`narrators[].reliability_evidence`). Reliability scoring and claim-evidence binding read from there. Schema-v1 batches may contain record-level `records[].reliability_evidence`; binding accepts that location as a fallback, but it does not seed the reliability layer. See `docs/ARCHITECTURE.md` §Reliability-Wiring Contract.
 
 ### Narrator Profiles
 
-Include a `narrators` array at batch level to provide biographical context:
+Include a `narrators` array at the batch level to provide biographical context:
 
 ```json
 "narrators": [{
@@ -233,11 +285,11 @@ Include a `narrators` array at batch level to provide biographical context:
 }]
 ```
 
-Narrator IDs in `isnad_chain` arrays reference entries in the `narrators` array. The `reliability_evidence` on each narrator supports the `reliability_weighted` analysis profile.
+Narrator IDs in `isnad_chain` arrays normally reference entries in the `narrators` array. An unresolved reference generates a warning instead of a blocking schema error, and normalization does not create a blank profile for it. Supply the profile explicitly if you need biography or reliability evidence.
 
 ### Multi-Variant Families
 
-Group multiple transmission paths under one `family_id` to model hadith variants:
+Group transmission paths under one `family_id` to model hadith variants:
 
 ```json
 "family_id": "bukhari-001-family",
@@ -255,27 +307,15 @@ Group multiple transmission paths under one `family_id` to model hadith variants
 ]
 ```
 
-Multiple variants in one family feed the CL/PCL analyzer's fan-out and bundle-coverage features.
+Multiple variants in one family feed the CL/PCL analyzer's fan-out and bundle-coverage routines.
 
 ---
 
 ## Test Suite
 
-286 tests covering the full pipeline:
+The automated suite covers JSON validation, workspace compatibility, entity resolution, reliability derivation, CL/PCL analysis, evidence binding, canonical reports, exports, end-to-end determinism, and browser smoke behavior.
 
-| Area | Tests | File |
-|------|-------|------|
-| JSON validation and migration | 33+ | `tests/node/json-validator.test.js` |
-| Compatibility and schema migration | 21 | `tests/node/compatibility-adapter.test.js` |
-| Entity resolution | 27 | `tests/node/entity-resolution.test.js` |
-| Reliability layer | 27 | `tests/node/reliability-layer.test.js` |
-| CL/PCL analysis | 65 | `tests/node/clpcl-analyzer.test.js` |
-| Evidence binding + anti-hallucination | 49 | `tests/node/phase4.test.js` |
-| Canonical reports and exports | 42 | `tests/node/phase5.test.js` |
-| E2E pipeline and determinism | 22 | `tests/node/phase6.test.js` |
-| Browser smoke | 3 | `tests/browser/smoke.test.js` |
-
-**Reproducibility:** 4 × 20-run determinism tests confirm stable output across repeated runs (timestamps excluded from comparisons).
+Key test files are in `tests/node/` and `tests/browser/`. Use `npm test` for the Node suite.
 
 ---
 
@@ -284,14 +324,20 @@ Multiple variants in one family feed the CL/PCL analyzer's fan-out and bundle-co
 ```
 index.html              — Main app source (canonical)
 academic/index.html     — Deployed artifact (synced with index.html)
-scripts/               — Analytics and export modules
-schemas/                — JSON schema definitions
+AGENTS.md               — Agent entry point, invariants, ownership, validation routing
+scripts/                — Analytics, export, CLI, and tooling modules
+schemas/                — Descriptive JSON schema mirrors (NOT loaded at runtime; see docs/ARCHITECTURE.md)
 tests/                  — Full test suite (Node + browser)
 docs/
-  ARCHITECTURE.md       — Internal structure and API reference
+  AGENT-OPERATING-MODEL.md — Cross-layer abstraction tower, control surface, question routing
+  STATUS.md             — Implemented/designed/envisioned triage and open questions
+  DECISIONS.md          — Append-only durable architecture decisions
+  ARCHITECTURE.md       — Internal structure, API reference, canonical numeric contracts
   USAGE.md              — End-user workflow guide
   SECURITY.md           — Security model and hardening
   SCHEMA-VERSIONING.md  — Schema migration policy
+  how-does-it-work.md   — Conceptual explanation of workflow
+  domain/               — ICMA methodology background (non-authoritative)
   examples/             — Sample import JSON, CSV template, checklist
 vitest.config.js        — Test configuration
 vitest.browser.config.js — Browser smoke test config
@@ -313,10 +359,16 @@ vitest.browser.config.js — Browser smoke test config
 
 | File | Description |
 |------|-------------|
+| `AGENTS.md` | Agent orientation, invariants, ownership, and validation entry points |
+| `docs/AGENT-OPERATING-MODEL.md` | Abstraction tower, control-surface matrix, question routing |
+| `docs/STATUS.md` | Implemented/designed/envisioned triage and open-questions register |
+| `docs/DECISIONS.md` | Durable architecture and agent-operating decisions (append-only) |
 | `docs/USAGE.md` | End-user workflow for chain building and analytics |
-| `docs/ARCHITECTURE.md` | Module boundaries, API reference, analytics pipeline |
+| `docs/ARCHITECTURE.md` | Module boundaries, API reference, canonical numeric contracts, CLI |
 | `docs/SECURITY.md` | Threat model, escaping, date integrity, CI/CD hardening |
 | `docs/SCHEMA-VERSIONING.md` | v0 → v1 migration rules and future policy |
+| `docs/how-does-it-work.md` | Conceptual explanation of chain construction and analysis |
+| `docs/domain/ICMA-*.md` | Hadith-scholarship methodology background (non-authoritative) |
 | `docs/examples/sample-import.json` | Full valid import batch |
 | `docs/examples/import-template.csv` | Spreadsheet template for batch entry |
 | `docs/examples/import-checklist.md` | Pre-import validation checklist |
@@ -326,8 +378,11 @@ vitest.browser.config.js — Browser smoke test config
 ## Running Tests
 
 ```bash
-# All tests (286 passing)
-npx vitest run
+# Node test suite
+npm test
+
+# Parity + Node suite (pre-completion gate)
+npm run check
 
 # Verbose output
 npx vitest run --reporter=verbose
@@ -356,3 +411,86 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
+---
+
+## How to Cite
+
+If you use Riwaq in research, teaching, software development, or a scholarly
+publication, cite the exact software release used. Cite the methodological
+paper as well when your work relies on its conceptual or analytical framework.
+
+### Cite the software
+
+Riwaq's analytical behavior may change between releases. Cite a versioned
+release rather than the repository in general.
+
+After the v1.1.0 GitHub release is published, cite it as:
+
+```text
+Abbasi, M. (2026). Riwaq: A reproducible and evidence-bound framework for hadith transmission analysis (Version 1.1.0) [Computer software]. https://github.com/munir-abbasi/riwaq/releases/tag/v1.1.0
+```
+
+Use a persistent identifier, such as an archived release DOI, when one is
+available. Otherwise, use the versioned release URL.
+
+### Cite the methodological paper
+
+The accompanying paper describes the conceptual basis, structural-analysis
+model, evidence-provenance architecture, limitations, and proposed validation
+framework:
+
+```text
+Abbasi, M. (2026). Riwaq: An evidence-bound computational framework for reproducible hadith transmission analysis. [Manuscript].
+```
+
+After formal publication, replace this manuscript citation with the journal
+citation and DOI.
+
+### BibTeX
+
+Software:
+
+```bibtex
+@software{abbasi_riwaq_2026,
+  author  = {Abbasi, Munir},
+  title   = {Riwaq: A Reproducible and Evidence-Bound Framework for Hadith Transmission Analysis},
+  year    = {2026},
+  version = {1.1.0},
+  url     = {https://github.com/munir-abbasi/riwaq/releases/tag/v1.1.0},
+  note    = {Computer software}
+}
+```
+
+Methodological paper:
+
+```bibtex
+@article{abbasi_riwaq_2026,
+  author  = {Abbasi, Munir},
+  title   = {Riwaq: An Evidence-Bound Computational Framework for Reproducible Hadith Transmission Analysis},
+  year    = {2026},
+  note    = {Manuscript}
+}
+```
+
+### Reproducibility information
+
+For computational analyses, report the exact Riwaq release used. Include the
+following details where possible:
+
+```text
+Riwaq version: 1.1.0
+Release tag: v1.1.0
+Commit: <immutable commit hash>
+Analysis profile: <profile or configuration>
+```
+
+Riwaq's structural scores depend on the declared analytical configuration.
+Report any non-default weights, thresholds, penalties, missing-data rules, or
+other parameter changes used in the analysis.
+
+### Citation metadata
+
+Each public release should include a machine-readable `CITATION.cff` file so
+that GitHub, Zenodo, Zotero, and other citation tools can generate the
+appropriate citation automatically.

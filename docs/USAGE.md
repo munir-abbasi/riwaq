@@ -64,53 +64,71 @@ If fullscreen is exited with `Esc`, map UI state is synchronized automatically.
 
 ## Analytics Workflow (Implemented)
 
-The analytics layer is fully implemented. To use:
+The analytics layer is fully implemented. Two equivalent ways to drive it:
 
-1. **Import Data** — Use JSON import with schema v1 format. See `tests/fixtures/phase5/fixtures.js` for example batch structure.
+### Option A — the control CLI (no code)
 
-2. **Run Analysis** — Call the pipeline programmatically:
+```bash
+# One-shot observation: validate -> quality + integrity observations -> canonical report gate
+node scripts/riwaq-cli.mjs pipeline your-batch.json
+
+# Discover capabilities and inspect current cross-layer state
+node scripts/riwaq-cli.mjs manifest
+node scripts/riwaq-cli.mjs impact module.entityResolver cli.snapshot
+node scripts/riwaq-cli.mjs snapshot your-batch.json
+
+# Optional integrity baseline: retain the seal separately from the batch
+node scripts/riwaq-cli.mjs seal your-batch.json > seal-envelope.json
+node scripts/riwaq-cli.mjs verify-seal your-batch.json --manifest seal-envelope.json
+
+# Or step by step
+node scripts/riwaq-cli.mjs validate your-batch.json
+node scripts/riwaq-cli.mjs analyze your-batch.json --profile structural_only
+node scripts/riwaq-cli.mjs report your-batch.json
+node scripts/riwaq-cli.mjs export your-batch.json --format md --out report.md
+```
+
+Each command prints a JSON envelope. `manifest` is the capability/contract discovery surface; pass one or more returned capability IDs to `impact` to obtain the minimum owners, contract docs, downstream consumers, and verification commands. `report` exposes complete ordered family results under `data.families`; its existing summary fields continue to describe the first family. `pipeline` stays compact and reports per-family gate summaries under `data.report.per_family`; call `report` only when full family details are needed. Its stages declare their authority through `control_type`: validation is a blocking precondition, quality and anti-hallucination results are observations, and the report is the publication gate. `snapshot` is observational: after valid input it exits `0`, while `data.publication.can_export` reports the authoritative publication state delegated from `CanonicalReport.canExport()`. `verify-seal` is also observational: it detects changes relative to a separately retained manifest but does not prove authenticity or affect publication permission. After schema validation succeeds, pipeline `ok`/exit status follows `data.report.can_export`; observation stages do not independently control it.
+
+### Option B — programmatic
+
+1. **Import Data** — Use JSON import with schema v1 format. See `docs/examples/sample-import.json` for a complete valid batch, and `tests/fixtures/phase5/fixtures.js` for example batch structure.
+
+2. **Run Analysis** — Validate and normalize first, then call the analysis API:
    ```javascript
+   import { validateBatch } from './scripts/json-validator.js';
    import { analyzeBatch, ANALYSIS_PROFILE } from './scripts/clpcl-analyzer.js';
-   const result = analyzeBatch(batch, ANALYSIS_PROFILE.STRUCTURAL_ONLY);
-   // or
-   const result = analyzeBatch(batch, ANALYSIS_PROFILE.RELIABILITY_WEIGHTED);
+   const { valid, collector, normalized } = validateBatch(rawJson);
+   if (!valid) throw new Error(collector.toReport().summary.error_count + ' blocking errors');
+   const result = analyzeBatch(normalized, ANALYSIS_PROFILE.STRUCTURAL_ONLY);
    ```
 
 3. **Review Results** — The analysis returns:
-   - `family_status`: `supported`, `contested`, `insufficient_data`, or `contradicted`
-   - `candidates`: ranked CL/PCL candidates with confidence scores
+   - `family_status`: `cl_detected`, `pcl_only`, or `insufficient_data`
+   - `candidates`: ranked CL/PCL candidates with confidence scores and an `outcome`
    - `analysis_snapshot`: graph metrics and computed features
 
 4. **Generate Reports**:
    ```javascript
    import { CanonicalReport } from './scripts/canonical-report.js';
    import { exportMarkdown } from './scripts/export-md.js';
-   import { exportDOCX } from './scripts/export-docx.js';
-   import { exportPDF } from './scripts/export-pdf.js';
 
-   const report = CanonicalReport.fromBatch(batch, { profile: 'structural_only' });
+   const report = CanonicalReport.fromBatch(normalized, { profile: 'structural_only' });
    const md = exportMarkdown(report);
-   const docx = await exportDOCX(report);
-   const pdf = await exportPDF(report);
    ```
 
 5. **Export Artifacts**:
    ```javascript
    import { emitArtifacts } from './scripts/artifacts.js';
-   const artifacts = emitArtifacts(batch, analysisResult, familyId);
+   const artifacts = emitArtifacts(normalized, analysisResult, familyId);
    // Returns: normalized_chains, narrator_graph, cl_candidates, analysis_snapshot
    ```
 
 ### Profiles
 
 - `structural_only` — Uses graph topology features only. Works without reliability evidence.
-- `reliability_weighted` — Blends structural score (65%) with reliability prior (35%). Requires evidence.
+- `reliability_weighted` — Uses the weighted structural/reliability contract owned by `docs/ARCHITECTURE.md`. It requires evidence **and** an explicitly constructed, injected `ReliabilityLayer`; the CLI flag is `--with-reliability`. Attach evidence to `narrators[].reliability_evidence` so both the layer and claim binding consume the same canonical records. A populated layer supplies per-narrator `derived_confidence`; absent a derived assessment, the prior remains neutral.
 
-### Claim Confidence Levels
+### Candidate Outcomes and Export Gate
 
-- `HIGH` — Structural score ≥0.7 AND reliability evidence supports (thiqah/sahih)
-- `MEDIUM` — Structural score ≥0.5, or weak reliability
-- `LOW` — Structural score <0.5 or no evidence
-- `UNSUPPORTED` — Claim made without analysis
-
-The anti-hallucination layer prevents unsupported claims from reaching exports. See `scripts/evidence-binding.js` for validation logic.
+Outcome bands and contradiction-cap values are owned solely by `docs/ARCHITECTURE.md` §Canonical Numeric and Enum Contracts. Candidate outcomes are separate from `family_status` and from evidence-binding validity. For publication/export decisions, construct a `CanonicalReport` (or run `cli report` / `cli pipeline`) and check `can_export`. A blocking evidence-binding violation sets `analysis_can_proceed` false and closes that gate.

@@ -21,4 +21,22 @@ Thumbs.db
 # Local research documents (not for public repository)
 Riwaq_Research_Paper.md
 Riwaq_Research_Paper.pdf
+Riwaq_Research_paper.pdf
 draft.md
+
+# Local agent/tool working files
+.freebuff/
+AGENTS.md
+PLAN-agent-ergonomics-overhaul.md
+docs/AGENT-OPERATING-MODEL.md
+docs/ARCHITECTURE.md
+docs/DECISIONS.md
+docs/STATUS.md
+
+# Local generated/test artifacts
+elements-of-style-pro/
+test-docx.js
+test.docx
+vitest-out.json
+*.bak.*
+.~lock.*#

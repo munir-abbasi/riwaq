@@ -2,6 +2,9 @@
 
 Complete this checklist before running the JSON import validator. All items marked **[BLOCK]** must pass.
 
+> **Faster path:** the first three Post-Validation items can be checked in one command:
+> `node scripts/riwaq-cli.mjs pipeline your-batch.json` (validate + quality gates + integrity sweep + report).
+
 ## Schema Integrity [BLOCK]
 
 - [ ] `schema_version` is present and equals `1`
@@ -22,9 +25,18 @@ Complete this checklist before running the JSON import validator. All items mark
 
 ## Narrator References
 
-- [ ] Every `narrator_id` in `isnad_chain` is defined in the `narrators` array
+- [ ] Review every unresolved `narrator_id` warning; undefined profiles are non-blocking but may leave biography/reliability data incomplete
 - [ ] Every `narrator_id` in `narrators` is unique
 - [ ] Every `narrator_id` matches pattern `^[a-zA-Z0-9_-]+$`
+- [ ] Stable IDs are no longer than 128 characters
+
+## Reliability Evidence [BLOCK when present]
+
+- [ ] Every evidence record has `evidence_id`, `narrator_id`, `rating`, `source_type`, `source_ref`, and `ingested_at`
+- [ ] `rating` is one of: `thiqah`, `saduq`, `majhul`, `daif`, `matruk`, `accused_fabrication`
+- [ ] `source_type` is one of: `url`, `print`, `manuscript`, `oral_report`
+- [ ] `source_ref` contains `collection`, `source_type`, `source_locator`, and `ingested_at`
+- [ ] Optional `rating_confidence`, when supplied, is between 0 and 1
 
 ## Quality Recommendations
 
@@ -49,7 +61,8 @@ Complete this checklist before running the JSON import validator. All items mark
 
 ## Post-Validation
 
-- [ ] Import validator passes all `[BLOCK]` checks (no errors)
-- [ ] Quality score ≥ 50 (see preflight gate report)
+- [ ] Import validator passes all `[BLOCK]` checks (no errors) — `node scripts/riwaq-cli.mjs validate <file>` exits 0
+- [ ] Preflight quality score is reviewed: `<20` blocks; `20–49` warns but proceeds; `>=50` is the healthier target, not a hard validity gate — `node scripts/riwaq-cli.mjs gates <file>` (bands owned by `docs/ARCHITECTURE.md`)
+- [ ] Optional integrity sweep: `node scripts/riwaq-cli.mjs hallucination <file>` — stricter than schema validation; blocks undeclared chain narrators and synthetic-pattern IDs (`test_`, `auto_`, `generated_`, `null`, `unknown`, …) that the schema validator accepts
 - [ ] All warnings reviewed and acknowledged
-- [ ] `import_errors.json` reviewed for false positives
+- [ ] If your calling workflow writes a validation report, review that report; `scripts/json-validator.js` itself does not create `import_errors.json`

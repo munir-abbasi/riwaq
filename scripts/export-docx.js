@@ -212,15 +212,16 @@ function _zipFiles(files) {
   let offset = 0;
   for (const entry of entries) {
     const nameBytes = Buffer.from(new TextEncoder().encode(entry.name));
-    const cd = _cdEntry(nameBytes, entry.raw.length, entry.deflated.length, offset);
+    const rawBuf = Buffer.isBuffer(entry.raw) ? entry.raw : Buffer.from(entry.raw);
+    const cd = _cdEntry(nameBytes, entry.raw.length, entry.deflated.length, offset, crc32(rawBuf));
     cdEntries.push(cd);
     offset += 30 + nameBytes.length + entry.deflated.length;
   }
 
   const totalCdSize = cdEntries.reduce((s, e) => s + e.length, 0);
-  const eocdOffset = offset + totalCdSize;
+  const eocdOffset = offset;
   const eocd = _zipEOCD(entries.length, totalCdSize, eocdOffset);
-  const buf = Buffer.alloc(eocdOffset + eocd.length);
+  const buf = Buffer.alloc(offset + totalCdSize + eocd.length);
 
   let pos = 0;
   for (const entry of entries) {
@@ -253,23 +254,24 @@ function _zipFiles(files) {
   return new Uint8Array(buf);
 }
 
-function _cdEntry(nameBytes, rawLen, deflatedLen, offset) {
+function _cdEntry(nameBytes, rawLen, deflatedLen, offset, fileCrc) {
   const cd = Buffer.alloc(46 + nameBytes.length);
   cd.writeUInt32LE(0x02014b50, 0);
   cd.writeUInt16LE(20, 4);
   cd.writeUInt16LE(20, 6);
   cd.writeUInt16LE(0, 8);
-  cd.writeUInt16LE(0, 10);
+  cd.writeUInt16LE(8, 10);
   cd.writeUInt32LE(0, 12);
-  cd.writeUInt32LE(crc32(nameBytes), 16);
+  cd.writeUInt32LE(fileCrc, 16);
   cd.writeUInt32LE(deflatedLen, 20);
   cd.writeUInt32LE(rawLen, 24);
   cd.writeUInt16LE(nameBytes.length, 28);
-  cd.writeUInt16LE(0, 30);
-  cd.writeUInt16LE(0, 32);
-  cd.writeUInt16LE(0, 34);
-  cd.writeUInt32LE(0, 36);
-  cd.writeUInt32LE(offset, 40);
+  cd.writeUInt16LE(0, 30); // extra field len
+  cd.writeUInt16LE(0, 32); // comment len
+  cd.writeUInt16LE(0, 34); // disk num
+  cd.writeUInt16LE(0, 36); // internal attr
+  cd.writeUInt32LE(0, 38); // external attr
+  cd.writeUInt32LE(offset, 42); // relative offset
   nameBytes.copy(cd, 46);
   return cd;
 }

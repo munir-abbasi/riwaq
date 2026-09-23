@@ -238,12 +238,23 @@ describe('canonical-report.js', () => {
     assert.equal(report.canExport(), true);
   });
 
-  it('analyzes all families in multi-family batch', () => {
+  it('serializes every family while preserving the primary-family fields', () => {
     const report = CanonicalReport.fromBatch(BATCH_MULTI_FAMILY, { profile: 'reliability_weighted' });
-    const familyIds = report.getFamilyIds();
-    assert.equal(familyIds.length, 2);
-    assert.ok(familyIds.includes('family-alpha'));
-    assert.ok(familyIds.includes('family-beta'));
+    const responseDump = JSON.parse(JSON.stringify(report));
+
+    assert.deepEqual(responseDump.family_ids, ['family-alpha', 'family-beta']);
+    assert.ok(Array.isArray(responseDump.families));
+    assert.deepEqual(responseDump.families.map(family => family.family_id), responseDump.family_ids);
+
+    for (const family of responseDump.families) {
+      assert.equal(family.analysis.family_status, report.getAnalysisResult(family.family_id).family_status);
+      assert.equal(
+        family.evidence_binding.analysis_can_proceed,
+        report.getValidationResult(family.family_id).analysis_can_proceed
+      );
+    }
+
+    assert.deepEqual(responseDump.candidates, responseDump.families[0].candidates);
   });
 
   it('getArtifacts() returns per-family artifacts', () => {
