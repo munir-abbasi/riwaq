@@ -48,6 +48,12 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: npm
+      # export-pdf.js converts DOCX to PDF by spawning soffice; the runner
+      # image ships no LibreOffice, which fails the three phase5 PDF tests
+      # with "spawn soffice ENOENT" (docs/ARCHITECTURE.md requires soffice
+      # on PATH in the test environment).
+      - name: Install LibreOffice Writer (soffice for PDF export tests)
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends libreoffice-writer
       - name: Install dependencies
         # The Node suite needs no browser; skip the best-effort playwright
         # postinstall (observed stalling >5 min on a slow CDN link, while the
