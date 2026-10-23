@@ -76,6 +76,7 @@ node scripts/riwaq-cli.mjs pipeline your-batch.json
 node scripts/riwaq-cli.mjs manifest
 node scripts/riwaq-cli.mjs impact module.entityResolver cli.snapshot
 node scripts/riwaq-cli.mjs snapshot your-batch.json
+node scripts/riwaq-cli.mjs diagnose your-batch.json
 
 # Optional integrity baseline: retain the seal separately from the batch
 node scripts/riwaq-cli.mjs seal your-batch.json > seal-envelope.json
@@ -88,7 +89,7 @@ node scripts/riwaq-cli.mjs report your-batch.json
 node scripts/riwaq-cli.mjs export your-batch.json --format md --out report.md
 ```
 
-Each command prints a JSON envelope. `manifest` is the capability/contract discovery surface; pass one or more returned capability IDs to `impact` to obtain the minimum owners, contract docs, downstream consumers, and verification commands. `report` exposes complete ordered family results under `data.families`; its existing summary fields continue to describe the first family. `pipeline` stays compact and reports per-family gate summaries under `data.report.per_family`; call `report` only when full family details are needed. Its stages declare their authority through `control_type`: validation is a blocking precondition, quality and anti-hallucination results are observations, and the report is the publication gate. `snapshot` is observational: after valid input it exits `0`, while `data.publication.can_export` reports the authoritative publication state delegated from `CanonicalReport.canExport()`. `verify-seal` is also observational: it detects changes relative to a separately retained manifest but does not prove authenticity or affect publication permission. After schema validation succeeds, pipeline `ok`/exit status follows `data.report.can_export`; observation stages do not independently control it.
+Each command prints a JSON envelope. `manifest` is the capability/contract discovery surface; pass one or more returned capability IDs to `impact` to obtain the minimum owners, contract docs, downstream consumers, and verification commands. `diagnose` evaluates cross-layer health ($L_1-L_8$) and emits a prioritized remediation packet with exact layer, entity ID, JSON instance path, and concrete advice with executable command hints (exit 0 for healthy/degraded, exit 1 when blocked; D021). `report` exposes complete ordered family results under `data.families`; its existing summary fields continue to describe the first family. `pipeline` stays compact and reports per-family gate summaries under `data.report.per_family`; call `report` only when full family details are needed. Its stages declare their authority through `control_type`: validation is a blocking precondition, quality and anti-hallucination results are observations, and the report is the publication gate. `snapshot` is observational: after valid input it exits `0`, while `data.publication.can_export` reports the authoritative publication state delegated from `CanonicalReport.canExport()`. `verify-seal` is also observational: it detects changes relative to a separately retained manifest but does not prove authenticity or affect publication permission. After schema validation succeeds, pipeline `ok`/exit status follows `data.report.can_export`; observation stages do not independently control it.
 
 ### Option B — programmatic
 

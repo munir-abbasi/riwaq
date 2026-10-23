@@ -15,7 +15,7 @@
  *   exportDOCXToBuffer(canonicalReport, options?) → Promise<Buffer>
  *   saveDOCX(canonicalReport, filePath, options?) → Promise<void>
  */
-import { writeFileSync, readFileSync } from 'fs';
+import { writeFileSync, readFileSync, unlinkSync } from 'fs';
 import { execFile } from 'child_process';
 import { promisify } from 'util';
 import { tmpdir } from 'os';
@@ -79,12 +79,12 @@ def escape(s):
     if s is None: return ''
     return str(s).replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
 
-with open('${mdPath.replace(/'/g, "\\'")}', 'r', encoding='utf-8') as f:
+with open(${JSON.stringify(mdPath)}, 'r', encoding='utf-8') as f:
     lines = f.read().split('\\n')
 
 doc = Document()
-doc.core_properties.title = '${title.replace(/'/g, "\\'")}'
-doc.core_properties.author = '${(opts.author || '').replace(/'/g, "\\'")}'
+doc.core_properties.title = ${JSON.stringify(title)}
+doc.core_properties.author = ${JSON.stringify(opts.author || '')}
 
 def add_heading(doc, text, level):
     h = doc.add_heading(text, level=min(level, 9))
@@ -161,8 +161,8 @@ while i < len(lines):
 
     i += 1
 
-doc.save('${docxPath.replace(/'/g, "\\'")}')
-print('OK:${docxPath}')
+doc.save(${JSON.stringify(docxPath)})
+print('OK:' + ${JSON.stringify(docxPath)})
 `.trim();
 
   writeFileSync(pyPath, pyScript, 'utf8');
@@ -181,9 +181,9 @@ print('OK:${docxPath}')
     const docxBuf = readFileSync(docxPath);
     return new Uint8Array(docxBuf);
   } finally {
-    try { require('fs').unlinkSync(mdPath); } catch {}
-    try { require('fs').unlinkSync(pyPath); } catch {}
-    try { require('fs').unlinkSync(docxPath); } catch {}
+    try { unlinkSync(mdPath); } catch {}
+    try { unlinkSync(pyPath); } catch {}
+    try { unlinkSync(docxPath); } catch {}
   }
 }
 

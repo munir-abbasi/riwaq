@@ -82,8 +82,9 @@ function _renderFamilyMetadata(data) {
   if (families.length === 0) return null;
 
   const rows = families.map(f => {
-    const sources = f.sources.slice(0, 3).join(', ');
-    return `| ${f.family_id} | ${f.record_count} | ${f.variant_count} | ${f.narrator_count} | ${sources || '—'} |`;
+    const safeFid = String(f.family_id || '').replace(/\|/g, '\\|');
+    const sources = f.sources.slice(0, 3).map(s => String(s).replace(/\|/g, '\\|')).join(', ');
+    return `| ${safeFid} | ${f.record_count} | ${f.variant_count} | ${f.narrator_count} | ${sources || '—'} |`;
   });
 
   return [

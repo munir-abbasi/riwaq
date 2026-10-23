@@ -16,7 +16,7 @@
  *   exportPDFViaMarkdown(markdownText, outputPath) → Promise<void>
  */
 import { writeFileSync, unlinkSync, existsSync } from 'fs';
-import { execFile } from 'child_process';
+import { execFile, execFileSync } from 'child_process';
 import { promisify } from 'util';
 import { tmpdir } from 'os';
 import { join } from 'path';
@@ -72,27 +72,45 @@ export async function exportPDFViaMarkdown(markdownText, outputPath) {
 
 async function _convertToPDF(docxPath, pdfPath) {
   const libreOfficePath = _findLibreOffice();
-  const args = [
-    '--headless',
-    '--convert-to', 'pdf',
-    '--outdir', tmpdir(),
-    docxPath,
-  ];
+  if (libreOfficePath) {
+    const args = [
+      '--headless',
+      '--convert-to', 'pdf',
+      '--outdir', tmpdir(),
+      docxPath,
+    ];
 
-  const { stdout, stderr } = await execFileAsync(libreOfficePath, args, {
-    timeout: 30000,
-    maxBuffer: 10 * 1024 * 1024,
-  });
+    const { stdout, stderr } = await execFileAsync(libreOfficePath, args, {
+      timeout: 30000,
+      maxBuffer: 10 * 1024 * 1024,
+    });
 
-  const expectedPdf = docxPath.replace(/\.docx$/, '.pdf');
-  if (!existsSync(expectedPdf) && !existsSync(pdfPath)) {
-    throw new Error(`LibreOffice PDF conversion failed. stdout: ${stdout}, stderr: ${stderr}`);
+    const expectedPdf = docxPath.replace(/\.docx$/, '.pdf');
+    if (!existsSync(expectedPdf) && !existsSync(pdfPath)) {
+      throw new Error(`LibreOffice PDF conversion failed. stdout: ${stdout}, stderr: ${stderr}`);
+    }
+
+    if (existsSync(expectedPdf) && !existsSync(pdfPath)) {
+      const { renameSync } = await import('fs');
+      renameSync(expectedPdf, pdfPath);
+    }
+    return;
   }
 
-  if (existsSync(expectedPdf) && !existsSync(pdfPath)) {
-    const { renameSync } = await import('fs');
-    renameSync(expectedPdf, pdfPath);
+  const pandocPath = _findPandoc();
+  if (pandocPath) {
+    const args = [docxPath, '-o', pdfPath, '--pdf-engine=weasyprint'];
+    await execFileAsync(pandocPath, args, {
+      timeout: 30000,
+      maxBuffer: 10 * 1024 * 1024,
+    });
+    if (!existsSync(pdfPath)) {
+      throw new Error(`Pandoc PDF conversion failed to create ${pdfPath}`);
+    }
+    return;
   }
+
+  throw new Error('PDF conversion requires LibreOffice (soffice) or Pandoc+WeasyPrint on PATH');
 }
 
 async function _markdownToMinimalDOCX(markdownText) {
@@ -104,14 +122,26 @@ function _findLibreOffice() {
   const candidates = ['/usr/bin/soffice', '/usr/bin/libreoffice', 'soffice', 'libreoffice'];
   for (const c of candidates) {
     try {
-      const { execFileSync } = require('child_process');
       execFileSync(c, ['--version'], { stdio: 'ignore' });
       return c;
     } catch {
       // not found, try next
     }
   }
-  return 'soffice';
+  return null;
+}
+
+function _findPandoc() {
+  const candidates = ['/usr/bin/pandoc', 'pandoc'];
+  for (const c of candidates) {
+    try {
+      execFileSync(c, ['--version'], { stdio: 'ignore' });
+      return c;
+    } catch {
+      // not found
+    }
+  }
+  return null;
 }
 
 function _safeUnlink(path) {

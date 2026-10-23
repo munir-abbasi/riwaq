@@ -67,9 +67,11 @@ function scoreNarratorMetadata(narrators) {
   return (total / narrators.length) * 100;
 }
 
-function scoreReliabilityCoverage(records) {
+function scoreReliabilityCoverage(records, narrators = []) {
   const totalNarrators = records.reduce((s, r) => s + (r.variants?.reduce((ss, v) => ss + (v.isnad_chain?.length || 0), 0) || 0), 0);
-  const withEvidence = records.reduce((s, r) => s + (r.reliability_evidence?.length || 0), 0);
+  const recordEvidence = records.reduce((s, r) => s + (r.reliability_evidence?.length || 0), 0);
+  const narratorEvidence = (narrators || []).reduce((s, n) => s + (n.reliability_evidence?.length || 0), 0);
+  const withEvidence = recordEvidence + narratorEvidence;
   if (totalNarrators === 0) return 0;
   return Math.min((withEvidence / Math.max(totalNarrators, 1)) * 100 * 5, 100);
 }
@@ -87,7 +89,7 @@ export function evaluateGates(batch, collector = new ImportErrorCollector()) {
   const provenanceScore = scoreProvenance(records);
   const diversityScore = scoreVariantDiversity(records);
   const metadataScore = scoreNarratorMetadata(narrators);
-  const reliabilityScore = scoreReliabilityCoverage(records);
+  const reliabilityScore = scoreReliabilityCoverage(records, narrators);
 
   const qualityScore = Math.round(
     provenanceScore * 0.35 +

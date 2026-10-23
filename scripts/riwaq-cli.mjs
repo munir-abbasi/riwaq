@@ -24,6 +24,7 @@
  *   families <file>                    List family IDs with per-family gate state
  *   manifest                           Machine-readable capability/contract manifest
  *   snapshot <file> [--profile P] [--with-reliability]  Compact cross-layer state packet
+ *   diagnose <file> [--profile P] [--with-reliability]  Automated cross-layer remediation packet
  *   impact <capability-id> [...]       Minimal semantic-impact route
  *   seal <file>                        Deterministic integrity manifest
  *   verify-seal <file> --manifest PATH Verify against a retained integrity manifest
@@ -43,7 +44,7 @@ import { CanonicalReport } from './canonical-report.js';
 import { emitArtifacts } from './artifacts.js';
 import { exportMarkdown } from './export-md.js';
 import { exportDOCX } from './export-docx.js';
-import { getCapabilityManifest, buildAgentStateSnapshot, buildSemanticImpactRoute } from './agent-control.js';
+import { getCapabilityManifest, buildAgentStateSnapshot, buildSemanticImpactRoute, buildAgentDiagnostics } from './agent-control.js';
 import { createIntegrityManifest, verifyIntegrityManifest } from './integrity-seal.js';
 
 const EXIT_OK = 0;
@@ -350,6 +351,24 @@ function cmdSnapshot(file, profile, withReliability) {
   }, EXIT_OK);
 }
 
+function cmdDiagnose(file, profile, withReliability) {
+  const { collector, normalized } = loadBatch(file, 'diagnose');
+  const layer = normalized ? buildReliabilityLayer(normalized, withReliability, 'diagnose') : null;
+  const diagnostics = buildAgentDiagnostics({
+    normalized,
+    collector,
+    profile,
+    reliabilityLayer: layer,
+    reliabilityLayerUsed: !!withReliability,
+  });
+  print({
+    ok: diagnostics.status !== 'blocked',
+    command: 'diagnose',
+    file,
+    data: diagnostics,
+  }, diagnostics.status !== 'blocked' ? EXIT_OK : EXIT_FAILED);
+}
+
 function cmdSeal(file) {
   const { valid, collector, normalized } = loadBatch(file, 'seal');
   if (!valid) fail('seal', 'Batch failed schema validation; sealing requires a valid batch', { code: 'INVALID_INPUT', validation: gateSummary(collector) });
@@ -387,15 +406,24 @@ function main() {
   const command = argv[0];
   const positional = [];
   const flags = {};
-  for (let i = 1; i < argv.length; i++) {
+
+  function nextArg(flag) {
+    if (i + 1 >= argv.length || argv[i + 1].startsWith('--')) {
+      usageError(`Missing argument for ${flag}`, `${command || '<command>'} [options]`);
+    }
+    return argv[++i];
+  }
+
+  let i = 1;
+  for (; i < argv.length; i++) {
     const a = argv[i];
-    if (a === '--profile') flags.profile = argv[++i];
+    if (a === '--profile') flags.profile = nextArg(a);
     else if (a === '--with-reliability') flags.withReliability = true;
-    else if (a === '--min-score') flags.minScore = Number(argv[++i]);
-    else if (a === '--family') flags.family = argv[++i];
-    else if (a === '--format') flags.format = argv[++i];
-    else if (a === '--out') flags.out = argv[++i];
-    else if (a === '--manifest') flags.manifest = argv[++i];
+    else if (a === '--min-score') flags.minScore = Number(nextArg(a));
+    else if (a === '--family') flags.family = nextArg(a);
+    else if (a === '--format') flags.format = nextArg(a);
+    else if (a === '--out') flags.out = nextArg(a);
+    else if (a === '--manifest') flags.manifest = nextArg(a);
     else if (a === '--help' || a === '-h') { printUsage(); }
     else positional.push(a);
   }
@@ -415,6 +443,7 @@ function main() {
     case 'manifest': return cmdManifest();
     case 'impact': return cmdImpact(positional);
     case 'snapshot': return cmdSnapshot(file, parseProfile(flags.profile, 'snapshot'), flags.withReliability);
+    case 'diagnose': return cmdDiagnose(file, parseProfile(flags.profile, 'diagnose'), flags.withReliability);
     case 'seal': return cmdSeal(file);
     case 'verify-seal': return cmdVerifySeal(file, flags.manifest);
     default:
@@ -437,6 +466,7 @@ Commands:
   manifest                            Machine-readable capability/contract manifest
   impact <capability-id> [...]        Minimal semantic-impact route
   snapshot <file> [--profile P] [--with-reliability]   Compact cross-layer state packet
+  diagnose <file> [--profile P] [--with-reliability]   Automated cross-layer remediation packet
   seal <file>                         Deterministic integrity manifest
   verify-seal <file> --manifest PATH Verify against a retained integrity manifest
   export <file> --format md|docx|pdf [--out PATH] [--profile P] [--with-reliability]

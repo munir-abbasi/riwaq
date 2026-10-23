@@ -21,6 +21,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { getCapabilityManifest } from '../../scripts/agent-control.js';
 import { PARTIAL_MINIMAL } from '../fixtures/phase1/fixtures.js';
+import { BATCH_SYNTHETIC_NARRATOR } from '../fixtures/phase4/fixtures.js';
 
 const CLI = join(process.cwd(), 'scripts', 'riwaq-cli.mjs');
 const SAMPLE = join(process.cwd(), 'docs', 'examples', 'sample-import.json');
@@ -190,5 +191,88 @@ describe('Riwaq Control CLI', () => {
     const rejectedEnvelope = JSON.parse(rejected.stdout);
     assert.equal(rejectedEnvelope.data.valid, false);
     assert.deepEqual(rejectedEnvelope.data.altered_entries.map(entry => entry.record_id), [tamperedBatch.records[0].hadith_id]);
+  });
+
+  it('diagnose command emits actionable cross-layer remediation packets for healthy and blocked states', () => {
+    // 1. Healthy multi-variant scenario
+    const healthy = runCli(['diagnose', SAMPLE_MULTI]);
+    assert.equal(healthy.code, 0, `expected diagnose exit 0 on SAMPLE_MULTI, got ${healthy.code}\nstdout: ${healthy.stdout}`);
+    const healthyEnvelope = JSON.parse(healthy.stdout);
+    assert.equal(healthyEnvelope.ok, true);
+    assert.equal(healthyEnvelope.command, 'diagnose');
+    assert.equal(healthyEnvelope.data.diagnostics_version, 1);
+    assert.equal(healthyEnvelope.data.status, 'healthy');
+    assert.equal(healthyEnvelope.data.can_export, true);
+    assert.equal(healthyEnvelope.data.blockers.length, 0);
+    assert.equal(healthyEnvelope.data.warnings.length, 0);
+
+    // 2. Degraded single-chain sample (insufficient data for CL detection, can still export)
+    const degraded = runCli(['diagnose', SAMPLE]);
+    assert.equal(degraded.code, 0, `expected diagnose exit 0 on SAMPLE, got ${degraded.code}`);
+    const degradedEnvelope = JSON.parse(degraded.stdout);
+    assert.equal(degradedEnvelope.ok, true);
+    assert.equal(degradedEnvelope.data.status, 'degraded');
+    assert.equal(degradedEnvelope.data.can_export, true);
+    assert.equal(degradedEnvelope.data.warnings[0].code, 'INSUFFICIENT_DATA_FAMILY');
+    assert.equal(degradedEnvelope.data.warnings[0].remediation.action, 'VERIFY_CHAIN_ORIENTATION');
+
+    // 3. Blocked scenario with undeclared narrator (L1 anti-hallucination blocker)
+    const dir = mkdtempSync(join(tmpdir(), 'riwaq-cli-diagnose-'));
+    const blockedFile = join(dir, 'blocked.json');
+    writeFileSync(blockedFile, JSON.stringify(BATCH_SYNTHETIC_NARRATOR), 'utf8');
+    const blocked = runCli(['diagnose', blockedFile]);
+    assert.equal(blocked.code, 1, `expected diagnose exit 1 on blocked input, got ${blocked.code}`);
+    const blockedEnvelope = JSON.parse(blocked.stdout);
+    assert.equal(blockedEnvelope.ok, false);
+    assert.equal(blockedEnvelope.data.status, 'blocked');
+    // Note: CanonicalReport.canExport() remains true at L8 because structural claim has no L6 blocking violations;
+    // but the diagnostic status is 'blocked' due to L1 anti-hallucination integrity blocker.
+    assert.equal(blockedEnvelope.data.can_export, true);
+    assert.equal(blockedEnvelope.data.primary_blocker, 'SYNTHETIC_OR_FABRICATED_EVIDENCE');
+    assert.equal(blockedEnvelope.data.blockers[0].layer, 'L1');
+    assert.equal(blockedEnvelope.data.blockers[0].entity_id, 'synthetic_narrator_x');
+    assert.equal(blockedEnvelope.data.blockers[0].remediation.action, 'FIX_INTEGRITY_VIOLATION');
+    assert.ok(blockedEnvelope.data.recommended_next_action.includes('data.blockers[0].remediation.advice'));
+
+    // 4. Blocked scenario with missing reliability evidence (L6 evidence-binding blocker)
+    const noEvidenceBatch = JSON.parse(readFileSync(SAMPLE_MULTI, 'utf8'));
+    noEvidenceBatch.narrators.forEach(n => { n.reliability_evidence = []; });
+    noEvidenceBatch.records.forEach(r => { r.reliability_evidence = []; });
+    const noEvidenceFile = join(dir, 'no-evidence.json');
+    writeFileSync(noEvidenceFile, JSON.stringify(noEvidenceBatch), 'utf8');
+    const blockedL6 = runCli(['diagnose', noEvidenceFile, '--profile', 'reliability_weighted']);
+    assert.equal(blockedL6.code, 1);
+    const blockedL6Envelope = JSON.parse(blockedL6.stdout);
+    assert.equal(blockedL6Envelope.ok, false);
+    assert.equal(blockedL6Envelope.data.status, 'blocked');
+    assert.equal(blockedL6Envelope.data.can_export, false);
+    assert.equal(blockedL6Envelope.data.primary_blocker, 'MISSING_EVIDENCE_FOR_RELIABILITY_CLAIM');
+    assert.equal(blockedL6Envelope.data.blockers[0].layer, 'L6');
+    assert.equal(blockedL6Envelope.data.blockers[0].entity_id, 'hisham-ibn-urwah');
+    assert.equal(blockedL6Envelope.data.blockers[0].remediation.action, 'ATTACH_NARRATOR_EVIDENCE');
+  });
+
+  it('export CLI command produces valid markdown, docx, and pdf files and enforces flag validation', () => {
+    const dir = mkdtempSync(join(tmpdir(), 'riwaq-cli-export-'));
+    const mdOut = join(dir, 'out.md');
+    const docxOut = join(dir, 'out.docx');
+    const pdfOut = join(dir, 'out.pdf');
+
+    const resMd = runCli(['export', SAMPLE, '--format', 'md', '--out', mdOut]);
+    assert.equal(resMd.code, 0, `expected md export exit 0, got ${resMd.code}\nstdout: ${resMd.stdout}`);
+    assert.ok(readFileSync(mdOut, 'utf8').includes('# Isnad Analysis Report'));
+
+    const resDocx = runCli(['export', SAMPLE, '--format', 'docx', '--out', docxOut]);
+    assert.equal(resDocx.code, 0, `expected docx export exit 0, got ${resDocx.code}\nstdout: ${resDocx.stdout}`);
+    assert.ok(readFileSync(docxOut).length > 100);
+
+    const resPdf = runCli(['export', SAMPLE, '--format', 'pdf', '--out', pdfOut]);
+    assert.equal(resPdf.code, 0, `expected pdf export exit 0, got ${resPdf.code}\nstdout: ${resPdf.stdout}`);
+    assert.ok(readFileSync(pdfOut).length > 100);
+
+    const resMissing = runCli(['gates', SAMPLE, '--min-score']);
+    assert.equal(resMissing.code, 2, `expected code 2 on missing flag arg, got ${resMissing.code}`);
+    const missingEnvelope = JSON.parse(resMissing.stdout);
+    assert.equal(missingEnvelope.error.code, 'USAGE');
   });
 });

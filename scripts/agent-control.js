@@ -13,6 +13,7 @@ import { CanonicalReport } from './canonical-report.js';
 export const AGENT_CONTROL_MANIFEST_VERSION = 3;
 export const AGENT_STATE_SNAPSHOT_VERSION = 1;
 export const SEMANTIC_IMPACT_ROUTE_VERSION = 1;
+export const AGENT_DIAGNOSTICS_VERSION = 1;
 
 const CLI_VERIFY = 'npx vitest run tests/node/cli.test.js';
 
@@ -31,6 +32,15 @@ const CAPABILITIES = Object.freeze([
     outputs: ['compact cross-layer state packet'], preconditions: ['schema validation must succeed'], side_effects: [],
     decision_signal: 'data.publication.can_export', control_type: 'projection',
     gate_scope: 'snapshot execution is observational; publication authority remains CanonicalReport.canExport()',
+    verification: CLI_VERIFY, downstream_consumers: ['agents'],
+  },
+  {
+    id: 'cli.diagnose', layer: 'L9/control-plane', owner: 'scripts/agent-control.js',
+    invocation: 'node scripts/riwaq-cli.mjs diagnose <file> [--profile P] [--with-reliability]',
+    inputs: ['validated import file', 'optional analysis profile', 'optional reliability-layer opt-in'],
+    outputs: ['prioritized agent diagnosis and remediation packet'], preconditions: ['schema validation must succeed'], side_effects: [],
+    decision_signal: 'data.can_export and data.primary_blocker', control_type: 'projection',
+    gate_scope: 'diagnostic projection; publication authority remains CanonicalReport.canExport()',
     verification: CLI_VERIFY, downstream_consumers: ['agents'],
   },
   {
@@ -367,5 +377,178 @@ export function buildAgentStateSnapshot({ normalized, collector, profile, reliab
       source: 'docs/AGENT-OPERATING-MODEL.md#8-sharp-edges',
       applicable: applicableSharpEdges({ unresolvedRefs, profile, reliabilityLayerUsed, perFamily }),
     },
+  };
+}
+
+export function buildAgentDiagnostics({ normalized, collector, profile = 'structural_only', reliabilityLayer = null, reliabilityLayerUsed = false }) {
+  const blockers = [];
+  const warnings = [];
+
+  const validationReport = collector && typeof collector.toReport === 'function'
+    ? collector.toReport()
+    : { warnings: [], errors: [] };
+
+  for (const e of (validationReport.errors || [])) {
+    blockers.push({
+      layer: 'L1',
+      code: e.code || 'VALIDATION_ERROR',
+      entity_id: e.narrator_id || null,
+      family_id: e.family_id || null,
+      message: e.message || 'Validation error',
+      remediation: {
+        action: 'FIX_SCHEMA_VALIDATION',
+        advice: 'Intake batch violates schema specification; inspect error path and fix fields.',
+      },
+    });
+  }
+
+  for (const w of (validationReport.warnings || [])) {
+    warnings.push({
+      layer: 'L1',
+      code: w.code || 'VALIDATION_WARNING',
+      entity_id: w.narrator_id || null,
+      family_id: w.family_id || null,
+      message: w.message || 'Validation warning',
+      remediation: {
+        action: w.code === ERROR_CODE.UNRESOLVED_REF ? 'DECLARE_NARRATOR_PROFILE' : 'INSPECT_INTAKE',
+        advice: w.code === ERROR_CODE.UNRESOLVED_REF
+          ? `Add a top-level narrator profile in narrators[] for '${w.narrator_id || 'unresolved'}' to ensure biographical and AH compliance.`
+          : 'Review intake batch against schema-version 1.',
+      },
+    });
+  }
+
+  if (!normalized) {
+    return {
+      diagnostics_version: AGENT_DIAGNOSTICS_VERSION,
+      status: 'blocked',
+      can_export: false,
+      primary_blocker: blockers.length > 0 ? blockers[0].code : 'INVALID_INPUT',
+      summary: {
+        blocker_count: blockers.length,
+        warning_count: warnings.length,
+        family_count: 0,
+        can_export: false,
+      },
+      blockers,
+      warnings,
+      recommended_next_action: 'Fix schema validation errors before running analysis.',
+    };
+  }
+
+  const { qualityScore } = evaluateGates(normalized);
+  if (qualityScore < 20) {
+    blockers.push({
+      layer: 'L1',
+      code: 'CRITICAL_DATA_QUALITY',
+      family_id: null,
+      entity_id: null,
+      message: `Preflight quality score ${qualityScore}/100 is below critical threshold 20.`,
+      remediation: {
+        action: 'ENRICH_DATA_QUALITY',
+        advice: 'Enrich provenance, variant diversity, and narrator metadata before proceeding.',
+      },
+    });
+  } else if (qualityScore < 50) {
+    warnings.push({
+      layer: 'L1',
+      code: 'DEGRADED_DATA_QUALITY',
+      family_id: null,
+      entity_id: null,
+      message: `Preflight quality score ${qualityScore}/100 is in degraded band (20-49).`,
+      remediation: {
+        action: 'OBSERVE_QUALITY_WARNING',
+        advice: 'Review quality metrics; analysis may proceed but results may reflect sparse evidence.',
+      },
+    });
+  }
+
+  const integrity = AntiHallucinationValidator.fromBatch(normalized).validate().toReport();
+  for (const v of (integrity.violations || [])) {
+    blockers.push({
+      layer: 'L1',
+      code: v.code || 'INTEGRITY_VIOLATION',
+      family_id: v.family_id || v.detail?.family_id || null,
+      entity_id: v.narrator_id || v.evidence_id || v.detail?.narrator_id || v.detail?.evidence_id || null,
+      message: v.message,
+      remediation: {
+        action: 'FIX_INTEGRITY_VIOLATION',
+        advice: 'Anti-hallucination sweep blocks on undeclared chain narrators, synthetic IDs, and unverifiable source types.',
+      },
+    });
+  }
+  for (const w of (integrity.warnings || [])) {
+    warnings.push({
+      layer: 'L1',
+      code: w.code || 'INTEGRITY_WARNING',
+      family_id: w.family_id || w.detail?.family_id || null,
+      entity_id: w.narrator_id || w.evidence_id || w.detail?.narrator_id || w.detail?.evidence_id || null,
+      message: w.message,
+      remediation: {
+        action: 'REVIEW_INTEGRITY_WARNING',
+        advice: 'Review provenance completeness and verify source citations.',
+      },
+    });
+  }
+
+  const report = CanonicalReport.fromBatch(normalized, { profile, reliabilityLayer });
+  const familyIds = report.getFamilyIds();
+  const canExport = report.canExport();
+
+  for (const fid of familyIds) {
+    const vResult = report.getValidationResult(fid);
+    const analysis = report.getAnalysisResult(fid);
+
+    if (analysis?.family_status === 'insufficient_data') {
+      warnings.push({
+        layer: 'L4',
+        code: 'INSUFFICIENT_DATA_FAMILY',
+        family_id: fid,
+        entity_id: null,
+        message: `Family '${fid}' yielded insufficient data (no Common Link candidate detected).`,
+        remediation: {
+          action: 'VERIFY_CHAIN_ORIENTATION',
+          advice: 'Verify that chain arrays run companion -> collector (fan-out must be downstream).',
+        },
+      });
+    }
+
+    if (vResult && !vResult.analysis_can_proceed) {
+      for (const viol of (vResult.violations || []).filter(v => v.level === 'blocking')) {
+        blockers.push({
+          layer: 'L6',
+          code: viol.code || 'BLOCKING_EVIDENCE_VIOLATION',
+          family_id: fid,
+          entity_id: viol.narrator_id || viol.evidence_id || viol.detail?.narrator_id || viol.detail?.evidence_id || null,
+          message: viol.message,
+          remediation: {
+            action: profile === 'reliability_weighted' ? 'ATTACH_NARRATOR_EVIDENCE' : 'INSPECT_EVIDENCE_BINDING',
+            advice: profile === 'reliability_weighted'
+              ? `Attach valid ReliabilityEvidence to narrator '${viol.narrator_id || viol.detail?.narrator_id || 'target'}' or switch to --profile structural_only.`
+              : 'Ensure all referenced evidence IDs exist and have valid provenance.',
+          },
+        });
+      }
+    }
+  }
+
+  const status = blockers.length > 0 ? 'blocked' : warnings.length > 0 ? 'degraded' : 'healthy';
+
+  return {
+    diagnostics_version: AGENT_DIAGNOSTICS_VERSION,
+    status,
+    can_export: canExport,
+    primary_blocker: blockers.length > 0 ? blockers[0].code : null,
+    summary: {
+      blocker_count: blockers.length,
+      warning_count: warnings.length,
+      family_count: familyIds.length,
+      can_export: canExport,
+    },
+    blockers,
+    warnings,
+    recommended_next_action: blockers.length > 0
+      ? 'Inspect data.blockers[0].remediation.advice and resolve the earliest owning layer.'
+      : 'node scripts/riwaq-cli.mjs export <file> --format md',
   };
 }

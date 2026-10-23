@@ -308,6 +308,22 @@ describe('evaluateGates', () => {
     assert.equal(gateResults.totalVariants, 3);
   });
 
+  it('evaluates reliability coverage from canonical narrator-level evidence per D019', () => {
+    const batchWithNarratorEvidence = JSON.parse(JSON.stringify(EDGE_CASE_ALL_RATINGS));
+    // Move evidence from record to narrator profiles
+    const evidenceList = batchWithNarratorEvidence.records[0].reliability_evidence;
+    batchWithNarratorEvidence.records[0].reliability_evidence = [];
+    for (const ev of evidenceList) {
+      const narrator = batchWithNarratorEvidence.narrators.find(n => n.narrator_id === ev.narrator_id);
+      if (narrator) {
+        narrator.reliability_evidence.push(ev);
+      }
+    }
+
+    const { gateResults } = evaluateGates(batchWithNarratorEvidence);
+    assert.isAbove(gateResults.reliabilityScore, 0, 'narrator-level evidence must be included in reliabilityScore');
+  });
+
   it('blocks duplicate hadith_ids across records', () => {
     const { valid, collector } = validateBatch(MALFORMED_DUPLICATE_HADITH_ID);
     assert.isFalse(valid);

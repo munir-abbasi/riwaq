@@ -80,12 +80,12 @@ The pipeline outputs:
 ### Multi-Format Exports
 All exports derive from a single canonical report object for consistency:
 
-| Format | Tool | Use Case |
-|--------|------|----------|
-| Markdown | Native JS | Plain-text reports, versioning |
-| DOCX | python-docx | Word processing, peer review |
-| PDF | LibreOffice | Print-ready publication |
-| JSON artifacts | Native JS | normalized_chains, narrator_graph, cl_candidates, analysis_snapshot |
+| Format | Engine / Tool | Requirements & Fallbacks | Use Case |
+|--------|---------------|--------------------------|----------|
+| Markdown | Native JS | Pure Node.js (zero dependencies) | Plain-text reports, versioning |
+| DOCX | python-docx / Native OOXML | Python 3 + `python-docx` (auto-fallback to pure JS OOXML) | Word processing, peer review |
+| PDF | LibreOffice / Pandoc+WeasyPrint | LibreOffice (`soffice`) or Pandoc + WeasyPrint on `PATH` | Print-ready publication |
+| JSON artifacts | Native JS | Pure Node.js (zero dependencies) | normalized_chains, narrator_graph, cl_candidates |
 
 ### JSON Import
 The importer processes hadith batches using schema validation. It provides:
@@ -95,6 +95,57 @@ The importer processes hadith batches using schema validation. It provides:
 - Multi-variant family grouping.
 - Narrator profiles (dates, locations, reliability ratings).
 - Matn text import per variant.
+
+---
+
+## Requirements & Prerequisites
+
+Riwaq is designed with a tiered architecture so you only need tools for the features you actually use:
+
+### 1. Web Application (Browser UI)
+- **Runtime:** Any modern standards-compliant web browser (Google Chrome, Mozilla Firefox, Apple Safari, Microsoft Edge).
+- **Dependencies:** **Zero external dependencies.** The web app is pure static HTML5, CSS3, and modern JavaScript (ES6+).
+- **Backend / Database:** None required. Persists workspace data locally in browser `localStorage`.
+- **Hosting:** Can be opened directly as a local file (`index.html`) or served via any basic static web server (e.g., `python3 -m http.server 8000` or `npx serve`).
+
+### 2. Analysis Modules & CLI Pipeline (`scripts/`)
+- **Node.js:** `v18.0.0` or higher (`v20.x` or `v22.x` LTS recommended). Native ES Modules (`"type": "module"`) required.
+- **npm:** Included with Node.js.
+- **Setup:**
+  ```bash
+  git clone https://github.com/munir-abbasi/riwaq.git
+  cd riwaq
+  npm install
+  ```
+
+### 3. Multi-Format Exporters
+- **Markdown (`.md`):** Zero external dependencies (pure Node.js).
+- **DOCX (`.docx`):**
+  - *Recommended:* Python `3.8+` with `python-docx` installed:
+    ```bash
+    pip install python-docx
+    ```
+  - *Fallback:* If Python or `python-docx` is not available, Riwaq automatically falls back to generating a valid Open Packaging Conventions (OOXML) `.docx` package via pure JavaScript.
+- **PDF (`.pdf`):** Dual-engine architecture (Decision D020):
+  - *Primary Engine:* LibreOffice (`soffice` or `libreoffice` on system `PATH`).
+  - *Fallback Engine:* Pandoc with WeasyPrint:
+    ```bash
+    sudo apt install pandoc   # Ubuntu/Debian
+    pip install weasyprint
+    ```
+  - *Fallback:* If neither PDF engine is installed, Markdown and DOCX exports continue to function without error.
+
+### 4. Testing & Verification
+- **Unit and Integration Suite (the gate):** `vitest` (installed via `npm install`). Requires only Node.js.
+  ```bash
+  npm test          # Run all Node.js unit and integration tests
+  npm run check     # Run parity validation and test suite
+  ```
+- **Browser Smoke Suite (optional):** Playwright Chromium headless shell.
+  ```bash
+  npx playwright install chromium
+  npm run smoke
+  ```
 
 ---
 
@@ -193,7 +244,7 @@ import { exportPDF } from './scripts/export-pdf.js';
 // DOCX (returns Uint8Array)
 const docxBytes = await exportDOCX(report);
 
-// PDF (requires LibreOffice installed)
+// PDF (requires LibreOffice or Pandoc+WeasyPrint installed)
 const pdfBytes = await exportPDF(report);
 ```
 

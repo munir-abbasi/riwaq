@@ -19,9 +19,20 @@ Thumbs.db
 *.temp
 
 # Local research documents (not for public repository)
-Riwaq_Research_Paper.md
-Riwaq_Research_paper.pdf
+Riwaq_Research_Paper*
 draft.md
+
+# Python cache & artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Test coverage & test runner artifacts
+coverage/
+.vitest-cache/
+playwright-report/
+test-results/
+vitest-out.json
 
 # Local agent/tool working files
 .freebuff/
@@ -36,6 +47,5 @@ docs/STATUS.md
 elements-of-style-pro/
 test-docx.js
 test.docx
-vitest-out.json
 *.bak.*
 .~lock.*#

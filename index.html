@@ -19,9 +19,11 @@
       --white-soft: #ffffff;
       --shadow: none;
       --node-width: 220px;
-      --ui-font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      --matn-font: Georgia, Charter, "Times New Roman", serif;
+      --ui-font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --matn-font: "Amiri", "Scheherazade New", "Traditional Arabic", Georgia, "Times New Roman", serif;
       --radius: 0px;
+      --text-dim: var(--muted);
+      --neon: var(--accent);
     }
 
     * { box-sizing: border-box; }
@@ -372,7 +374,7 @@
 
     .matn-token {
       display: inline;
-      padding: 0 4px;
+      padding: 1px 5px;
       border-radius: var(--radius);
       border: 1px solid transparent;
     }
@@ -382,17 +384,18 @@
     }
 
     .matn-added {
-      color: #000;
-      background: #e6e6e6;
-      border-color: var(--line);
-      font-weight: bold;
+      color: #0b4f1c;
+      background: #e8f5e9;
+      border-color: #c8e6c9;
+      font-weight: 600;
     }
 
     .matn-removed {
-      color: var(--text);
-      background: transparent;
+      color: #721c24;
+      background: #fde8e8;
       text-decoration: line-through;
-      opacity: 0.6;
+      border-color: #f5c6cb;
+      opacity: 0.85;
     }
 
     label {
@@ -419,6 +422,11 @@
       outline: 2px solid var(--line);
       outline-offset: -1px;
       border-color: var(--line);
+    }
+
+    button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible, .tab-btn:focus-visible, .node-toggle:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
     }
 
     .input-row { display: flex; gap: 10px; align-items: stretch; }
@@ -600,7 +608,7 @@
       padding: 32px 16px;
       margin-top: 40px;
       border-top: 2px solid var(--line);
-      color: var(--text-dim);
+      color: var(--muted);
       font-size: 0.9rem;
       background: var(--bg);
     }
@@ -614,6 +622,15 @@
       background: var(--line);
       color: var(--bg);
       text-decoration: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
     }
 
     @media (max-width: 1200px) {
@@ -690,13 +707,13 @@
       </section>
     </section>
 
-    <div class="tabs" aria-label="Workspace tabs">
-      <button class="tab-btn active" id="detailsTabBtn" type="button" data-tab="details">Details & Matn</button>
-      <button class="tab-btn" id="mapTabBtn" type="button" data-tab="map">Spider Chain Map</button>
+    <div class="tabs" role="tablist" aria-label="Workspace tabs">
+      <button class="tab-btn active" id="detailsTabBtn" role="tab" aria-selected="true" aria-controls="detailsPanel" type="button" data-tab="details">Details & Matn</button>
+      <button class="tab-btn" id="mapTabBtn" role="tab" aria-selected="false" aria-controls="mapPanel" type="button" data-tab="map">Spider Chain Map</button>
     </div>
 
     <div class="tab-panels">
-      <section class="tab-panel" id="detailsPanel">
+      <section class="tab-panel" id="detailsPanel" role="tabpanel" aria-labelledby="detailsTabBtn">
         <section class="layout">
           <section class="panel">
             <div class="controls">
@@ -740,15 +757,15 @@
                     <option value="hijri">Hijri calendar</option>
                   </select>
                 </label>
-                <div class="date-row-labels">
+                <div class="date-row-labels" aria-hidden="true">
                   <span>Day</span>
                   <span>Month</span>
                   <span>Year</span>
                 </div>
                 <div class="date-grid">
-                  <input id="birthDay" type="number" min="1" max="31" placeholder="Day" />
-                  <input id="birthMonth" type="number" min="1" max="12" placeholder="Month" />
-                  <input id="birthYear" type="number" placeholder="Year" />
+                  <input id="birthDay" type="number" min="1" max="31" placeholder="Day" aria-label="Birth day" />
+                  <input id="birthMonth" type="number" min="1" max="12" placeholder="Month" aria-label="Birth month" />
+                  <input id="birthYear" type="number" placeholder="Year" aria-label="Birth year" />
                 </div>
               </div>
 
@@ -761,15 +778,15 @@
                     <option value="hijri">Hijri calendar</option>
                   </select>
                 </label>
-                <div class="date-row-labels">
+                <div class="date-row-labels" aria-hidden="true">
                   <span>Day</span>
                   <span>Month</span>
                   <span>Year</span>
                 </div>
                 <div class="date-grid">
-                  <input id="deathDay" type="number" min="1" max="31" placeholder="Day" />
-                  <input id="deathMonth" type="number" min="1" max="12" placeholder="Month" />
-                  <input id="deathYear" type="number" placeholder="Year" />
+                  <input id="deathDay" type="number" min="1" max="31" placeholder="Day" aria-label="Death day" />
+                  <input id="deathMonth" type="number" min="1" max="12" placeholder="Month" aria-label="Death month" />
+                  <input id="deathYear" type="number" placeholder="Year" aria-label="Death year" />
                 </div>
               </div>
             </div>
@@ -788,30 +805,26 @@
 
           <div class="chip-editor form-section">
             <span class="section-title">Locations</span>
-            <label>
-              Travel locations or cities
-              <div class="input-row">
-                <input id="locationInput" type="text" placeholder="Add one city, then press Add" />
-                <button class="mini-btn" id="addLocationBtn" type="button">Add city</button>
-              </div>
-            </label>
+            <label for="locationInput">Travel locations or cities</label>
+            <div class="input-row">
+              <input id="locationInput" type="text" placeholder="Add one city, then press Add" />
+              <button class="mini-btn" id="addLocationBtn" type="button">Add city</button>
+            </div>
             <div class="chip-list" id="locationChips"></div>
           </div>
 
           <div class="chip-editor form-section">
             <span class="section-title">Tags</span>
-            <label>
-              Tags
-              <div class="input-row">
-                <input id="tagInput" type="text" placeholder="Write the tag name here" />
-                <select id="tagShapeSelect" style="max-width: 150px;">
-                  <option value="pill">Pill</option>
-                  <option value="square">Square</option>
-                  <option value="diamond">Diamond</option>
-                </select>
-                <button class="mini-btn" id="addTagBtn" type="button">Add tag</button>
-              </div>
-            </label>
+            <label for="tagInput">Tags</label>
+            <div class="input-row">
+              <input id="tagInput" type="text" placeholder="Write the tag name here" />
+              <select id="tagShapeSelect" style="max-width: 150px;" aria-label="Tag badge shape">
+                <option value="pill">Pill</option>
+                <option value="square">Square</option>
+                <option value="diamond">Diamond</option>
+              </select>
+              <button class="mini-btn" id="addTagBtn" type="button">Add tag</button>
+            </div>
             <div class="chip-list" id="tagChips"></div>
           </div>
 
@@ -857,7 +870,7 @@
         </section>
       </section>
 
-      <section class="tab-panel" id="mapPanel" hidden>
+      <section class="tab-panel" id="mapPanel" role="tabpanel" aria-labelledby="mapTabBtn" hidden>
         <section class="canvas-panel" id="mapCanvasPanel">
           <div class="canvas-head">
             <div>
@@ -884,7 +897,7 @@
 
   <footer class="app-footer">
     <div class="container">
-      <p>Riwaq by <a href="https://www.syntaxhouse.com" target="_blank" rel="noopener noreferrer">Munir Abbasi</a> | <a href="https://github.com/munir-abbasi/riwaq" target="_blank" rel="noopener noreferrer">GitHub Repository</a></p>
+      <p>Riwaq by <a href="https://www.syntaxhouse.com" target="_blank" rel="noopener noreferrer">Munir Abbasi</a> | <a href="https://github.com/munir-abbasi/riwaq" target="_blank" rel="noopener noreferrer">GitHub Repository</a> | <a href="https://munir-abbasi.github.io/riwaq" target="_blank" rel="noopener noreferrer">Online Web App</a></p>
     </div>
   </footer>
 
@@ -970,6 +983,8 @@
       els.mapPanel.hidden = !showMap;
       els.detailsTabBtn.classList.toggle("active", !showMap);
       els.mapTabBtn.classList.toggle("active", showMap);
+      els.detailsTabBtn.setAttribute("aria-selected", !showMap ? "true" : "false");
+      els.mapTabBtn.setAttribute("aria-selected", showMap ? "true" : "false");
 
       if (showMap) {
         requestAnimationFrame(() => {
@@ -1519,7 +1534,7 @@
           <span class="badge">${escapeHtml(narrator.ages.hijri)}</span>
         </div>
       ` : `<p>No age details added.</p>`;
-      const matnMarkup = narrator.matn ? `<p style="margin-top: 12px;"><strong style="color: var(--neon); display: block; margin-bottom: 6px;">Matn</strong>${escapeHtml(narrator.matn)}</p>` : "";
+      const matnMarkup = narrator.matn ? `<p style="margin-top: 12px;"><strong style="color: var(--accent); display: block; margin-bottom: 6px;">Matn</strong>${escapeHtml(narrator.matn)}</p>` : "";
       node.innerHTML = `
         <div class="node-top">
           <div>
@@ -1537,7 +1552,7 @@
           ${narrator.notes ? `<p style="margin-top: 12px;">${escapeHtml(narrator.notes)}</p>` : ""}
         </div>
         <div class="node-actions">
-          <button class="node-toggle" type="button">${isExpanded ? "Hide details" : "Show details"}</button>
+          <button class="node-toggle" type="button" aria-expanded="${isExpanded}">${isExpanded ? "Hide details" : "Show details"}</button>
         </div>
       `;
       const toggle = node.querySelector(".node-toggle");
@@ -1644,9 +1659,9 @@
         <strong>Color Key</strong>
         <div class="small">The first narrator with matn is used as the reference text for comparison.</div>
         <div class="matn-legend">
-          <span class="legend-chip"><span class="legend-swatch" style="background: rgba(255,255,255,0.18);"></span>Same wording</span>
-          <span class="legend-chip"><span class="legend-swatch" style="background: rgba(217,255,87,0.9);"></span>Added or changed wording</span>
-          <span class="legend-chip"><span class="legend-swatch" style="background: rgba(255,99,99,0.42);"></span>Missing from this matn</span>
+          <span class="legend-chip"><span class="legend-swatch" style="background: var(--panel); border: 1px solid var(--line);"></span>Same wording</span>
+          <span class="legend-chip"><span class="legend-swatch" style="background: #e8f5e9; border: 1px solid #c8e6c9;"></span>Added or changed wording</span>
+          <span class="legend-chip"><span class="legend-swatch" style="background: #fde8e8; border: 1px solid #f5c6cb; text-decoration: line-through;"></span>Missing from this matn</span>
         </div>
         <div class="small">Reference narrator: ${escapeHtml(referenceNarrator.name)}</div>
       `;
@@ -1661,7 +1676,7 @@
         item.innerHTML = `
           <strong>${index + 1}. ${escapeHtml(narrator.name)}</strong>
           <div class="small">Status: ${escapeHtml(narrator.status)}</div>
-          <div class="matn-text">${matnBody}</div>
+          <div class="matn-text" dir="auto">${matnBody}</div>
         `;
         els.matnAlignment.appendChild(item);
       });
