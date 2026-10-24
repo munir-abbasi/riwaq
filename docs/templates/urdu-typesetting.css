@@ -1,0 +1,146 @@
+@page {
+  size: A4;
+  margin: 2.5cm 2cm 2.5cm 2cm;
+  @bottom-center {
+    content: counter(page);
+    font-family: "Jameel Noori Nastaleeq", "Noto Nastaliq Urdu", serif;
+    font-size: 11pt;
+  }
+  @top-right {
+    content: "رواق (Riwaq) — اسناد مع المتن تحقیقی فریم ورک";
+    font-family: "Jameel Noori Nastaleeq", "Noto Nastaliq Urdu", serif;
+    font-size: 10pt;
+    color: #64748b;
+  }
+}
+
+html, body {
+  direction: rtl;
+  text-align: justify;
+  font-family: "Jameel Noori Nastaleeq", "Noto Nastaliq Urdu", "AA Sameer Sagar Nastaleeq Bold", serif;
+  font-size: 13.5pt;
+  line-height: 2.3;
+  color: #1a1a1a;
+  background-color: #ffffff;
+}
+
+h1 {
+  font-family: "Jameel Noori Nastaleeq", "Noto Nastaliq Urdu", "AA Sameer Sagar Nastaleeq Bold", serif;
+  font-size: 24pt;
+  font-weight: bold;
+  text-align: center;
+  line-height: 1.8;
+  margin-top: 1.5em;
+  margin-bottom: 0.8em;
+  color: #0b2545;
+  border-bottom: 2px solid #0b2545;
+  padding-bottom: 0.3em;
+}
+
+h2 {
+  font-family: "Jameel Noori Nastaleeq", "Noto Nastaliq Urdu", "AA Sameer Sagar Nastaleeq Bold", serif;
+  font-size: 18pt;
+  font-weight: bold;
+  line-height: 1.8;
+  margin-top: 1.4em;
+  margin-bottom: 0.5em;
+  color: #134074;
+  border-bottom: 1px solid #cbd5e1;
+  padding-bottom: 0.2em;
+}
+
+h3 {
+  font-family: "Jameel Noori Nastaleeq", "Noto Nastaliq Urdu", "AA Sameer Sagar Nastaleeq Bold", serif;
+  font-size: 15pt;
+  font-weight: bold;
+  line-height: 1.8;
+  margin-top: 1.2em;
+  margin-bottom: 0.4em;
+  color: #1d4ed8;
+}
+
+h4, h5, h6 {
+  font-family: "Jameel Noori Nastaleeq", "Noto Nastaliq Urdu", "AA Sameer Sagar Nastaleeq Bold", serif;
+  font-size: 13.5pt;
+  font-weight: bold;
+  line-height: 1.8;
+}
+
+p {
+  margin-top: 0;
+  margin-bottom: 1em;
+  text-align: justify;
+}
+
+blockquote {
+  border-right: 4px solid #134074;
+  border-left: none;
+  margin: 1.2em 0;
+  padding: 0.6em 1.2em;
+  background-color: #f8fafc;
+  color: #1e293b;
+  font-style: normal;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.8em 0;
+  font-size: 11pt;
+  line-height: 1.8;
+}
+
+th, td {
+  border: 1px solid #94a3b8;
+  padding: 8px 12px;
+  text-align: right;
+  vertical-align: middle;
+}
+
+th {
+  background-color: #f1f5f9;
+  color: #0f172a;
+  font-weight: bold;
+}
+
+tr:nth-child(even) {
+  background-color: #f8fafc;
+}
+
+code, pre {
+  direction: ltr;
+  text-align: left;
+  font-family: "DejaVu Sans Mono", "FreeMono", monospace;
+  font-size: 9.5pt;
+}
+
+pre {
+  background-color: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  padding: 10px 14px;
+  overflow-x: auto;
+  line-height: 1.4;
+  margin: 1.2em 0;
+}
+
+code {
+  background-color: #f1f5f9;
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #cbd5e1;
+  margin: 2em 0;
+}
+
+ul, ol {
+  margin-right: 1.5em;
+  padding-right: 0.5em;
+}
+
+li {
+  margin-bottom: 0.4em;
+}

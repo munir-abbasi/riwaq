@@ -19,6 +19,7 @@ Thumbs.db
 *.temp
 
 # Local research documents (not for public repository)
+research-output/
 Riwaq_Research_Paper*
 draft.md
 
