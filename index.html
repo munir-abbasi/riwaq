@@ -646,6 +646,7 @@
       .form-section { padding: 16px; }
       .preview { min-height: auto; }
       .node { width: min(270px, calc(100vw - 40px)); }
+      .mini-btn { min-height: 40px; padding: 6px 14px; }
     }
   </style>
 </head>
@@ -818,10 +819,10 @@
             <label for="tagInput">Tags</label>
             <div class="input-row">
               <input id="tagInput" type="text" placeholder="Write the tag name here" />
-              <select id="tagShapeSelect" style="max-width: 150px;" aria-label="Tag badge shape">
-                <option value="pill">Pill</option>
-                <option value="square">Square</option>
-                <option value="diamond">Diamond</option>
+              <select id="tagShapeSelect" style="max-width: 190px;" aria-label="Tag badge shape">
+                <option value="pill">⬭ Pill / بیضوی</option>
+                <option value="square">▢ Square / مربع</option>
+                <option value="diamond">◇ Diamond / معین</option>
               </select>
               <button class="mini-btn" id="addTagBtn" type="button">Add tag</button>
             </div>
