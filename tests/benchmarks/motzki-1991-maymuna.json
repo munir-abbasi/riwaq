@@ -1,0 +1,228 @@
+{
+  "schema_version": 1,
+  "imported_at": "2026-10-25T00:00:00.000Z",
+  "import_id": "benchmark-motzki-1991-maymuna",
+  "source_batch_ref": "Harald Motzki (1991) JNES 50: The Musannaf of Abd al-Razzaq — Marriage of Maymunah Study",
+  "ground_truth": {
+    "benchmark_id": "motzki-1991-maymuna",
+    "study": "Harald Motzki (1991) 'The Musannaf of Abd al-Razzaq as a Source of Authentic Ahadith of the First Century A.H.'",
+    "expected_cls": ["amr-ibn-dinar"],
+    "expected_pcls": ["ibn-jurayj", "sufyan-ibn-uyaynah"],
+    "expected_family_status": "cl_detected",
+    "canonical_narrators": [
+      "maymunah",
+      "ibn-abbas",
+      "ata-ibn-abi-rabah",
+      "amr-ibn-dinar",
+      "ibn-jurayj",
+      "sufyan-ibn-uyaynah",
+      "hammad-ibn-zayd",
+      "shu-bah-ibn-al-hajjaj",
+      "abd-al-razzaq",
+      "ahmad-ibn-hanbal",
+      "ali-ibn-khashram",
+      "muslim",
+      "al-humaydi",
+      "bukhari",
+      "musaddad",
+      "abu-dawud",
+      "muhammad-ibn-bashshar",
+      "al-nasai"
+    ],
+    "min_cl_recall": 1.0,
+    "min_disambiguation_precision": 1.0,
+    "expected_matn_basis": "measured_token_jaccard"
+  },
+  "narrators": [
+    { "narrator_id": "maymunah", "names": ["Maymunah bint al-Harith", "ميمونة بنت الحارث"] },
+    { "narrator_id": "ibn-abbas", "names": ["Abdullah ibn Abbas", "عبد الله بن عباس"] },
+    { "narrator_id": "ata-ibn-abi-rabah", "names": ["Ata ibn Abi Rabah", "عطاء بن أبي رباح"] },
+    { "narrator_id": "amr-ibn-dinar", "names": ["Amr ibn Dinar al-Makki", "عمرو بن دينار"] },
+    { "narrator_id": "ibn-jurayj", "names": ["Abd al-Malik ibn Abd al-Aziz ibn Jurayj", "ابن جريج"] },
+    { "narrator_id": "sufyan-ibn-uyaynah", "names": ["Sufyan ibn Uyaynah", "سفيان بن عيينة"] },
+    { "narrator_id": "hammad-ibn-zayd", "names": ["Hammad ibn Zayd", "حماد بن زيد"] },
+    { "narrator_id": "shu-bah-ibn-al-hajjaj", "names": ["Shu'bah ibn al-Hajjaj", "شعبة بن الحجاج"] },
+    { "narrator_id": "abd-al-razzaq", "names": ["Abd al-Razzaq al-San'ani", "عبد الرزاق الصنعاني"] },
+    { "narrator_id": "ahmad-ibn-hanbal", "names": ["Ahmad ibn Hanbal", "أحمد بن حنبل"] },
+    { "narrator_id": "ali-ibn-khashram", "names": ["Ali ibn Khashram", "علي بن خشرم"] },
+    { "narrator_id": "muslim", "names": ["Muslim ibn al-Hajjaj", "مسلم بن الحجاج"] },
+    { "narrator_id": "al-humaydi", "names": ["Abdullah ibn al-Zubayr al-Humaydi", "الحميدي"] },
+    { "narrator_id": "bukhari", "names": ["Muhammad ibn Ismail al-Bukhari", "البخاري"] },
+    { "narrator_id": "musaddad", "names": ["Musaddad ibn Musarhad", "مسدد بن مسرهد"] },
+    { "narrator_id": "abu-dawud", "names": ["Abu Dawud al-Sijistani", "أبو داود السجستاني"] },
+    { "narrator_id": "muhammad-ibn-bashshar", "names": ["Muhammad ibn Bashshar Bundar", "محمد بن بشار بندار"] },
+    { "narrator_id": "al-nasai", "names": ["Ahmad ibn Shu'ayb al-Nasa'i", "النسائي"] }
+  ],
+  "records": [
+    {
+      "hadith_id": "motzki-m-01",
+      "family_id": "family-maymunah-marriage",
+      "title": "Marriage of Maymunah — Abd al-Razzaq from Ibn Jurayj",
+      "source_ref": {
+        "collection": "Musannaf Abd al-Razzaq",
+        "source_type": "print",
+        "source_locator": "Kitab al-Nikah, Hadith 10321",
+        "ingested_at": "2026-10-25T00:00:00.000Z",
+        "checksum": null
+      },
+      "variants": [
+        {
+          "variant_id": "variant-abd-al-razzaq",
+          "isnad_chain": ["maymunah", "ibn-abbas", "ata-ibn-abi-rabah", "amr-ibn-dinar", "ibn-jurayj", "abd-al-razzaq"],
+          "isnad_raw": "عبد الرزاق عن ابن جريج عن عمرو بن دينار عن عطاء عن ابن عباس عن ميمونة",
+          "matn_raw": "تزوج النبي صلى الله عليه وسلم ميمونة وهو محرم وبنى بها وهو حلال",
+          "matn_segments": [
+            { "pericope_id": "p1", "text": "تزوج النبي صلى الله عليه وسلم ميمونة", "variant_type": "base", "alignment_anchor": "marriage-act" },
+            { "pericope_id": "p2", "text": "وهو محرم", "variant_type": "base", "alignment_anchor": "ihram-status" },
+            { "pericope_id": "p3", "text": "وبنى بها وهو حلال", "variant_type": "ziyada", "alignment_anchor": "consummation-status" }
+          ],
+          "collector_note": null,
+          "provenance": null
+        }
+      ],
+      "matn_raw": null,
+      "reliability_evidence": []
+    },
+    {
+      "hadith_id": "motzki-m-02",
+      "family_id": "family-maymunah-marriage",
+      "title": "Marriage of Maymunah — Ahmad from Ibn Jurayj",
+      "source_ref": {
+        "collection": "Musnad Ahmad",
+        "source_type": "print",
+        "source_locator": "Musnad Bani Hashim, Hadith 1912",
+        "ingested_at": "2026-10-25T00:00:00.000Z",
+        "checksum": null
+      },
+      "variants": [
+        {
+          "variant_id": "variant-ahmad",
+          "isnad_chain": ["maymunah", "ibn-abbas", "ata-ibn-abi-rabah", "amr-ibn-dinar", "ibn-jurayj", "ahmad-ibn-hanbal"],
+          "isnad_raw": "حدثنا عبد الرزاق أنا ابن جريج أخبرني عمرو بن دينار أن عطاء أخبره عن ابن عباس",
+          "matn_raw": "أن رسول الله صلى الله عليه وسلم تزوج ميمونة وهو محرم وبنى بها وهو حلال بسرف",
+          "matn_segments": [
+            { "pericope_id": "p1", "text": "أن رسول الله صلى الله عليه وسلم تزوج ميمونة", "variant_type": "base", "alignment_anchor": "marriage-act" },
+            { "pericope_id": "p2", "text": "وهو محرم", "variant_type": "base", "alignment_anchor": "ihram-status" },
+            { "pericope_id": "p3", "text": "وبنى بها وهو حلال بسرف", "variant_type": "ziyada", "alignment_anchor": "consummation-status" }
+          ],
+          "collector_note": null,
+          "provenance": null
+        }
+      ],
+      "matn_raw": null,
+      "reliability_evidence": []
+    },
+    {
+      "hadith_id": "motzki-m-03",
+      "family_id": "family-maymunah-marriage",
+      "title": "Marriage of Maymunah — Muslim from Sufyan",
+      "source_ref": {
+        "collection": "Sahih Muslim",
+        "source_type": "print",
+        "source_locator": "Kitab al-Nikah, Hadith 1410a",
+        "ingested_at": "2026-10-25T00:00:00.000Z",
+        "checksum": null
+      },
+      "variants": [
+        {
+          "variant_id": "variant-muslim-sufyan",
+          "isnad_chain": ["maymunah", "ibn-abbas", "ata-ibn-abi-rabah", "amr-ibn-dinar", "sufyan-ibn-uyaynah", "ali-ibn-khashram", "muslim"],
+          "isnad_raw": "حدثنا علي بن خشرم أخبرنا سفيان عن عمرو عن عطاء عن ابن عباس",
+          "matn_raw": "تزوج النبي صلى الله عليه وسلم ميمونة وهو محرم",
+          "matn_segments": [
+            { "pericope_id": "p1", "text": "تزوج النبي صلى الله عليه وسلم ميمونة", "variant_type": "base", "alignment_anchor": "marriage-act" },
+            { "pericope_id": "p2", "text": "وهو محرم", "variant_type": "base", "alignment_anchor": "ihram-status" }
+          ],
+          "collector_note": null,
+          "provenance": null
+        }
+      ],
+      "matn_raw": null,
+      "reliability_evidence": []
+    },
+    {
+      "hadith_id": "motzki-m-04",
+      "family_id": "family-maymunah-marriage",
+      "title": "Marriage of Maymunah — Bukhari from Sufyan",
+      "source_ref": {
+        "collection": "Sahih al-Bukhari",
+        "source_type": "print",
+        "source_locator": "Kitab Jazaa al-Sayd, Hadith 1837",
+        "ingested_at": "2026-10-25T00:00:00.000Z",
+        "checksum": null
+      },
+      "variants": [
+        {
+          "variant_id": "variant-bukhari-sufyan",
+          "isnad_chain": ["maymunah", "ibn-abbas", "ata-ibn-abi-rabah", "amr-ibn-dinar", "sufyan-ibn-uyaynah", "al-humaydi", "bukhari"],
+          "isnad_raw": "حدثنا الحميدي حدثنا سفيان حدثنا عمرو بن دينار أخبرني عطاء عن ابن عباس",
+          "matn_raw": "أن النبي صلى الله عليه وسلم نكح ميمونة وهو محرم",
+          "matn_segments": [
+            { "pericope_id": "p1", "text": "أن النبي صلى الله عليه وسلم نكح ميمونة", "variant_type": "muradif", "alignment_anchor": "marriage-act" },
+            { "pericope_id": "p2", "text": "وهو محرم", "variant_type": "base", "alignment_anchor": "ihram-status" }
+          ],
+          "collector_note": null,
+          "provenance": null
+        }
+      ],
+      "matn_raw": null,
+      "reliability_evidence": []
+    },
+    {
+      "hadith_id": "motzki-m-05",
+      "family_id": "family-maymunah-marriage",
+      "title": "Marriage of Maymunah — Abu Dawud from Hammad",
+      "source_ref": {
+        "collection": "Sunan Abi Dawud",
+        "source_type": "print",
+        "source_locator": "Kitab al-Manasik, Hadith 1845",
+        "ingested_at": "2026-10-25T00:00:00.000Z",
+        "checksum": null
+      },
+      "variants": [
+        {
+          "variant_id": "variant-abu-dawud-hammad",
+          "isnad_chain": ["maymunah", "ibn-abbas", "ata-ibn-abi-rabah", "amr-ibn-dinar", "hammad-ibn-zayd", "musaddad", "abu-dawud"],
+          "isnad_raw": "حدثنا مسدد حدثنا حماد عن عمرو عن عطاء عن ابن عباس",
+          "matn_raw": "تزوج رسول الله صلى الله عليه وسلم ميمونة وهو محرم",
+          "matn_segments": [
+            { "pericope_id": "p1", "text": "تزوج رسول الله صلى الله عليه وسلم ميمونة", "variant_type": "base", "alignment_anchor": "marriage-act" },
+            { "pericope_id": "p2", "text": "وهو محرم", "variant_type": "base", "alignment_anchor": "ihram-status" }
+          ],
+          "collector_note": null,
+          "provenance": null
+        }
+      ],
+      "matn_raw": null,
+      "reliability_evidence": []
+    },
+    {
+      "hadith_id": "motzki-m-06",
+      "family_id": "family-maymunah-marriage",
+      "title": "Marriage of Maymunah — Nasa'i from Shu'bah",
+      "source_ref": {
+        "collection": "Sunan al-Nasai",
+        "source_type": "print",
+        "source_locator": "Kitab al-Hajj, Hadith 2841",
+        "ingested_at": "2026-10-25T00:00:00.000Z",
+        "checksum": null
+      },
+      "variants": [
+        {
+          "variant_id": "variant-nasai-shubah",
+          "isnad_chain": ["maymunah", "ibn-abbas", "ata-ibn-abi-rabah", "amr-ibn-dinar", "shu-bah-ibn-al-hajjaj", "muhammad-ibn-bashshar", "al-nasai"],
+          "isnad_raw": "أخبرنا محمد بن بشار حدثنا شعبة عن عمرو بن دينار عن عطاء عن ابن عباس",
+          "matn_raw": "تزوج رسول الله صلى الله عليه وسلم ميمونة وهو محرم",
+          "matn_segments": [
+            { "pericope_id": "p1", "text": "تزوج رسول الله صلى الله عليه وسلم ميمونة", "variant_type": "base", "alignment_anchor": "marriage-act" },
+            { "pericope_id": "p2", "text": "وهو محرم", "variant_type": "base", "alignment_anchor": "ihram-status" }
+          ],
+          "collector_note": null,
+          "provenance": null
+        }
+      ],
+      "matn_raw": null,
+      "reliability_evidence": []
+    }
+  ]
+}

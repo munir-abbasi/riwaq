@@ -21,6 +21,10 @@ New capabilities include:
 - An evidence binding layer (`scripts/evidence-binding.js`) that drops reliability-weighted claims if they lack provenance.
 - Integrity gates (`json-validator.js`, `anti-hallucination.js`, `preflight-gates.js`) that block invalid exports.
 - A deterministic CLI (`scripts/riwaq-cli.mjs`) for validation, analysis, and exporting.
+- Structured matn pericope apparatus and measured $S_5$ coherence (token Jaccard) for isnad-cum-matn analysis (ICMA).
+- An AI proposal staging buffer (`scripts/proposal-store.js`) with SHA-256 verifiable operation receipts.
+- A native Model Context Protocol (MCP) server (`scripts/riwaq-mcp.mjs`) for agentic tool calling.
+- An automated scholarly ICMA benchmark suite (`tests/benchmarks/`, `scripts/eval-harness.mjs`).
 - Markdown, DOCX, PDF, and JSON exports generated from a single canonical report.
 - An automated test suite covering the pipeline.
 
@@ -95,6 +99,14 @@ The importer processes hadith batches using schema validation. It provides:
 - Multi-variant family grouping.
 - Narrator profiles (dates, locations, reliability ratings).
 - Matn text import per variant.
+
+### Agentic AI & Model Context Protocol (MCP) Integration
+Riwaq is built as a 10-layer unidirectional Abstraction Tower ($L_0 \to L_9$) designed for autonomous agents and LLMs:
+- **Native MCP stdio Server (`scripts/riwaq-mcp.mjs`):** Exposes typed tools (`riwaq_manifest`, `riwaq_diagnose`, `riwaq_validate`, `riwaq_analyze`, `riwaq_stage_proposal`, `riwaq_commit_proposal`, `riwaq_export`) over standard JSON-RPC 2.0 stdio transport.
+- **AI Proposal Staging Buffer (`scripts/proposal-store.js`):** Synthetic extractions, narrator merges, and matn segmentations enter a dedicated staging store rather than mutating canonical batch state. Approvals commit through `entity-resolution.js` minting immutable SHA-256 operation receipts.
+- **Structured Matn Apparatus ($L_3$):** Pericope segmentation (`pericope_id`, `text`, `variant_type`, `alignment_anchor`) enables granular text-critical collation (`base`, `ziyada`, `tas_hif`, `muradif`, `taqdim_takhir`, `omission`).
+- **Measured $S_5$ Matn Coherence ($L_4$):** Computes normalized token Jaccard overlap between variant pericopes across collector branches (`measured_token_jaccard`), replacing unmeasured defaults when text segments are present.
+- **Scholarly ICMA Benchmark Suite (`scripts/eval-harness.mjs`):** Automated evaluation harness testing graph topology recall (CL/PCL F1), narrator disambiguation precision, and matn alignment agreement against gold-standard classical hadith studies (Harald Motzki 1991, Gregor Schoeler 1996, Pavel Pavlovitch 2016).
 
 ---
 
@@ -186,6 +198,12 @@ node scripts/riwaq-cli.mjs validate docs/examples/sample-import.json
 node scripts/riwaq-cli.mjs analyze docs/examples/sample-import.json --profile structural_only
 node scripts/riwaq-cli.mjs report docs/examples/sample-import.json
 node scripts/riwaq-cli.mjs export docs/examples/sample-import.json --format md --out report.md
+
+# Launch the native Model Context Protocol (MCP) stdio server
+node scripts/riwaq-cli.mjs mcp
+
+# Run the ICMA scholarly benchmark evaluation suite
+node scripts/eval-harness.mjs tests/benchmarks --format md
 ```
 
 Every command prints a JSON envelope and uses stable process exit codes. Use `pipeline` for a compact cross-layer observation and `report` when complete ordered family results are needed under `data.families`. The `snapshot` command is an observational inspection tool: after valid input, it exits `0`; inspect `data.publication.can_export` for publication state. The `verify-seal` command compares canonical records with a separately retained baseline. It detects tampering but does not prove authenticity or grant export permission. Exports refuse to run when `canExport()` returns false.
@@ -376,9 +394,12 @@ Key test files are in `tests/node/` and `tests/browser/`. Use `npm test` for the
 ```
 index.html              — Main app source (canonical)
 academic/index.html     — Deployed artifact (synced with index.html)
-scripts/                — Analytics, export, CLI, and tooling modules
+scripts/                — Analytics, export, CLI, MCP server, proposal store, and eval harness
 schemas/                — Descriptive JSON schema mirrors (NOT loaded at runtime; see docs/ARCHITECTURE.md)
 tests/                  — Full test suite (Node + browser)
+  benchmarks/           — Scholarly ICMA benchmark corpora (Motzki, Schoeler, Pavlovitch)
+  fixtures/             — Golden and E2E verifiable artifacts
+  node/                 — Unit, integration, and E2E test suites
 docs/
   ARCHITECTURE.md       — Internal structure, API reference, canonical numeric contracts
   USAGE.md              — End-user workflow guide

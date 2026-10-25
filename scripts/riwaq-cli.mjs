@@ -46,6 +46,7 @@ import { exportMarkdown } from './export-md.js';
 import { exportDOCX } from './export-docx.js';
 import { getCapabilityManifest, buildAgentStateSnapshot, buildSemanticImpactRoute, buildAgentDiagnostics } from './agent-control.js';
 import { createIntegrityManifest, verifyIntegrityManifest } from './integrity-seal.js';
+import { RiwaqMcpServer } from './riwaq-mcp.mjs';
 
 const EXIT_OK = 0;
 const EXIT_FAILED = 1;
@@ -446,6 +447,11 @@ function main() {
     case 'diagnose': return cmdDiagnose(file, parseProfile(flags.profile, 'diagnose'), flags.withReliability);
     case 'seal': return cmdSeal(file);
     case 'verify-seal': return cmdVerifySeal(file, flags.manifest);
+    case 'mcp': {
+      const server = new RiwaqMcpServer();
+      server.listen();
+      return;
+    }
     default:
       printUsage(command ? `Unknown command: ${command}` : 'No command given');
   }
@@ -470,6 +476,7 @@ Commands:
   seal <file>                         Deterministic integrity manifest
   verify-seal <file> --manifest PATH Verify against a retained integrity manifest
   export <file> --format md|docx|pdf [--out PATH] [--profile P] [--with-reliability]
+  mcp                                 Native Model Context Protocol (MCP) stdio server
 
 Profiles: structural_only (default) | reliability_weighted
 Exit codes: 0 ok · 1 validation/export failure · 2 usage error`;

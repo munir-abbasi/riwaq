@@ -1,0 +1,221 @@
+{
+  "schema_version": 1,
+  "imported_at": "2026-10-25T00:00:00.000Z",
+  "import_id": "benchmark-schoeler-1996-urwa",
+  "source_batch_ref": "Gregor Schoeler (1996) Arabica 43: Character and Authenticity — Urwah Traditions via al-Zuhri",
+  "ground_truth": {
+    "benchmark_id": "schoeler-1996-urwa",
+    "study": "Gregor Schoeler (1996) 'Character and Authenticity of the Muslim Tradition on the Life of Muhammad'",
+    "expected_cls": ["al-zuhri"],
+    "expected_pcls": ["ma-mar-ibn-rashid", "malik-ibn-anas"],
+    "expected_family_status": "cl_detected",
+    "canonical_narrators": [
+      "aisha",
+      "urwah-ibn-al-zubayr",
+      "al-zuhri",
+      "ma-mar-ibn-rashid",
+      "malik-ibn-anas",
+      "sufyan-ibn-uyaynah",
+      "yunus-ibn-yazid",
+      "abd-al-razzaq",
+      "ahmad-ibn-hanbal",
+      "al-shafii",
+      "yahya-ibn-bukayr",
+      "bukhari",
+      "al-humaydi",
+      "ibn-wahb",
+      "muslim"
+    ],
+    "min_cl_recall": 1.0,
+    "min_disambiguation_precision": 1.0,
+    "expected_matn_basis": "measured_token_jaccard"
+  },
+  "narrators": [
+    { "narrator_id": "aisha", "names": ["Aisha bint Abi Bakr", "عائشة بنت أبي بكر"] },
+    { "narrator_id": "urwah-ibn-al-zubayr", "names": ["Urwah ibn al-Zubayr", "عروة بن الزبير"] },
+    { "narrator_id": "al-zuhri", "names": ["Ibn Shihab al-Zuhri", "ابن شهاب الزهري"] },
+    { "narrator_id": "ma-mar-ibn-rashid", "names": ["Ma'mar ibn Rashid", "معمر بن راشد"] },
+    { "narrator_id": "malik-ibn-anas", "names": ["Malik ibn Anas", "مالك بن أنس"] },
+    { "narrator_id": "sufyan-ibn-uyaynah", "names": ["Sufyan ibn Uyaynah", "سفيان بن عيينة"] },
+    { "narrator_id": "yunus-ibn-yazid", "names": ["Yunus ibn Yazid al-Ayli", "يونس بن يزيد الأيلي"] },
+    { "narrator_id": "abd-al-razzaq", "names": ["Abd al-Razzaq al-San'ani", "عبد الرزاق الصنعاني"] },
+    { "narrator_id": "ahmad-ibn-hanbal", "names": ["Ahmad ibn Hanbal", "أحمد بن حنبل"] },
+    { "narrator_id": "al-shafii", "names": ["Muhammad ibn Idris al-Shafi'i", "محمد بن إدريس الشافعي"] },
+    { "narrator_id": "yahya-ibn-bukayr", "names": ["Yahya ibn Bukayr", "يحيى بن بكير"] },
+    { "narrator_id": "bukhari", "names": ["Muhammad ibn Ismail al-Bukhari", "البخاري"] },
+    { "narrator_id": "al-humaydi", "names": ["Abdullah ibn al-Zubayr al-Humaydi", "الحميدي"] },
+    { "narrator_id": "ibn-wahb", "names": ["Abdullah ibn Wahb", "عبد الله بن وهب"] },
+    { "narrator_id": "muslim", "names": ["Muslim ibn al-Hajjaj", "مسلم بن الحجاج"] }
+  ],
+  "records": [
+    {
+      "hadith_id": "schoeler-u-01",
+      "family_id": "family-urwa-zuhri",
+      "title": "Beginning of Revelation — Abd al-Razzaq from Ma'mar",
+      "source_ref": {
+        "collection": "Musannaf Abd al-Razzaq",
+        "source_type": "print",
+        "source_locator": "Kitab al-Maghazi, Hadith 9718",
+        "ingested_at": "2026-10-25T00:00:00.000Z",
+        "checksum": null
+      },
+      "variants": [
+        {
+          "variant_id": "variant-mamar-abd-al-razzaq",
+          "isnad_chain": ["aisha", "urwah-ibn-al-zubayr", "al-zuhri", "ma-mar-ibn-rashid", "abd-al-razzaq"],
+          "isnad_raw": "عبد الرزاق عن معمر عن الزهري عن عروة عن عائشة",
+          "matn_raw": "أول ما بدئ به رسول الله صلى الله عليه وسلم من الوحي الرؤيا الصالحة في النوم",
+          "matn_segments": [
+            { "pericope_id": "p1", "text": "أول ما بدئ به رسول الله صلى الله عليه وسلم من الوحي", "variant_type": "base", "alignment_anchor": "opening-clause" },
+            { "pericope_id": "p2", "text": "الرؤيا الصالحة في النوم", "variant_type": "base", "alignment_anchor": "vision-descriptor" }
+          ],
+          "collector_note": null,
+          "provenance": null
+        }
+      ],
+      "matn_raw": null,
+      "reliability_evidence": []
+    },
+    {
+      "hadith_id": "schoeler-u-02",
+      "family_id": "family-urwa-zuhri",
+      "title": "Beginning of Revelation — Ahmad from Ma'mar",
+      "source_ref": {
+        "collection": "Musnad Ahmad",
+        "source_type": "print",
+        "source_locator": "Musnad Aisha, Hadith 25624",
+        "ingested_at": "2026-10-25T00:00:00.000Z",
+        "checksum": null
+      },
+      "variants": [
+        {
+          "variant_id": "variant-mamar-ahmad",
+          "isnad_chain": ["aisha", "urwah-ibn-al-zubayr", "al-zuhri", "ma-mar-ibn-rashid", "ahmad-ibn-hanbal"],
+          "isnad_raw": "حدثنا عبد الرزاق أخبرنا معمر عن الزهري عن عروة عن عائشة",
+          "matn_raw": "أول ما بدئ به رسول الله صلى الله عليه وسلم من الوحي الرؤيا الصادقة في النوم",
+          "matn_segments": [
+            { "pericope_id": "p1", "text": "أول ما بدئ به رسول الله صلى الله عليه وسلم من الوحي", "variant_type": "base", "alignment_anchor": "opening-clause" },
+            { "pericope_id": "p2", "text": "الرؤيا الصادقة في النوم", "variant_type": "tas_hif", "alignment_anchor": "vision-descriptor" }
+          ],
+          "collector_note": null,
+          "provenance": null
+        }
+      ],
+      "matn_raw": null,
+      "reliability_evidence": []
+    },
+    {
+      "hadith_id": "schoeler-u-03",
+      "family_id": "family-urwa-zuhri",
+      "title": "Beginning of Revelation — Shafi'i from Malik",
+      "source_ref": {
+        "collection": "Al-Umm",
+        "source_type": "print",
+        "source_locator": "Kitab Siyar al-Awza'i, Vol 7 p 320",
+        "ingested_at": "2026-10-25T00:00:00.000Z",
+        "checksum": null
+      },
+      "variants": [
+        {
+          "variant_id": "variant-malik-shafii",
+          "isnad_chain": ["aisha", "urwah-ibn-al-zubayr", "al-zuhri", "malik-ibn-anas", "al-shafii"],
+          "isnad_raw": "الشافعي عن مالك عن ابن شهاب عن عروة عن عائشة",
+          "matn_raw": "أول ما بدئ به النبي صلى الله عليه وسلم الرؤيا الصالحة",
+          "matn_segments": [
+            { "pericope_id": "p1", "text": "أول ما بدئ به النبي صلى الله عليه وسلم", "variant_type": "base", "alignment_anchor": "opening-clause" },
+            { "pericope_id": "p2", "text": "الرؤيا الصالحة", "variant_type": "base", "alignment_anchor": "vision-descriptor" }
+          ],
+          "collector_note": null,
+          "provenance": null
+        }
+      ],
+      "matn_raw": null,
+      "reliability_evidence": []
+    },
+    {
+      "hadith_id": "schoeler-u-04",
+      "family_id": "family-urwa-zuhri",
+      "title": "Beginning of Revelation — Bukhari from Yahya from Malik",
+      "source_ref": {
+        "collection": "Sahih al-Bukhari",
+        "source_type": "print",
+        "source_locator": "Kitab Bad' al-Wahy, Hadith 3",
+        "ingested_at": "2026-10-25T00:00:00.000Z",
+        "checksum": null
+      },
+      "variants": [
+        {
+          "variant_id": "variant-malik-bukhari",
+          "isnad_chain": ["aisha", "urwah-ibn-al-zubayr", "al-zuhri", "malik-ibn-anas", "yahya-ibn-bukayr", "bukhari"],
+          "isnad_raw": "حدثنا يحيى بن بكير حدثنا الليث... وحدثني عبد الله بن محمد حدثنا عبد الرزاق...",
+          "matn_raw": "أول ما بدئ به رسول الله صلى الله عليه وسلم من الوحي الرؤيا الصالحة في النوم فكان لا يرى رؤيا إلا جاءت مثل فلق الصبح",
+          "matn_segments": [
+            { "pericope_id": "p1", "text": "أول ما بدئ به رسول الله صلى الله عليه وسلم من الوحي", "variant_type": "base", "alignment_anchor": "opening-clause" },
+            { "pericope_id": "p2", "text": "الرؤيا الصالحة في النوم", "variant_type": "base", "alignment_anchor": "vision-descriptor" },
+            { "pericope_id": "p3", "text": "فكان لا يرى رؤيا إلا جاءت مثل فلق الصبح", "variant_type": "ziyada", "alignment_anchor": "morning-light-clause" }
+          ],
+          "collector_note": null,
+          "provenance": null
+        }
+      ],
+      "matn_raw": null,
+      "reliability_evidence": []
+    },
+    {
+      "hadith_id": "schoeler-u-05",
+      "family_id": "family-urwa-zuhri",
+      "title": "Beginning of Revelation — Humaydi from Sufyan",
+      "source_ref": {
+        "collection": "Musnad al-Humaydi",
+        "source_type": "print",
+        "source_locator": "Ahadith Aisha, Hadith 241",
+        "ingested_at": "2026-10-25T00:00:00.000Z",
+        "checksum": null
+      },
+      "variants": [
+        {
+          "variant_id": "variant-sufyan-humaydi",
+          "isnad_chain": ["aisha", "urwah-ibn-al-zubayr", "al-zuhri", "sufyan-ibn-uyaynah", "al-humaydi"],
+          "isnad_raw": "حدثنا الحميدي حدثنا سفيان حدثنا الزهري أخبرني عروة بن الزبير عن عائشة",
+          "matn_raw": "أول ما بدئ به رسول الله صلى الله عليه وسلم من الوحي الرؤيا الصادقة في النوم",
+          "matn_segments": [
+            { "pericope_id": "p1", "text": "أول ما بدئ به رسول الله صلى الله عليه وسلم من الوحي", "variant_type": "base", "alignment_anchor": "opening-clause" },
+            { "pericope_id": "p2", "text": "الرؤيا الصادقة في النوم", "variant_type": "tas_hif", "alignment_anchor": "vision-descriptor" }
+          ],
+          "collector_note": null,
+          "provenance": null
+        }
+      ],
+      "matn_raw": null,
+      "reliability_evidence": []
+    },
+    {
+      "hadith_id": "schoeler-u-06",
+      "family_id": "family-urwa-zuhri",
+      "title": "Beginning of Revelation — Muslim from Ibn Wahb from Yunus",
+      "source_ref": {
+        "collection": "Sahih Muslim",
+        "source_type": "print",
+        "source_locator": "Kitab al-Iman, Hadith 160a",
+        "ingested_at": "2026-10-25T00:00:00.000Z",
+        "checksum": null
+      },
+      "variants": [
+        {
+          "variant_id": "variant-yunus-muslim",
+          "isnad_chain": ["aisha", "urwah-ibn-al-zubayr", "al-zuhri", "yunus-ibn-yazid", "ibn-wahb", "muslim"],
+          "isnad_raw": "حدثني محمد بن رافع حدثنا عبد الرزاق أخبرنا معمر... وحدثني حرملة أخبرنا ابن وهب أخبرني يونس عن ابن شهاب",
+          "matn_raw": "أول ما بدئ به رسول الله صلى الله عليه وسلم من الوحي الرؤيا الصالحة في النوم",
+          "matn_segments": [
+            { "pericope_id": "p1", "text": "أول ما بدئ به رسول الله صلى الله عليه وسلم من الوحي", "variant_type": "base", "alignment_anchor": "opening-clause" },
+            { "pericope_id": "p2", "text": "الرؤيا الصالحة في النوم", "variant_type": "base", "alignment_anchor": "vision-descriptor" }
+          ],
+          "collector_note": null,
+          "provenance": null
+        }
+      ],
+      "matn_raw": null,
+      "reliability_evidence": []
+    }
+  ]
+}

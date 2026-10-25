@@ -58,8 +58,9 @@ const RATING_PRIORS = Object.freeze({
   matruk_or_accused_fabrication: 0.20,
 });
 
-const DEFAULT_MATN_COHERENCE = 0.50;
-const DEFAULT_MATN_COHERENCE_BASIS = 'default_constant_unmeasured';
+export const DEFAULT_MATN_COHERENCE = 0.50;
+export const DEFAULT_MATN_COHERENCE_BASIS = 'default_constant_unmeasured';
+export const MEASURED_MATN_COHERENCE_BASIS = 'measured_token_jaccard';
 const CONTRADICTION_CAP = 0.70;
 const SUPPORTED_THRESHOLD = 0.75;
 const CONTESTED_LOW = 0.55;
@@ -187,6 +188,69 @@ function getTerminalSetForVariant(variant) {
   return chain.length > 0 ? chain[chain.length - 1] : null;
 }
 
+export function normalizeArabicTokens(text) {
+  if (!text || typeof text !== 'string') return new Set();
+  const cleaned = text
+    .replace(/[\u064B-\u065F\u0670\u0640]/g, '')
+    .replace(/[إأآا]/g, 'ا')
+    .replace(/ة/g, 'ه')
+    .replace(/ى/g, 'ي')
+    .toLowerCase();
+  const tokens = cleaned.match(/[\p{L}\p{N}]+/gu) || [];
+  return new Set(tokens.filter(t => t.length > 0));
+}
+
+export function computeNodeMatnCoherence(nid, variants) {
+  const passingVariants = variants.filter(v =>
+    (v.isnad_chain || []).includes(nid) &&
+    Array.isArray(v.matn_segments) &&
+    v.matn_segments.length > 0
+  );
+
+  if (passingVariants.length < 2) {
+    return {
+      matn_coherence: DEFAULT_MATN_COHERENCE,
+      matn_coherence_basis: DEFAULT_MATN_COHERENCE_BASIS,
+    };
+  }
+
+  const tokenSets = passingVariants.map(v => {
+    const allText = v.matn_segments.map(s => s.text || '').join(' ');
+    return normalizeArabicTokens(allText);
+  });
+
+  let totalJaccard = 0;
+  let pairCount = 0;
+
+  for (let i = 0; i < tokenSets.length; i++) {
+    for (let j = i + 1; j < tokenSets.length; j++) {
+      const setA = tokenSets[i];
+      const setB = tokenSets[j];
+      const union = new Set([...setA, ...setB]);
+      if (union.size === 0) continue;
+      let intersectionCount = 0;
+      for (const token of setA) {
+        if (setB.has(token)) intersectionCount++;
+      }
+      totalJaccard += intersectionCount / union.size;
+      pairCount++;
+    }
+  }
+
+  if (pairCount === 0) {
+    return {
+      matn_coherence: DEFAULT_MATN_COHERENCE,
+      matn_coherence_basis: DEFAULT_MATN_COHERENCE_BASIS,
+    };
+  }
+
+  const score = Math.round((totalJaccard / pairCount) * 1e12) / 1e12;
+  return {
+    matn_coherence: score,
+    matn_coherence_basis: MEASURED_MATN_COHERENCE_BASIS,
+  };
+}
+
 /**
  * Compute per-node features per the scoring spec.
  */
@@ -273,7 +337,7 @@ function computeFeatures(nodes, batch) {
     }
     const chronology_conflict_ratio = incidentCount > 0 ? chronologyConflicts / incidentCount : 0;
 
-    const matn_coherence = DEFAULT_MATN_COHERENCE;
+    const { matn_coherence, matn_coherence_basis } = computeNodeMatnCoherence(nid, variants);
 
     const provenance_completeness_ratio = node.totalProvenanceCount > 0
       ? node.completeProvenanceCount / node.totalProvenanceCount
@@ -287,6 +351,7 @@ function computeFeatures(nodes, batch) {
       bypass_ratio,
       chronology_conflict_ratio,
       matn_coherence,
+      matn_coherence_basis,
       provenance_completeness_ratio: provenance_completeness_ratio,
     });
   }
@@ -463,7 +528,7 @@ export class CLPCLAnalyzer {
         outcome,
         contradiction_cap_active: contradictionFlag,
         profile,
-        matn_coherence_basis: DEFAULT_MATN_COHERENCE_BASIS,
+        matn_coherence_basis: f.matn_coherence_basis || DEFAULT_MATN_COHERENCE_BASIS,
         features: {
           fan_out: f.fan_out,
           bundle_coverage: Math.round(f.bundle_coverage * 1e12) / 1e12,
@@ -520,7 +585,7 @@ export class CLPCLAnalyzer {
         outcome,
         contradiction_cap_active: contradictionFlag,
         profile,
-        matn_coherence_basis: DEFAULT_MATN_COHERENCE_BASIS,
+        matn_coherence_basis: f.matn_coherence_basis || DEFAULT_MATN_COHERENCE_BASIS,
         features: {
           fan_out: f.fan_out,
           bundle_coverage: Math.round(f.bundle_coverage * 1e12) / 1e12,

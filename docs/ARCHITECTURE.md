@@ -85,7 +85,7 @@ Quality score 0–100, weighted `0.35*provenance + 0.20*variant_diversity + 0.25
 | S2 | bundle_coverage | identity (0–1) |
 | S3 | collector_diversity | normalized from 2 to 8 |
 | S4 | pre_single_strand_ratio | identity (0–1) |
-| S5 | matn_coherence | identity (0–1); currently a constant `0.50` default; candidate `matn_coherence_basis` is `default_constant_unmeasured` |
+| S5 | matn_coherence | identity (0–1); when `matn_segments` are present, computes deterministic Jaccard token overlap between variant pericopes across branches (`matn_coherence_basis`: `measured_token_jaccard`); when omitted, falls back to neutral `0.50` (`matn_coherence_basis`: `default_constant_unmeasured`) (D017, D023) |
 | P1 | bypass_ratio | penalty |
 | P2 | chronology_conflict_ratio | penalty |
 | P3 | 1 − provenance_completeness_ratio | penalty |
@@ -241,6 +241,35 @@ Both serial projections of a binding — `ValidationResult.toReport()` and the c
 - `scripts/export-docx.js` — `exportDOCX(report)` → Promise of DOCX bytes (python-docx when available, raw OOXML fallback); `saveDOCX(report, path)`.
 - `scripts/export-pdf.js` — `exportPDF(report)` → Promise of PDF bytes; dual-engine converter using LibreOffice (`soffice`) when present and falling back automatically to `pandoc <docx> -o <pdf> --pdf-engine=weasyprint` (D020).
 
+### Structured Matn apparatus & pericope alignment (L3)
+
+Owned by `scripts/json-validator.js` and consumed by `scripts/clpcl-analyzer.js` (D022, D023). Within `IsnadVariant`, `matn_segments` provides an optional array of structured pericopes/propositions:
+- `pericope_id` (string identifier, e.g. `p1`, `p2`);
+- `text` (verbatim Arabic segment);
+- `alignment_anchor` (optional reference to base narrative segment);
+- `variant_type` (`base` | `ziyada` | `tas_hif` | `muradif` | `taqdim_takhir` | `omission`);
+- `semantic_notes` (scholarly or LLM collation commentary).
+
+When `matn_segments` is omitted, the variant falls back gracefully to `matn_raw`. Feature `S5` in `clpcl-analyzer.js` checks for segmented variants: when present across distinct collector branches, it calculates a deterministic Jaccard token overlap score emitting `matn_coherence_basis: "measured_token_jaccard"`; otherwise it preserves the neutral `0.50` default with basis `default_constant_unmeasured`.
+
+### AI Proposal staging buffer subsystem (L2/L3)
+
+Owned by `scripts/proposal-store.js` (or integrated within `entity-resolution.js` / `json-validator.js`, D024). Prevents stochastic LLM hallucinations from directly polluting canonical research state.
+- **Proposal Lifecycle:** `proposed` → `reviewed` → `committed` | `rejected`.
+- **Proposal Types:** `PROPOSAL_NARRATOR_MERGE`, `PROPOSAL_NARRATOR_SPLIT`, `PROPOSAL_ISNAD_PARSE`, `PROPOSAL_MATN_ALIGNMENT`.
+- **Pre-Commit Gate:** Proposals must pass invariant checks (`anti-hallucination.js`, orphan ID checks, circular alias checks) before researcher commitment.
+- **Accretion & Provenance:** Committing a proposal mints an immutable, SHA-256 verifiable operation receipt logging the source model fingerprint, prompt identifier, human reviewer approval, and evidence redistribution.
+
+### Model Context Protocol (MCP) server (L9)
+
+Implemented in `scripts/riwaq-mcp.mjs` (D025). Provides a native JSON-RPC 2.0 stdio interface exposing Riwaq's capability manifest directly to external agent drivers:
+- `riwaq_manifest`: Returns capability/contract manifest without executing analysis.
+- `riwaq_diagnose`: Evaluates cross-layer health and returns prioritized blockers/warnings with exact remediation advice.
+- `riwaq_validate`: Runs schema, provenance, and anti-hallucination checks over batch files.
+- `riwaq_analyze`: Computes graph metrics, CL/PCL candidates, and feature vectors.
+- `riwaq_stage_proposal`: Buffers an agent extraction/merge proposal for scholar review.
+- `riwaq_export`: Exports canonical reports to Markdown, DOCX, or PDF.
+
 ### Machine-readable artifacts
 
 `scripts/artifacts.js` — `emitArtifacts(batch, analysisResult, familyId)` returns the four-artifact bundle: `normalized_chains`, `narrator_graph`, `cl_candidates`, `analysis_snapshot`.
@@ -285,6 +314,18 @@ Historical "phase" labels map to current coverage as follows. Test counts are no
 | — | `tests/node/cli.test.js` | CLI golden/failure paths plus agent manifest/snapshot/impact projection contracts |
 
 Fixtures directories correspond to the phase of the *module* they exercise, not to a chronological project phase.
+
+### Testing Rules & Verification Architecture (D026)
+
+All development, bug fixes, and agent workflows in Riwaq must strictly adhere to the following testing disciplines:
+1. **Failure-mode first:** Before writing implementation code, list the important ways the system/feature can fail (or the key behavioral scenarios). Implement against those.
+2. **High-value E2E / integration tests:** Prefer high-value integration flows for complex features, using medium-to-hard scenarios rather than trivial happy paths.
+3. **Verifiable, repeatable artifacts:** End every E2E integration test with a verifiable artifact (JSON response dump, state snapshot, diagnostic remediation packet, or SHA-256 integrity manifest).
+4. **Selective unit / component tests:** Reserved for pure deterministic logic (e.g. Jaccard similarity, scoring weights, date normalization) or high-risk isolated components. Never as the primary verification mechanism; never written after the fact as mere mirrors of implementation details.
+5. **Forbidden patterns:**
+   - *Tautological tests* (asserting that mock outputs equal mock inputs);
+   - *Change-detector tests* (tests that break on harmless internal refactorings despite identical external behavior).
+6. **Bug fix regression requirement:** Always add a regression test that fails on pre-fix code, unless existing tests already exercise that exact behavioral gap.
 
 ## Analytical Inputs and Outputs
 

@@ -1,0 +1,174 @@
+{
+  "evaluated_at": "2026-10-25T19:05:47.410Z",
+  "suite_passed": true,
+  "summary": {
+    "total_benchmarks": 3,
+    "passed_benchmarks": 3,
+    "failed_benchmarks": 0,
+    "mean_cl_f1": 1,
+    "mean_disambiguation_precision": 1
+  },
+  "benchmarks": [
+    {
+      "benchmark_id": "motzki-1991-maymuna",
+      "study": "Harald Motzki (1991) 'The Musannaf of Abd al-Razzaq as a Source of Authentic Ahadith of the First Century A.H.'",
+      "valid_batch": true,
+      "family_status": {
+        "detected": "cl_detected",
+        "expected": "cl_detected",
+        "match": true
+      },
+      "topology": {
+        "common_links": {
+          "expected": [
+            "amr-ibn-dinar"
+          ],
+          "detected": [
+            "amr-ibn-dinar"
+          ],
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "partial_common_links": {
+          "expected": [
+            "ibn-jurayj",
+            "sufyan-ibn-uyaynah"
+          ],
+          "detected": [
+            "ibn-jurayj",
+            "sufyan-ibn-uyaynah"
+          ],
+          "tp": 2,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        }
+      },
+      "disambiguation": {
+        "precision": 1,
+        "recall": 1,
+        "hallucinated_count": 0,
+        "hallucinated_ids": []
+      },
+      "matn_coherence": {
+        "expected_basis": "measured_token_jaccard",
+        "observed_basis": "measured_token_jaccard",
+        "basis_match": true
+      },
+      "passed": true,
+      "source_file": "motzki-1991-maymuna.json"
+    },
+    {
+      "benchmark_id": "pavlovitch-ibn-ishaq",
+      "study": "Pavel Pavlovitch (2016) 'The Formation of the Islamic Understanding of Judicial Traditions'",
+      "valid_batch": true,
+      "family_status": {
+        "detected": "pcl_only",
+        "expected": "pcl_only",
+        "match": true
+      },
+      "topology": {
+        "common_links": {
+          "expected": [],
+          "detected": [],
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "partial_common_links": {
+          "expected": [
+            "al-shabi",
+            "muhammad-ibn-ishaq"
+          ],
+          "detected": [
+            "al-shabi",
+            "muhammad-ibn-ishaq"
+          ],
+          "tp": 2,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        }
+      },
+      "disambiguation": {
+        "precision": 1,
+        "recall": 1,
+        "hallucinated_count": 0,
+        "hallucinated_ids": []
+      },
+      "matn_coherence": {
+        "expected_basis": "default_constant_unmeasured",
+        "observed_basis": "default_constant_unmeasured",
+        "basis_match": true
+      },
+      "passed": true,
+      "source_file": "pavlovitch-ibn-ishaq.json"
+    },
+    {
+      "benchmark_id": "schoeler-1996-urwa",
+      "study": "Gregor Schoeler (1996) 'Character and Authenticity of the Muslim Tradition on the Life of Muhammad'",
+      "valid_batch": true,
+      "family_status": {
+        "detected": "cl_detected",
+        "expected": "cl_detected",
+        "match": true
+      },
+      "topology": {
+        "common_links": {
+          "expected": [
+            "al-zuhri"
+          ],
+          "detected": [
+            "al-zuhri"
+          ],
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "partial_common_links": {
+          "expected": [
+            "ma-mar-ibn-rashid",
+            "malik-ibn-anas"
+          ],
+          "detected": [
+            "ma-mar-ibn-rashid",
+            "malik-ibn-anas"
+          ],
+          "tp": 2,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        }
+      },
+      "disambiguation": {
+        "precision": 1,
+        "recall": 1,
+        "hallucinated_count": 0,
+        "hallucinated_ids": []
+      },
+      "matn_coherence": {
+        "expected_basis": "measured_token_jaccard",
+        "observed_basis": "measured_token_jaccard",
+        "basis_match": true
+      },
+      "passed": true,
+      "source_file": "schoeler-urwa-tradition.json"
+    }
+  ]
+}

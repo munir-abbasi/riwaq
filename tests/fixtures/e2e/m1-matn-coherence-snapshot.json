@@ -1,0 +1,18 @@
+{
+  "test_run_at": "2026-10-25T00:00:00.000Z",
+  "family_id": "family-intentions",
+  "cl_candidate": "hisham-ibn-urwah",
+  "matn_coherence_score": 0.330085630744,
+  "matn_coherence_basis": "measured_token_jaccard",
+  "subscores": {
+    "S1": 0.2,
+    "S2": 1,
+    "S3": 0.333333333333,
+    "S4": 1,
+    "S5": 0.330085630744,
+    "P1": 0,
+    "P2": 0,
+    "P3": 0
+  },
+  "can_export": true
+}

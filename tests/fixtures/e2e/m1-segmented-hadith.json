@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "imported_at": "2026-10-25T00:00:00.000Z",
+  "import_id": "m1-segmented-batch-001",
+  "source_batch_ref": "Hadith of Intentions with Matn Apparatus",
+  "records": [
+    {
+      "hadith_id": "hadith-intentions-01",
+      "family_id": "family-intentions",
+      "title": "Actions by Intentions — Variant Basra",
+      "source_ref": {
+        "collection": "Sahih al-Bukhari",
+        "source_type": "print",
+        "source_locator": "Book 1, Hadith 1",
+        "ingested_at": "2026-10-25T00:00:00.000Z",
+        "checksum": null
+      },
+      "variants": [
+        {
+          "variant_id": "variant-basra",
+          "isnad_chain": ["urwah-ibn-al-zubayr", "hisham-ibn-urwah", "hammad-ibn-zayd", "bukhari"],
+          "isnad_raw": "حدثنا الحميدي حدثنا سفيان حدثنا يحيى...",
+          "matn_raw": "إنما الأعمال بالنيات وإنما لكل امرئ ما نوى فمن كانت هجرته إلى دنيا يصيبها",
+          "matn_segments": [
+            { "pericope_id": "p1", "text": "إنما الأعمال بالنيات", "variant_type": "base", "alignment_anchor": "core-rule" },
+            { "pericope_id": "p2", "text": "وإنما لكل امرئ ما نوى", "variant_type": "base", "alignment_anchor": "reward-rule" },
+            { "pericope_id": "p3", "text": "فمن كانت هجرته إلى دنيا يصيبها", "variant_type": "base", "alignment_anchor": "migration-clause" }
+          ],
+          "collector_note": null,
+          "provenance": null
+        }
+      ],
+      "matn_raw": null,
+      "reliability_evidence": []
+    },
+    {
+      "hadith_id": "hadith-intentions-02",
+      "family_id": "family-intentions",
+      "title": "Actions by Intentions — Variant Kufa",
+      "source_ref": {
+        "collection": "Sahih Muslim",
+        "source_type": "print",
+        "source_locator": "Kitab al-Imarah, Hadith 1907",
+        "ingested_at": "2026-10-25T00:00:00.000Z",
+        "checksum": null
+      },
+      "variants": [
+        {
+          "variant_id": "variant-kufa",
+          "isnad_chain": ["urwah-ibn-al-zubayr", "hisham-ibn-urwah", "wakie-ibn-al-jarrah", "muslim"],
+          "isnad_raw": "حدثنا أبو بكر بن أبي شيبة حدثنا وكيع...",
+          "matn_raw": "إنما العمل بالنية وإنما لامرئ ما نوى فمن كانت هجرته لدنيا يصيبها أو امرأة ينكحها",
+          "matn_segments": [
+            { "pericope_id": "p1", "text": "إنما العمل بالنية", "variant_type": "tas_hif", "alignment_anchor": "core-rule" },
+            { "pericope_id": "p2", "text": "وإنما لامرئ ما نوى", "variant_type": "muradif", "alignment_anchor": "reward-rule" },
+            { "pericope_id": "p3", "text": "فمن كانت هجرته لدنيا يصيبها أو امرأة ينكحها", "variant_type": "ziyada", "alignment_anchor": "migration-clause" }
+          ],
+          "collector_note": null,
+          "provenance": null
+        }
+      ],
+      "matn_raw": null,
+      "reliability_evidence": []
+    },
+    {
+      "hadith_id": "hadith-intentions-03",
+      "family_id": "family-intentions",
+      "title": "Actions by Intentions — Variant Medina",
+      "source_ref": {
+        "collection": "Muwatta Malik",
+        "source_type": "print",
+        "source_locator": "Kitab al-Nuzur, Hadith 1",
+        "ingested_at": "2026-10-25T00:00:00.000Z",
+        "checksum": null
+      },
+      "variants": [
+        {
+          "variant_id": "variant-medina",
+          "isnad_chain": ["urwah-ibn-al-zubayr", "hisham-ibn-urwah", "malik-ibn-anas", "yahya-al-laythi"],
+          "isnad_raw": "وحدثني مالك عن هشام بن عروة...",
+          "matn_raw": "إنما الأعمال بالنيات ولكل امرئ ما نوى",
+          "matn_segments": [
+            { "pericope_id": "p1", "text": "إنما الأعمال بالنيات", "variant_type": "base", "alignment_anchor": "core-rule" },
+            { "pericope_id": "p2", "text": "ولكل امرئ ما نوى", "variant_type": "base", "alignment_anchor": "reward-rule" }
+          ],
+          "collector_note": null,
+          "provenance": null
+        }
+      ],
+      "matn_raw": null,
+      "reliability_evidence": []
+    },
+    {
+      "hadith_id": "hadith-intentions-04",
+      "family_id": "family-intentions",
+      "title": "Actions by Intentions — Variant Damascus",
+      "source_ref": {
+        "collection": "Sunan Abu Dawud",
+        "source_type": "print",
+        "source_locator": "Kitab al-Talaq, Hadith 2201",
+        "ingested_at": "2026-10-25T00:00:00.000Z",
+        "checksum": null
+      },
+      "variants": [
+        {
+          "variant_id": "variant-damascus",
+          "isnad_chain": ["urwah-ibn-al-zubayr", "hisham-ibn-urwah", "al-walid-ibn-muslim", "abu-dawud"],
+          "isnad_raw": "حدثنا محمد بن كثير أخبرنا سفيان...",
+          "matn_raw": "الأعمال بالنية ولكل امرئ ما نوى",
+          "matn_segments": [
+            { "pericope_id": "p1", "text": "الأعمال بالنية", "variant_type": "muradif", "alignment_anchor": "core-rule" },
+            { "pericope_id": "p2", "text": "ولكل امرئ ما نوى", "variant_type": "base", "alignment_anchor": "reward-rule" }
+          ],
+          "collector_note": null,
+          "provenance": null
+        }
+      ],
+      "matn_raw": null,
+      "reliability_evidence": []
+    }
+  ],
+  "narrators": [
+    { "narrator_id": "urwah-ibn-al-zubayr", "names": ["Urwah ibn al-Zubayr"], "kunya": "Abu Abd Allah", "birth": null, "death": { "year": 94 }, "locations": ["Medina"], "tags": ["tabiin"], "aliases": [] },
+    { "narrator_id": "hisham-ibn-urwah", "names": ["Hisham ibn Urwah"], "kunya": "Abu al-Mundhir", "birth": { "year": 61 }, "death": { "year": 146 }, "locations": ["Medina", "Baghdad"], "tags": ["thiqah"], "aliases": [] },
+    { "narrator_id": "hammad-ibn-zayd", "names": ["Hammad ibn Zayd"], "kunya": "Abu Ismail", "birth": null, "death": { "year": 179 }, "locations": ["Basra"], "tags": ["thiqah"], "aliases": [] },
+    { "narrator_id": "wakie-ibn-al-jarrah", "names": ["Waki ibn al-Jarrah"], "kunya": "Abu Sufyan", "birth": null, "death": { "year": 197 }, "locations": ["Kufa"], "tags": ["thiqah"], "aliases": [] },
+    { "narrator_id": "malik-ibn-anas", "names": ["Malik ibn Anas"], "kunya": "Abu Abd Allah", "birth": null, "death": { "year": 179 }, "locations": ["Medina"], "tags": ["imam"], "aliases": [] },
+    { "narrator_id": "al-walid-ibn-muslim", "names": ["al-Walid ibn Muslim"], "kunya": "Abu al-Abbas", "birth": null, "death": { "year": 195 }, "locations": ["Damascus"], "tags": ["thiqah"], "aliases": [] },
+    { "narrator_id": "bukhari", "names": ["Muhammad ibn Ismail al-Bukhari"], "kunya": "Abu Abd Allah", "birth": null, "death": { "year": 256 }, "locations": ["Bukhara"], "tags": ["collector"], "aliases": [] },
+    { "narrator_id": "muslim", "names": ["Muslim ibn al-Hajjaj"], "kunya": "Abu al-Husayn", "birth": null, "death": { "year": 261 }, "locations": ["Nishapur"], "tags": ["collector"], "aliases": [] },
+    { "narrator_id": "yahya-al-laythi", "names": ["Yahya ibn Yahya al-Laythi"], "kunya": "Abu Muhammad", "birth": null, "death": { "year": 234 }, "locations": ["Cordoba"], "tags": ["rawi"], "aliases": [] },
+    { "narrator_id": "abu-dawud", "names": ["Abu Dawud al-Sijistani"], "kunya": "Abu Dawud", "birth": null, "death": { "year": 275 }, "locations": ["Basra"], "tags": ["collector"], "aliases": [] }
+  ]
+}

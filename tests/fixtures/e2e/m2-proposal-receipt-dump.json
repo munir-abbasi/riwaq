@@ -1,0 +1,239 @@
+{
+  "test_run_at": "2026-10-25T00:00:00.000Z",
+  "proposal": {
+    "proposal_id": "prop-merge-1792955507161-vbwhf",
+    "type": "PROPOSAL_NARRATOR_MERGE",
+    "status": "committed",
+    "payload": {
+      "sourceId": "aymen-unknown",
+      "targetId": "hisham-ibn-urwah"
+    },
+    "rationale": "Historical identification confirmed",
+    "model_metadata": {
+      "model": "gemini-1.5-pro",
+      "prompt_id": "disambig-v1",
+      "confidence": 0.95,
+      "timestamp": "2026-10-25T19:11:47.161Z"
+    },
+    "created_at": "2026-10-25T19:11:47.161Z",
+    "receipt": {
+      "receipt_version": 1,
+      "receipt_id": "rcpt-1792955507162-jvzhh",
+      "proposal_id": "prop-merge-1792955507161-vbwhf",
+      "operation_type": "PROPOSAL_NARRATOR_MERGE",
+      "model_provenance": {
+        "model": "gemini-1.5-pro",
+        "prompt_id": "disambig-v1",
+        "confidence": 0.95
+      },
+      "reviewer": {
+        "reviewer_id": "prof_motzki_verifier",
+        "signed_off_at": "2026-10-25T19:11:47.162Z",
+        "notes": "Verified against Tahdhib al-Kamal entries."
+      },
+      "state_proofs": {
+        "before_hash": "95d3a85704f22bfde809e2463120765db1051c61aeb4331150f361351783ae90",
+        "after_hash": "9ba0b05f55f0c3fe697cca42042d4ab60f848717fe79aef65333b3d8af69ff6e"
+      },
+      "operation_details": {
+        "operation_id": "op-1792955507162-wm72s",
+        "type": "MERGE",
+        "payload": {
+          "source_id": "aymen-unknown",
+          "target_id": "hisham-ibn-urwah",
+          "evidence_redistributed_count": 0
+        },
+        "timestamp": "2026-10-25T19:11:47.162Z",
+        "receipt": {
+          "receipt_version": 1,
+          "operation_id": "op-1792955507162-wm72s",
+          "operation_type": "MERGE",
+          "inputs": {
+            "source_id": "aymen-unknown",
+            "target_id": "hisham-ibn-urwah",
+            "evidence_redistributed_count": 0
+          },
+          "affected_ids": [
+            "aymen-unknown",
+            "hisham-ibn-urwah"
+          ],
+          "state_refs": {
+            "before": "entity-resolution-log:0",
+            "after": "entity-resolution-log:1"
+          },
+          "provenance": {
+            "status": "not_applicable",
+            "movements": []
+          },
+          "invariant_checks": [
+            {
+              "name": "source_is_retired",
+              "passed": true
+            },
+            {
+              "name": "source_resolves_to_target",
+              "passed": true
+            },
+            {
+              "name": "evidence_reassigned_to_target",
+              "passed": true
+            }
+          ],
+          "verification": {
+            "status": "passed"
+          }
+        },
+        "evidence_redistributed": []
+      },
+      "status": "verified_and_accreted"
+    },
+    "updated_at": "2026-10-25T19:11:47.162Z"
+  },
+  "receipt": {
+    "receipt_version": 1,
+    "receipt_id": "rcpt-1792955507162-jvzhh",
+    "proposal_id": "prop-merge-1792955507161-vbwhf",
+    "operation_type": "PROPOSAL_NARRATOR_MERGE",
+    "model_provenance": {
+      "model": "gemini-1.5-pro",
+      "prompt_id": "disambig-v1",
+      "confidence": 0.95
+    },
+    "reviewer": {
+      "reviewer_id": "prof_motzki_verifier",
+      "signed_off_at": "2026-10-25T19:11:47.162Z",
+      "notes": "Verified against Tahdhib al-Kamal entries."
+    },
+    "state_proofs": {
+      "before_hash": "95d3a85704f22bfde809e2463120765db1051c61aeb4331150f361351783ae90",
+      "after_hash": "9ba0b05f55f0c3fe697cca42042d4ab60f848717fe79aef65333b3d8af69ff6e"
+    },
+    "operation_details": {
+      "operation_id": "op-1792955507162-wm72s",
+      "type": "MERGE",
+      "payload": {
+        "source_id": "aymen-unknown",
+        "target_id": "hisham-ibn-urwah",
+        "evidence_redistributed_count": 0
+      },
+      "timestamp": "2026-10-25T19:11:47.162Z",
+      "receipt": {
+        "receipt_version": 1,
+        "operation_id": "op-1792955507162-wm72s",
+        "operation_type": "MERGE",
+        "inputs": {
+          "source_id": "aymen-unknown",
+          "target_id": "hisham-ibn-urwah",
+          "evidence_redistributed_count": 0
+        },
+        "affected_ids": [
+          "aymen-unknown",
+          "hisham-ibn-urwah"
+        ],
+        "state_refs": {
+          "before": "entity-resolution-log:0",
+          "after": "entity-resolution-log:1"
+        },
+        "provenance": {
+          "status": "not_applicable",
+          "movements": []
+        },
+        "invariant_checks": [
+          {
+            "name": "source_is_retired",
+            "passed": true
+          },
+          {
+            "name": "source_resolves_to_target",
+            "passed": true
+          },
+          {
+            "name": "evidence_reassigned_to_target",
+            "passed": true
+          }
+        ],
+        "verification": {
+          "status": "passed"
+        }
+      },
+      "evidence_redistributed": []
+    },
+    "status": "verified_and_accreted"
+  },
+  "replayed_receipts": [
+    {
+      "proposal_id": "prop-merge-1792955507161-vbwhf",
+      "receipt": {
+        "receipt_version": 1,
+        "receipt_id": "rcpt-1792955507162-jvzhh",
+        "proposal_id": "prop-merge-1792955507161-vbwhf",
+        "operation_type": "PROPOSAL_NARRATOR_MERGE",
+        "model_provenance": {
+          "model": "gemini-1.5-pro",
+          "prompt_id": "disambig-v1",
+          "confidence": 0.95
+        },
+        "reviewer": {
+          "reviewer_id": "prof_motzki_verifier",
+          "signed_off_at": "2026-10-25T19:11:47.162Z",
+          "notes": "Verified against Tahdhib al-Kamal entries."
+        },
+        "state_proofs": {
+          "before_hash": "95d3a85704f22bfde809e2463120765db1051c61aeb4331150f361351783ae90",
+          "after_hash": "9ba0b05f55f0c3fe697cca42042d4ab60f848717fe79aef65333b3d8af69ff6e"
+        },
+        "operation_details": {
+          "operation_id": "op-1792955507162-wm72s",
+          "type": "MERGE",
+          "payload": {
+            "source_id": "aymen-unknown",
+            "target_id": "hisham-ibn-urwah",
+            "evidence_redistributed_count": 0
+          },
+          "timestamp": "2026-10-25T19:11:47.162Z",
+          "receipt": {
+            "receipt_version": 1,
+            "operation_id": "op-1792955507162-wm72s",
+            "operation_type": "MERGE",
+            "inputs": {
+              "source_id": "aymen-unknown",
+              "target_id": "hisham-ibn-urwah",
+              "evidence_redistributed_count": 0
+            },
+            "affected_ids": [
+              "aymen-unknown",
+              "hisham-ibn-urwah"
+            ],
+            "state_refs": {
+              "before": "entity-resolution-log:0",
+              "after": "entity-resolution-log:1"
+            },
+            "provenance": {
+              "status": "not_applicable",
+              "movements": []
+            },
+            "invariant_checks": [
+              {
+                "name": "source_is_retired",
+                "passed": true
+              },
+              {
+                "name": "source_resolves_to_target",
+                "passed": true
+              },
+              {
+                "name": "evidence_reassigned_to_target",
+                "passed": true
+              }
+            ],
+            "verification": {
+              "status": "passed"
+            }
+          },
+          "evidence_redistributed": []
+        },
+        "status": "verified_and_accreted"
+      }
+    }
+  ]
+}

@@ -52,6 +52,14 @@ const CAPABILITIES = Object.freeze([
     verification: CLI_VERIFY, downstream_consumers: ['agents'],
   },
   {
+    id: 'cli.mcp', layer: 'L9/control-plane', owner: 'scripts/riwaq-mcp.mjs',
+    invocation: 'node scripts/riwaq-cli.mjs mcp | node scripts/riwaq-mcp.mjs',
+    inputs: ['stdio JSON-RPC stream'], outputs: ['Model Context Protocol stdio session'],
+    preconditions: [], side_effects: [], decision_signal: null, control_type: 'projection',
+    gate_scope: 'none', verification: 'npx vitest run tests/node/mcp-server.test.js',
+    downstream_consumers: ['autonomous agents', 'agentic IDEs'],
+  },
+  {
     id: 'cli.seal', layer: 'L9/security projection', owner: 'scripts/integrity-seal.js',
     invocation: 'node scripts/riwaq-cli.mjs seal <file>', inputs: ['schema-valid import file'],
     outputs: ['deterministic integrity manifest'], preconditions: ['schema validation must succeed'], side_effects: [],

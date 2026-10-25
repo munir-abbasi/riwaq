@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "imported_at": "2026-10-25T00:00:00.000Z",
+  "import_id": "benchmark-pavlovitch-ibn-ishaq",
+  "source_batch_ref": "Pavel Pavlovitch (2016): The Formation of Islamic Understanding of Judicial Traditions — Ibn Ishaq PCL Study",
+  "ground_truth": {
+    "benchmark_id": "pavlovitch-ibn-ishaq",
+    "study": "Pavel Pavlovitch (2016) 'The Formation of the Islamic Understanding of Judicial Traditions'",
+    "expected_cls": [],
+    "expected_pcls": ["al-shabi", "muhammad-ibn-ishaq"],
+    "expected_family_status": "pcl_only",
+    "canonical_narrators": [
+      "ali",
+      "al-shabi",
+      "muhammad-ibn-ishaq",
+      "ismail-ibn-abi-khalid",
+      "yahya-ibn-said",
+      "jarir-ibn-abd-al-hamid",
+      "sufyan-al-thawri",
+      "ahmad-ibn-hanbal",
+      "ibn-abi-shaybah",
+      "waki-ibn-al-jarrah"
+    ],
+    "min_cl_recall": 1.0,
+    "min_disambiguation_precision": 1.0,
+    "expected_matn_basis": "default_constant_unmeasured"
+  },
+  "narrators": [
+    { "narrator_id": "ali", "names": ["Ali ibn Abi Talib", "علي بن أبي طالب"] },
+    { "narrator_id": "al-shabi", "names": ["Amir ibn Sharahil al-Sha'bi", "عامر بن شراحيل الشعبي"] },
+    { "narrator_id": "muhammad-ibn-ishaq", "names": ["Muhammad ibn Ishaq", "محمد بن إسحاق"] },
+    { "narrator_id": "ismail-ibn-abi-khalid", "names": ["Isma'il ibn Abi Khalid", "إسماعيل بن أبي خالد"] },
+    { "narrator_id": "yahya-ibn-said", "names": ["Yahya ibn Sa'id al-Ansari", "يحيى بن سعيد الأنصاري"] },
+    { "narrator_id": "jarir-ibn-abd-al-hamid", "names": ["Jarir ibn Abd al-Hamid", "جرير بن عبد الحميد"] },
+    { "narrator_id": "sufyan-al-thawri", "names": ["Sufyan al-Thawri", "سفيان الثوري"] },
+    { "narrator_id": "ahmad-ibn-hanbal", "names": ["Ahmad ibn Hanbal", "أحمد بن حنبل"] },
+    { "narrator_id": "ibn-abi-shaybah", "names": ["Abu Bakr ibn Abi Shaybah", "أبو بكر بن أبي شيبة"] },
+    { "narrator_id": "waki-ibn-al-jarrah", "names": ["Waki' ibn al-Jarrah", "وكيع بن الجراح"] }
+  ],
+  "records": [
+    {
+      "hadith_id": "pavlovitch-p-01",
+      "family_id": "family-judicial-traditions",
+      "title": "Judicial Precedent of Ali — Ahmad via Yahya from Ibn Ishaq",
+      "source_ref": {
+        "collection": "Musnad Ahmad",
+        "source_type": "print",
+        "source_locator": "Musnad Ali, Hadith 789",
+        "ingested_at": "2026-10-25T00:00:00.000Z",
+        "checksum": null
+      },
+      "variants": [
+        {
+          "variant_id": "variant-ibn-ishaq-yahya",
+          "isnad_chain": ["ali", "al-shabi", "muhammad-ibn-ishaq", "yahya-ibn-said", "ahmad-ibn-hanbal"],
+          "isnad_raw": "حدثنا يحيى بن سعيد عن ابن إسحاق عن الشعبي عن علي",
+          "matn_raw": "قضى علي رضي الله عنه في دية الأصابع سواء",
+          "collector_note": null,
+          "provenance": null
+        }
+      ],
+      "matn_raw": null,
+      "reliability_evidence": []
+    },
+    {
+      "hadith_id": "pavlovitch-p-02",
+      "family_id": "family-judicial-traditions",
+      "title": "Judicial Precedent of Ali — Ibn Abi Shaybah via Jarir from Ibn Ishaq",
+      "source_ref": {
+        "collection": "Musannaf Ibn Abi Shaybah",
+        "source_type": "print",
+        "source_locator": "Kitab al-Diyat, Hadith 27612",
+        "ingested_at": "2026-10-25T00:00:00.000Z",
+        "checksum": null
+      },
+      "variants": [
+        {
+          "variant_id": "variant-ibn-ishaq-jarir",
+          "isnad_chain": ["ali", "al-shabi", "muhammad-ibn-ishaq", "jarir-ibn-abd-al-hamid", "ibn-abi-shaybah"],
+          "isnad_raw": "حدثنا جرير عن ابن إسحاق عن الشعبي عن علي",
+          "matn_raw": "أن عليا سوى بين الأصابع في الدية",
+          "collector_note": null,
+          "provenance": null
+        }
+      ],
+      "matn_raw": null,
+      "reliability_evidence": []
+    },
+    {
+      "hadith_id": "pavlovitch-p-03",
+      "family_id": "family-judicial-traditions",
+      "title": "Judicial Precedent of Ali — Waki via Thawri from Ismail",
+      "source_ref": {
+        "collection": "Musannaf Abd al-Razzaq",
+        "source_type": "print",
+        "source_locator": "Kitab al-Uqul, Hadith 17823",
+        "ingested_at": "2026-10-25T00:00:00.000Z",
+        "checksum": null
+      },
+      "variants": [
+        {
+          "variant_id": "variant-ismail-thawri",
+          "isnad_chain": ["ali", "al-shabi", "ismail-ibn-abi-khalid", "sufyan-al-thawri", "waki-ibn-al-jarrah"],
+          "isnad_raw": "حدثنا وكيع عن سفيان عن إسماعيل بن أبي خالد عن الشعبي عن علي",
+          "matn_raw": "قضى علي في الأصابع عشرا عشرا",
+          "collector_note": null,
+          "provenance": null
+        }
+      ],
+      "matn_raw": null,
+      "reliability_evidence": []
+    }
+  ]
+}

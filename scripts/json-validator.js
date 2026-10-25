@@ -92,6 +92,23 @@ const SCHEMA = {
         isnad_chain: { type: 'array', minItems: 1, items: { $ref: '#/$defs/NarratorIdentifier' } },
         isnad_raw: { type: ['string', 'null'] },
         matn_raw: { type: ['string', 'null'] },
+        matn_segments: {
+          type: ['array', 'null'],
+          items: {
+            type: 'object',
+            required: ['pericope_id', 'text'],
+            properties: {
+              pericope_id: { type: 'string' },
+              text: { type: 'string' },
+              alignment_anchor: { type: ['string', 'null'] },
+              variant_type: {
+                type: 'string',
+                enum: ['base', 'ziyada', 'tas_hif', 'muradif', 'taqdim_takhir', 'omission'],
+              },
+              semantic_notes: { type: ['string', 'null'] },
+            },
+          },
+        },
         collector_note: { type: ['string', 'null'] },
         provenance: {
           type: ['object', 'null'],
@@ -350,6 +367,15 @@ export function normalizeBatch(batch) {
         isnad_chain: [...v.isnad_chain],
         isnad_raw: v.isnad_raw || null,
         matn_raw: v.matn_raw || null,
+        matn_segments: Array.isArray(v.matn_segments)
+          ? v.matn_segments.map(s => ({
+              pericope_id: String(s.pericope_id),
+              text: String(s.text),
+              alignment_anchor: s.alignment_anchor ? String(s.alignment_anchor) : null,
+              variant_type: s.variant_type || 'base',
+              semantic_notes: s.semantic_notes ? String(s.semantic_notes) : null,
+            }))
+          : null,
         collector_note: v.collector_note || null,
         provenance: v.provenance || null,
       })),
