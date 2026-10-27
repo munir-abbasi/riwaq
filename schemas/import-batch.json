@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/07/schema#",
-  "$id": "https://isnad-builder.app/schemas/import-batch.json",
+  "$id": "https://raw.githubusercontent.com/munir-abbasi/riwaq/main/schemas/import-batch.json",
   "title": "ImportBatch",
   "description": "A batch import payload containing one or more hadith records, metadata, and optional narrator profiles.",
   "type": "object",

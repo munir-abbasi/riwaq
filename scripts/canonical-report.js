@@ -52,10 +52,10 @@ export function buildReportData(batch, analysisResult, explainabilityResult, val
     reliability_prior: c.reliability_prior,
     matn_coherence_basis: c.matn_coherence_basis,
     contradiction_cap: c.contradiction_cap_active || false,
-    bundle_coverage: c.bundle_coverage,
-    fan_out: c.fan_out,
-    collector_diversity: c.collector_diversity,
-    bypass_ratio: c.bypass_ratio,
+    bundle_coverage: c.features.bundle_coverage,
+    fan_out: c.features.fan_out,
+    collector_diversity: c.features.collector_diversity,
+    bypass_ratio: c.features.bypass_ratio,
     methodology_note: c.methodology_note,
     evidence_ids: c.evidence_ids || [],
   }));
@@ -66,6 +66,7 @@ export function buildReportData(batch, analysisResult, explainabilityResult, val
         category: b.claim_category,
         is_exempt: b.is_exempt,
         binding_valid: b.binding_valid,
+        warnings: b.warnings.map(w => ({ ...w })),
         evidence_refs: b.evidence_refs.map(e => ({
           evidence_id: e.evidence_id,
           has_provenance: !!(e.evidence_record?.source_ref),
@@ -120,14 +121,14 @@ export function buildReportData(batch, analysisResult, explainabilityResult, val
       graph_nodes: artifacts?.narrator_graph?.node_count ?? 0,
       graph_edges: artifacts?.narrator_graph?.edge_count ?? 0,
     },
-    uncertainty: explainabilityResult?.uncertainty_section || {
+    uncertainty: explainabilityResult?.getUncertaintySection() || {
       excluded_candidates: [],
       insufficient_data_families: [],
       unverified_evidence: [],
       blocking_violations: [],
       total_uncertain_count: 0,
     },
-    audit_trail: explainabilityResult?.audit_trail || [],
+    audit_trail: explainabilityResult?.getAuditTrail().map(entry => ({ ...entry })) || [],
   };
 }
 

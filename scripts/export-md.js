@@ -22,6 +22,7 @@ export const MD_SECTION = Object.freeze({
   NORMALIZED_CHAINS: 'normalized_chains',
   NARRATOR_GRAPH: 'narrator_graph',
   UNCERTAINTY: 'uncertainty',
+  AUDIT_TRAIL: 'audit_trail',
   ARTIFACTS: 'artifacts',
   FOOTER: 'footer',
 });
@@ -58,6 +59,7 @@ function _renderMarkdown(data, opts) {
   lines.push(_renderEvidenceBinding(data, opts));
   lines.push(_renderNormalizedChains(data, opts));
   lines.push(_renderUncertainty(data, opts));
+  lines.push(_renderAuditTrail(data));
   lines.push(_renderFooter(data));
 
   return lines.filter(l => l !== null).join('\n\n');
@@ -165,7 +167,7 @@ function _renderEvidenceBinding(data, opts) {
   for (const b of bindings) {
     const status = b.is_exempt ? '_(exempt)_' : b.binding_valid ? '✓' : '✗';
     lines.push(`- **${b.narrator_id}** ${status}`);
-    lines.push(`  - Category: ${b.claim_category}`);
+    lines.push(`  - Category: ${b.category}`);
     if (b.evidence_refs.length > 0) {
       const refs = b.evidence_refs.map(e => `${e.evidence_id}${e.has_provenance ? '' : ' *(missing provenance)*'}`).join(', ');
       lines.push(`  - Evidence: ${refs}`);
@@ -175,9 +177,14 @@ function _renderEvidenceBinding(data, opts) {
     for (const v of b.violations) {
       lines.push(`  - **${v.level}:** ${v.code} — ${v.message}`);
     }
+    lines.push(..._renderBindingWarnings(b.warnings));
   }
 
   return lines.join('\n');
+}
+
+function _renderBindingWarnings(warnings) {
+  return (warnings || []).map(w => `  - **Warning:** ${w.code} — ${w.message}`);
 }
 
 function _renderNormalizedChains(data, opts) {
@@ -246,6 +253,17 @@ function _renderUncertainty(data, opts) {
   }
 
   return lines.join('\n');
+}
+
+function _renderAuditTrail(data) {
+  const entries = data.audit_trail || [];
+  if (entries.length === 0) return null;
+
+  return [
+    '## Audit Trail',
+    '',
+    ...entries.map(entry => `- **${entry.type}** — ${entry.subject}: ${entry.detail}`),
+  ].join('\n');
 }
 
 function _renderFooter(data) {

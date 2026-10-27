@@ -235,11 +235,15 @@ Both serial projections of a binding — `ValidationResult.toReport()` and the c
 
 `CanonicalReport.canExport()` returns true only when every family validation result permits analysis to proceed. Human-facing exporters consume the report rather than running their own analysis.
 
+Candidate graph metrics are projected from the analyzer's `features` object. Uncertainty and audit entries come from the explainability model's public accessors, and evidence bindings preserve their canonical `category` and per-binding `warnings`. These warnings remain explanatory observations and do not change `canExport()`.
+
 ### Exporters
 
 - `scripts/export-md.js` — `exportMarkdown(report)` → Markdown string; `exportMarkdownFromData(reportData)` for pre-built report data.
 - `scripts/export-docx.js` — `exportDOCX(report)` → Promise of DOCX bytes (python-docx when available, raw OOXML fallback); `saveDOCX(report, path)`.
 - `scripts/export-pdf.js` — `exportPDF(report)` → Promise of PDF bytes; dual-engine converter using LibreOffice (`soffice`) when present and falling back automatically to `pandoc <docx> -o <pdf> --pdf-engine=weasyprint` (D020).
+
+The shared Markdown renderer includes candidate metrics, evidence categories and warnings, uncertainty, and the canonical audit trail. DOCX and PDF consume that same rendering path.
 
 ### Structured Matn apparatus & pericope alignment (L3)
 

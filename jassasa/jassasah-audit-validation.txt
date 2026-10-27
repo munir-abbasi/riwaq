@@ -1,0 +1,65 @@
+JASSASAH SOURCE AUDIT — VALIDATION RECORD
+Recorded: 2026-10-26T17:07:24.577080+00:00
+
+Scope: retained digital source extracts, chain encoding, inventory counts and existing schema checks.
+These checks do not authenticate a digital reading, prove narrator identity/hearing, or establish historical independence.
+
+PASS: 19 retained source attestations across 10 collection titles; source-text hashes match the retrieval ledger.
+PASS: 18 encoded attestations / 20 complete compiler paths / 71 referenced narrator profiles.
+PASS: 19 chain appendix sections and 20 complete normalized paths; P-967 separately qualified and excluded from import.
+PASS: all 16 pre-existing variant IDs and normalized chains retained; 4 new paths added.
+PASS: 9 al-Shabi pupil classes + 2 other Fatimah approaches + 1 Jabir class = 12 lower-branch classes.
+PASS: every imported chain/narrative pair reassembles its retained continuous source text (whitespace ignored).
+PASS: every imported witness has the corresponding source URL; every narrator ID resolves; orientation checked at both endpoints.
+PASS: no narrator ratings or reliability evidence added.
+PASS: 52 diagnostic Arabic quotations match a retained witness or IS editorial apparatus after removing vocalization/punctuation; marked ellipses allow ordered gaps within one source.
+LIMIT: quotation matching checks textual presence, not interpretive correctness; the comparisons and normalized chains were also read against the cited Arabic.
+
+$ node scripts/riwaq-cli.mjs validate jassasa/jassasah-riwaq-import.json
+{
+  "ok": true,
+  "command": "validate",
+  "file": "jassasa/jassasah-riwaq-import.json",
+  "data": {
+    "valid": true,
+    "error_count": 0,
+    "warning_count": 0,
+    "errors": [],
+    "warnings": []
+  }
+}
+Exit code: 0
+
+$ node scripts/riwaq-cli.mjs validate jassasa/jassasah-audited-import.json
+{
+  "ok": true,
+  "command": "validate",
+  "file": "jassasa/jassasah-audited-import.json",
+  "data": {
+    "valid": true,
+    "error_count": 0,
+    "warning_count": 0,
+    "errors": [],
+    "warnings": []
+  }
+}
+Exit code: 0
+
+$ ./node_modules/.bin/vitest run tests/node/json-validator.test.js
+RUN  v4.1.11 /home/meer/Projects/Isnad-builder
+
+ ✓ tests/node/json-validator.test.js (36 tests) 78ms
+
+ Test Files  1 passed (1)
+      Tests  36 passed (36)
+   Start at  22:05:17
+   Duration  333ms (transform 57ms, setup 0ms, import 109ms, tests 78ms, environment 0ms)
+
+No new tests, dependencies, application code, or schema changes.
+
+Current file SHA-256 values for subsequent local comparisons:
+7b69bcb0f85816f1741da5c00346aa2e9a37910433444fe8aaad852bc08b657a  jassasah-source-audit.md
+db3379905dad4e8419a4c42c9b0f1454ffcd5dfa959fbc1055844291e630ffe4  jassasah-source-texts.md
+6d8c8567a1f5b901bde0853b60ddc1c3fbbde989003685f79ed257329af51001  jassasah-audited-import.json
+4aa5802299e3b867a6036d7c08c2be519c50be4596dcc894ce19475ca9dee4c4  jassasah-riwaq-research.md
+989924ad93c66be1699dc2c737645a3669dbdd804bb09a702e96eb0ddb64c0d5  jassasah-riwaq-import.json

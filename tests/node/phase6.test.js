@@ -12,7 +12,8 @@
  */
 import { describe, it } from 'vitest';
 import * as assert2 from 'node:assert';
-import { existsSync } from 'node:fs';
+import { existsSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { join } from 'path';
 
 import { normalizeBatch, validateBatch } from '../../scripts/json-validator.js';
@@ -125,14 +126,33 @@ describe('Phase 6 — E2E Pipeline', () => {
       }
     });
 
-    it('Markdown export produces valid output', () => {
-      const report = CanonicalReport.fromBatch(BATCH_SMALL, { profile: 'structural_only' });
+    it('exports uncertain structural claims with metrics, audit entries, and missing-evidence warnings', () => {
+      const batch = structuredClone(BATCH_SMALL);
+      batch.records[0].reliability_evidence = [];
+      const report = CanonicalReport.fromBatch(batch, { profile: 'structural_only' });
+      const data = JSON.parse(JSON.stringify(report));
       const md = exportMarkdown(report);
-      assert2.ok(md.length > 100);
-      assert2.ok(
-        md.includes('Confidence') || md.includes('confidence'),
-        'MD should contain confidence info'
-      );
+      assert2.equal(report.canExport(), true);
+      assert2.deepEqual({
+        uncertain: data.uncertainty.excluded_candidates.map(c => c.narrator_id),
+        metrics: [data.candidates[0].fan_out, data.candidates[0].bundle_coverage,
+          data.candidates[0].collector_diversity, data.candidates[0].bypass_ratio],
+        category: data.evidence_binding.bindings[0].category,
+        warnings: data.evidence_binding.bindings[0].warnings?.map(w => w.code),
+        audit: data.audit_trail.map(entry => entry.type),
+      }, {
+        uncertain: ['cl-narrator'], metrics: [3, 1, 3, 0], category: 'outcome_claim',
+        warnings: ['NO_EVIDENCE_STRUCTURAL'],
+        audit: ['ANALYSIS_START', 'FAMILY_STATUS', 'CANDIDATE_RANKED', 'ANALYSIS_COMPLETE'],
+      });
+      for (const text of ['**Fan-out:** 3', '**Bundle coverage:** 100.0%',
+        '**Collector diversity:** 3', '**Bypass ratio:** 0.0%', 'Category: outcome_claim',
+        'NO_EVIDENCE_STRUCTURAL', 'methodologically valid', '**Excluded:** cl-narrator',
+        '## Audit Trail', 'ANALYSIS_START', 'CANDIDATE_RANKED', 'ANALYSIS_COMPLETE']) {
+        assert2.ok(md.includes(text), `export must retain ${text}`);
+      }
+      assert2.ok(!md.includes('No uncertainty flags'));
+      writeFileSync(join(tmpdir(), 'riwaq-reporting-regression.md'), md);
     });
 
     it('DOCX export produces valid ZIP bytes', async () => {

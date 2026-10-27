@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/07/schema#",
-  "$id": "https://isnad-builder.app/schemas/narrator-profile.json",
+  "$id": "https://raw.githubusercontent.com/munir-abbasi/riwaq/main/schemas/narrator-profile.json",
   "title": "NarratorProfile",
   "description": "Canonical profile for a narrator entity, used for entity resolution and reliability tracking.",
   "type": "object",

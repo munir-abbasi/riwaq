@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/07/schema#",
-  "$id": "https://isnad-builder.app/schemas/hadith-record.json",
+  "$id": "https://raw.githubusercontent.com/munir-abbasi/riwaq/main/schemas/hadith-record.json",
   "title": "HadithRecord",
   "description": "Canonical representation of a single hadith import record. A HadithRecord belongs to exactly one hadith family and contains one or more isnad variants.",
   "type": "object",

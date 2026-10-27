@@ -1,0 +1,1025 @@
+{
+  "recorded_at": "2026-10-26T17:13:17.812170+00:00",
+  "repository_head": "75654e760fd6db4f3edcb4f8a83e42dd8fe929c7",
+  "scope": "Local reproducibility, live Riwaq pipeline, canonical projection/export, and sensitivity review; no fresh manuscript or edition collation.",
+  "input_hashes_match_previous_validation": {
+    "jassasah-source-audit.md": "7b69bcb0f85816f1741da5c00346aa2e9a37910433444fe8aaad852bc08b657a",
+    "jassasah-source-texts.md": "db3379905dad4e8419a4c42c9b0f1454ffcd5dfa959fbc1055844291e630ffe4",
+    "jassasah-audited-import.json": "6d8c8567a1f5b901bde0853b60ddc1c3fbbde989003685f79ed257329af51001",
+    "jassasah-riwaq-research.md": "4aa5802299e3b867a6036d7c08c2be519c50be4596dcc894ce19475ca9dee4c4",
+    "jassasah-riwaq-import.json": "989924ad93c66be1699dc2c737645a3669dbdd804bb09a702e96eb0ddb64c0d5"
+  },
+  "source_and_artifact_checks": {
+    "retained_attestations": 19,
+    "encoded_attestations": 18,
+    "variants": 20,
+    "nodes": 71,
+    "edges": 82,
+    "diagnostic_quotations_matched": 52,
+    "all_chain_arrays_preserved": true,
+    "all_matn_texts_preserved": true,
+    "all_chain_provenance_refs_preserved": true,
+    "all_graph_edge_variant_memberships_match_input": true,
+    "source_hashes_verified": true,
+    "isnad_and_matn_reassemble_sources": true,
+    "matn_segments_present": 0
+  },
+  "structural_pipeline": {
+    "ok": true,
+    "command": "pipeline",
+    "file": "jassasa/jassasah-audited-import.json",
+    "data": {
+      "stages": {
+        "validation": {
+          "control_type": "blocking_precondition",
+          "passed": true,
+          "warnings": 0
+        },
+        "quality_gates": {
+          "control_type": "observation",
+          "passed": true,
+          "quality_score": 58,
+          "gates": {
+            "provenanceScore": 89,
+            "diversityScore": 100,
+            "metadataScore": 27,
+            "reliabilityScore": 0,
+            "overallScore": 58,
+            "recordCount": 18,
+            "narratorCount": 71,
+            "totalVariants": 20
+          }
+        },
+        "anti_hallucination": {
+          "control_type": "observation",
+          "valid": true,
+          "can_proceed": true,
+          "violations": [],
+          "warnings": []
+        }
+      },
+      "report": {
+        "control_type": "publication_gate",
+        "authority": "CanonicalReport.canExport()",
+        "can_export": true,
+        "family_ids": [
+          "jassasah-tamim-family"
+        ],
+        "per_family": {
+          "jassasah-tamim-family": {
+            "analysis_can_proceed": true,
+            "violation_count": 0
+          }
+        },
+        "profile": "structural_only",
+        "family_status": "cl_detected",
+        "candidate_count": 3,
+        "candidates": [
+          {
+            "narrator_id": "amir-al-shabi",
+            "type": "common_link",
+            "outcome": "contested",
+            "confidence": 0.7025,
+            "confidence_4dp": 0.7025,
+            "profile": "structural_only",
+            "structural_score": 0.7025,
+            "reliability_prior": null,
+            "matn_coherence_basis": "default_constant_unmeasured",
+            "contradiction_cap": false,
+            "evidence_ids": []
+          },
+          {
+            "narrator_id": "fatimah-bint-qays",
+            "type": "common_link",
+            "outcome": "uncertain",
+            "confidence": 0.4375,
+            "confidence_4dp": 0.4375,
+            "profile": "structural_only",
+            "structural_score": 0.4375,
+            "reliability_prior": null,
+            "matn_coherence_basis": "default_constant_unmeasured",
+            "contradiction_cap": false,
+            "evidence_ids": []
+          },
+          {
+            "narrator_id": "abd-allah-ibn-buraydah",
+            "type": "partial_common_link",
+            "outcome": "likely_weak_in_context",
+            "confidence": 0.09,
+            "confidence_4dp": 0.09,
+            "profile": "structural_only",
+            "structural_score": 0.09,
+            "reliability_prior": null,
+            "matn_coherence_basis": "default_constant_unmeasured",
+            "contradiction_cap": false,
+            "evidence_ids": []
+          }
+        ],
+        "blocking_violations": 0
+      }
+    }
+  },
+  "diagnostics": {
+    "ok": true,
+    "command": "diagnose",
+    "file": "jassasa/jassasah-audited-import.json",
+    "data": {
+      "diagnostics_version": 1,
+      "status": "healthy",
+      "can_export": true,
+      "primary_blocker": null,
+      "summary": {
+        "blocker_count": 0,
+        "warning_count": 0,
+        "family_count": 1,
+        "can_export": true
+      },
+      "blockers": [],
+      "warnings": [],
+      "recommended_next_action": "node scripts/riwaq-cli.mjs export <file> --format md"
+    }
+  },
+  "golden_pipeline": {
+    "ok": true,
+    "command": "pipeline",
+    "file": "docs/examples/sample-import.json",
+    "data": {
+      "stages": {
+        "validation": {
+          "control_type": "blocking_precondition",
+          "passed": true,
+          "warnings": 0
+        },
+        "quality_gates": {
+          "control_type": "observation",
+          "passed": true,
+          "quality_score": 92,
+          "gates": {
+            "provenanceScore": 89,
+            "diversityScore": 100,
+            "metadataScore": 84,
+            "reliabilityScore": 100,
+            "overallScore": 92,
+            "recordCount": 1,
+            "narratorCount": 5,
+            "totalVariants": 1
+          }
+        },
+        "anti_hallucination": {
+          "control_type": "observation",
+          "valid": true,
+          "can_proceed": true,
+          "violations": [],
+          "warnings": []
+        }
+      },
+      "report": {
+        "control_type": "publication_gate",
+        "authority": "CanonicalReport.canExport()",
+        "can_export": true,
+        "family_ids": [
+          "bukhari-imran-family"
+        ],
+        "per_family": {
+          "bukhari-imran-family": {
+            "analysis_can_proceed": true,
+            "violation_count": 0
+          }
+        },
+        "profile": "structural_only",
+        "family_status": "insufficient_data",
+        "candidate_count": 0,
+        "candidates": [],
+        "blocking_violations": 0
+      }
+    }
+  },
+  "expected_reliability_refusal": {
+    "exit_code": 1,
+    "response": {
+      "ok": false,
+      "command": "pipeline",
+      "file": "jassasa/jassasah-audited-import.json",
+      "data": {
+        "stages": {
+          "validation": {
+            "control_type": "blocking_precondition",
+            "passed": true,
+            "warnings": 0
+          },
+          "quality_gates": {
+            "control_type": "observation",
+            "passed": true,
+            "quality_score": 58,
+            "gates": {
+              "provenanceScore": 89,
+              "diversityScore": 100,
+              "metadataScore": 27,
+              "reliabilityScore": 0,
+              "overallScore": 58,
+              "recordCount": 18,
+              "narratorCount": 71,
+              "totalVariants": 20
+            }
+          },
+          "anti_hallucination": {
+            "control_type": "observation",
+            "valid": true,
+            "can_proceed": true,
+            "violations": [],
+            "warnings": []
+          }
+        },
+        "report": {
+          "control_type": "publication_gate",
+          "authority": "CanonicalReport.canExport()",
+          "can_export": false,
+          "family_ids": [
+            "jassasah-tamim-family"
+          ],
+          "per_family": {
+            "jassasah-tamim-family": {
+              "analysis_can_proceed": false,
+              "violation_count": 3
+            }
+          },
+          "profile": "reliability_weighted",
+          "family_status": "cl_detected",
+          "candidate_count": 3,
+          "candidates": [
+            {
+              "narrator_id": "amir-al-shabi",
+              "type": "common_link",
+              "outcome": "contested",
+              "confidence": 0.631625,
+              "confidence_4dp": 0.6316,
+              "profile": "reliability_weighted",
+              "structural_score": 0.7025,
+              "reliability_prior": 0.5,
+              "matn_coherence_basis": "default_constant_unmeasured",
+              "contradiction_cap": false,
+              "evidence_ids": []
+            },
+            {
+              "narrator_id": "fatimah-bint-qays",
+              "type": "common_link",
+              "outcome": "uncertain",
+              "confidence": 0.459375,
+              "confidence_4dp": 0.4594,
+              "profile": "reliability_weighted",
+              "structural_score": 0.4375,
+              "reliability_prior": 0.5,
+              "matn_coherence_basis": "default_constant_unmeasured",
+              "contradiction_cap": false,
+              "evidence_ids": []
+            },
+            {
+              "narrator_id": "abd-allah-ibn-buraydah",
+              "type": "partial_common_link",
+              "outcome": "likely_weak_in_context",
+              "confidence": 0.2335,
+              "confidence_4dp": 0.2335,
+              "profile": "reliability_weighted",
+              "structural_score": 0.09,
+              "reliability_prior": 0.5,
+              "matn_coherence_basis": "default_constant_unmeasured",
+              "contradiction_cap": false,
+              "evidence_ids": []
+            }
+          ],
+          "blocking_violations": 3
+        }
+      }
+    }
+  },
+  "sensitivity": {
+    "lower-branch-representatives": {
+      "selection": [
+        "jass-muslim-2942a-awarith-route",
+        "jass-muslim-2942b-sayyar-route",
+        "jass-muslim-2942c-hulwani-route",
+        "jass-muslim-2942d-abu-zinad-route",
+        "jass-abudawud-4325-zuhri-route",
+        "jass-abudawud-4327-mujalid-sadran-route",
+        "jass-abudawud-4328-jabir-route",
+        "jass-tirmidhi-2253-qatada-route",
+        "jass-nasai-kubra-4453-dawud-route",
+        "jass-ibn-hibban-6787-yahya-route",
+        "jass-audit-p-956",
+        "jass-audit-p-960"
+      ],
+      "input_variant_count": 12,
+      "pipeline": {
+        "ok": true,
+        "command": "pipeline",
+        "file": "/tmp/jassasah-review/lower-branch-representatives-input.json",
+        "data": {
+          "stages": {
+            "validation": {
+              "control_type": "blocking_precondition",
+              "passed": true,
+              "warnings": 0
+            },
+            "quality_gates": {
+              "control_type": "observation",
+              "passed": true,
+              "quality_score": 58,
+              "gates": {
+                "provenanceScore": 89,
+                "diversityScore": 100,
+                "metadataScore": 27,
+                "reliabilityScore": 0,
+                "overallScore": 58,
+                "recordCount": 12,
+                "narratorCount": 71,
+                "totalVariants": 12
+              }
+            },
+            "anti_hallucination": {
+              "control_type": "observation",
+              "valid": true,
+              "can_proceed": true,
+              "violations": [],
+              "warnings": []
+            }
+          },
+          "report": {
+            "control_type": "publication_gate",
+            "authority": "CanonicalReport.canExport()",
+            "can_export": true,
+            "family_ids": [
+              "jassasah-tamim-family"
+            ],
+            "per_family": {
+              "jassasah-tamim-family": {
+                "analysis_can_proceed": true,
+                "violation_count": 0
+              }
+            },
+            "profile": "structural_only",
+            "family_status": "cl_detected",
+            "candidate_count": 2,
+            "candidates": [
+              {
+                "narrator_id": "amir-al-shabi",
+                "type": "common_link",
+                "outcome": "contested",
+                "confidence": 0.595833333333,
+                "confidence_4dp": 0.5958,
+                "profile": "structural_only",
+                "structural_score": 0.595833333333,
+                "reliability_prior": null,
+                "matn_coherence_basis": "default_constant_unmeasured",
+                "contradiction_cap": false,
+                "evidence_ids": []
+              },
+              {
+                "narrator_id": "fatimah-bint-qays",
+                "type": "common_link",
+                "outcome": "uncertain",
+                "confidence": 0.379166666667,
+                "confidence_4dp": 0.3792,
+                "profile": "structural_only",
+                "structural_score": 0.379166666667,
+                "reliability_prior": null,
+                "matn_coherence_basis": "default_constant_unmeasured",
+                "contradiction_cap": false,
+                "evidence_ids": []
+              }
+            ],
+            "blocking_violations": 0
+          }
+        }
+      }
+    },
+    "without-jabir": {
+      "selection": [
+        "jass-muslim-2942a-awarith-route",
+        "jass-muslim-2942a-hajjaj-route",
+        "jass-muslim-2942b-sayyar-route",
+        "jass-muslim-2942c-hulwani-route",
+        "jass-muslim-2942c-nawfali-route",
+        "jass-muslim-2942d-abu-zinad-route",
+        "jass-abudawud-4325-zuhri-route",
+        "jass-abudawud-4326-husayn-route",
+        "jass-abudawud-4327-mujalid-sadran-route",
+        "jass-tirmidhi-2253-qatada-route",
+        "jass-ibnmajah-4074-mujalid-route",
+        "jass-nasai-kubra-4453-dawud-route",
+        "jass-ahmad-27102-dawud-route",
+        "jass-ibn-abi-shaybah-40425-mujalid-route",
+        "jass-ibn-hibban-6787-yahya-route",
+        "jass-audit-y",
+        "jass-audit-p-956",
+        "jass-audit-p-960",
+        "jass-audit-p-968"
+      ],
+      "input_variant_count": 19,
+      "pipeline": {
+        "ok": true,
+        "command": "pipeline",
+        "file": "/tmp/jassasah-review/without-jabir-input.json",
+        "data": {
+          "stages": {
+            "validation": {
+              "control_type": "blocking_precondition",
+              "passed": true,
+              "warnings": 0
+            },
+            "quality_gates": {
+              "control_type": "observation",
+              "passed": true,
+              "quality_score": 58,
+              "gates": {
+                "provenanceScore": 89,
+                "diversityScore": 100,
+                "metadataScore": 27,
+                "reliabilityScore": 0,
+                "overallScore": 58,
+                "recordCount": 17,
+                "narratorCount": 71,
+                "totalVariants": 19
+              }
+            },
+            "anti_hallucination": {
+              "control_type": "observation",
+              "valid": true,
+              "can_proceed": true,
+              "violations": [],
+              "warnings": []
+            }
+          },
+          "report": {
+            "control_type": "publication_gate",
+            "authority": "CanonicalReport.canExport()",
+            "can_export": true,
+            "family_ids": [
+              "jassasah-tamim-family"
+            ],
+            "per_family": {
+              "jassasah-tamim-family": {
+                "analysis_can_proceed": true,
+                "violation_count": 0
+              }
+            },
+            "profile": "structural_only",
+            "family_status": "cl_detected",
+            "candidate_count": 3,
+            "candidates": [
+              {
+                "narrator_id": "amir-al-shabi",
+                "type": "common_link",
+                "outcome": "contested",
+                "confidence": 0.713157894737,
+                "confidence_4dp": 0.7132,
+                "profile": "structural_only",
+                "structural_score": 0.713157894737,
+                "reliability_prior": null,
+                "matn_coherence_basis": "default_constant_unmeasured",
+                "contradiction_cap": false,
+                "evidence_ids": []
+              },
+              {
+                "narrator_id": "fatimah-bint-qays",
+                "type": "common_link",
+                "outcome": "uncertain",
+                "confidence": 0.45,
+                "confidence_4dp": 0.45,
+                "profile": "structural_only",
+                "structural_score": 0.45,
+                "reliability_prior": null,
+                "matn_coherence_basis": "default_constant_unmeasured",
+                "contradiction_cap": false,
+                "evidence_ids": []
+              },
+              {
+                "narrator_id": "abd-allah-ibn-buraydah",
+                "type": "partial_common_link",
+                "outcome": "likely_weak_in_context",
+                "confidence": 0.089473684211,
+                "confidence_4dp": 0.0895,
+                "profile": "structural_only",
+                "structural_score": 0.089473684211,
+                "reliability_prior": null,
+                "matn_coherence_basis": "default_constant_unmeasured",
+                "contradiction_cap": false,
+                "evidence_ids": []
+              }
+            ],
+            "blocking_violations": 0
+          }
+        }
+      }
+    }
+  },
+  "boundary_trace": {
+    "input_validation": true,
+    "can_export": true,
+    "raw_candidates": [
+      {
+        "narrator_id": "amir-al-shabi",
+        "candidate_type": "common_link",
+        "structural_score": 0.7025,
+        "final_confidence": 0.7025,
+        "display_confidence_4dp": 0.7025,
+        "outcome": "contested",
+        "contradiction_cap_active": false,
+        "profile": "structural_only",
+        "matn_coherence_basis": "default_constant_unmeasured",
+        "features": {
+          "fan_out": 9,
+          "bundle_coverage": 0.85,
+          "collector_diversity": 9,
+          "pre_single_strand_ratio": 0,
+          "bypass_ratio": 0.05,
+          "chronology_conflict_ratio": 0,
+          "matn_coherence": 0.5,
+          "provenance_completeness_ratio": 1
+        },
+        "subscores": {
+          "S1": 1,
+          "S2": 0.85,
+          "S3": 1,
+          "S4": 0,
+          "S5": 0.5,
+          "P1": 0.05,
+          "P2": 0,
+          "P3": 0
+        },
+        "reliability_prior": null,
+        "_family_id": "jassasah-tamim-family"
+      },
+      {
+        "narrator_id": "fatimah-bint-qays",
+        "candidate_type": "common_link",
+        "structural_score": 0.4375,
+        "final_confidence": 0.4375,
+        "display_confidence_4dp": 0.4375,
+        "outcome": "uncertain",
+        "contradiction_cap_active": false,
+        "profile": "structural_only",
+        "matn_coherence_basis": "default_constant_unmeasured",
+        "features": {
+          "fan_out": 3,
+          "bundle_coverage": 0.95,
+          "collector_diversity": 10,
+          "pre_single_strand_ratio": 0,
+          "bypass_ratio": 0,
+          "chronology_conflict_ratio": 0,
+          "matn_coherence": 0.5,
+          "provenance_completeness_ratio": 1
+        },
+        "subscores": {
+          "S1": 0,
+          "S2": 0.95,
+          "S3": 1,
+          "S4": 0,
+          "S5": 0.5,
+          "P1": 0,
+          "P2": 0,
+          "P3": 0
+        },
+        "reliability_prior": null,
+        "_family_id": "jassasah-tamim-family"
+      },
+      {
+        "narrator_id": "abd-allah-ibn-buraydah",
+        "candidate_type": "partial_common_link",
+        "pcl_mode": "cl_anchored",
+        "structural_score": 0.09,
+        "final_confidence": 0.09,
+        "display_confidence_4dp": 0.09,
+        "outcome": "likely_weak_in_context",
+        "contradiction_cap_active": false,
+        "profile": "structural_only",
+        "matn_coherence_basis": "default_constant_unmeasured",
+        "features": {
+          "fan_out": 2,
+          "bundle_coverage": 0.2,
+          "collector_diversity": 3,
+          "pre_single_strand_ratio": 0.125,
+          "bypass_ratio": 0.3,
+          "chronology_conflict_ratio": 0,
+          "matn_coherence": 0.5,
+          "provenance_completeness_ratio": 1
+        },
+        "subscores": {
+          "S1": 0,
+          "S2": 0.2,
+          "S3": 0.166666666667,
+          "S4": 0.125,
+          "S5": 0.5,
+          "P1": 0.3,
+          "P2": 0,
+          "P3": 0
+        },
+        "reliability_prior": null,
+        "_family_id": "jassasah-tamim-family"
+      }
+    ],
+    "canonical_candidates": [
+      {
+        "narrator_id": "amir-al-shabi",
+        "type": "common_link",
+        "outcome": "contested",
+        "confidence": 0.7025,
+        "confidence_4dp": 0.7025,
+        "profile": "structural_only",
+        "structural_score": 0.7025,
+        "reliability_prior": null,
+        "matn_coherence_basis": "default_constant_unmeasured",
+        "contradiction_cap": false,
+        "evidence_ids": []
+      },
+      {
+        "narrator_id": "fatimah-bint-qays",
+        "type": "common_link",
+        "outcome": "uncertain",
+        "confidence": 0.4375,
+        "confidence_4dp": 0.4375,
+        "profile": "structural_only",
+        "structural_score": 0.4375,
+        "reliability_prior": null,
+        "matn_coherence_basis": "default_constant_unmeasured",
+        "contradiction_cap": false,
+        "evidence_ids": []
+      },
+      {
+        "narrator_id": "abd-allah-ibn-buraydah",
+        "type": "partial_common_link",
+        "outcome": "likely_weak_in_context",
+        "confidence": 0.09,
+        "confidence_4dp": 0.09,
+        "profile": "structural_only",
+        "structural_score": 0.09,
+        "reliability_prior": null,
+        "matn_coherence_basis": "default_constant_unmeasured",
+        "contradiction_cap": false,
+        "evidence_ids": []
+      }
+    ],
+    "raw_bindings": {
+      "valid": true,
+      "analysis_can_proceed": true,
+      "binding_count": 3,
+      "violation_count": 0,
+      "warning_count": 0,
+      "blocked_claims": [],
+      "violations": [],
+      "warnings": [],
+      "bindings": [
+        {
+          "claim_id": "amir-al-shabi",
+          "claim_category": "outcome_claim",
+          "is_exempt": false,
+          "binding_valid": false,
+          "evidence_refs": [],
+          "violations": [],
+          "warnings": [
+            {
+              "code": "NO_EVIDENCE_STRUCTURAL",
+              "message": "Structural claim for 'amir-al-shabi' has no reliability evidence. Claim is methodologically valid but unsupported by reliability data.",
+              "detail": {
+                "narrator_id": "amir-al-shabi"
+              }
+            }
+          ]
+        },
+        {
+          "claim_id": "fatimah-bint-qays",
+          "claim_category": "outcome_claim",
+          "is_exempt": false,
+          "binding_valid": false,
+          "evidence_refs": [],
+          "violations": [],
+          "warnings": [
+            {
+              "code": "NO_EVIDENCE_STRUCTURAL",
+              "message": "Structural claim for 'fatimah-bint-qays' has no reliability evidence. Claim is methodologically valid but unsupported by reliability data.",
+              "detail": {
+                "narrator_id": "fatimah-bint-qays"
+              }
+            }
+          ]
+        },
+        {
+          "claim_id": "abd-allah-ibn-buraydah",
+          "claim_category": "outcome_claim",
+          "is_exempt": false,
+          "binding_valid": false,
+          "evidence_refs": [],
+          "violations": [],
+          "warnings": [
+            {
+              "code": "NO_EVIDENCE_STRUCTURAL",
+              "message": "Structural claim for 'abd-allah-ibn-buraydah' has no reliability evidence. Claim is methodologically valid but unsupported by reliability data.",
+              "detail": {
+                "narrator_id": "abd-allah-ibn-buraydah"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "canonical_bindings": {
+      "valid": true,
+      "analysis_can_proceed": true,
+      "binding_count": 3,
+      "blocking_violations": 0,
+      "bindings": [
+        {
+          "narrator_id": "amir-al-shabi",
+          "category": "outcome_claim",
+          "is_exempt": false,
+          "binding_valid": false,
+          "evidence_refs": [],
+          "violations": []
+        },
+        {
+          "narrator_id": "fatimah-bint-qays",
+          "category": "outcome_claim",
+          "is_exempt": false,
+          "binding_valid": false,
+          "evidence_refs": [],
+          "violations": []
+        },
+        {
+          "narrator_id": "abd-allah-ibn-buraydah",
+          "category": "outcome_claim",
+          "is_exempt": false,
+          "binding_valid": false,
+          "evidence_refs": [],
+          "violations": []
+        }
+      ]
+    },
+    "artifact_summary": {
+      "chain_count": 20,
+      "graph_nodes": 71,
+      "graph_edges": 82
+    },
+    "raw_explainability": {
+      "panel_data": {
+        "family_id": "jassasah-tamim-family",
+        "profile": "structural_only",
+        "family_status": "cl_detected",
+        "candidates": [
+          {
+            "rank": 1,
+            "narrator_id": "amir-al-shabi",
+            "candidate_type": "common_link",
+            "pcl_mode": null,
+            "final_confidence": 0.7025,
+            "display_confidence": 0.7025,
+            "outcome": "contested",
+            "outcome_label": "Contested — Conflicting Evidence Present",
+            "structural_score": 0.7025,
+            "profile": "structural_only",
+            "contradiction_cap_active": false,
+            "reliability_prior": null,
+            "features": {
+              "fan_out": 9,
+              "bundle_coverage": 0.85,
+              "collector_diversity": 9,
+              "pre_single_strand_ratio": 0,
+              "bypass_ratio": 0.05,
+              "chronology_conflict_ratio": 0,
+              "matn_coherence": 0.5,
+              "provenance_completeness_ratio": 1
+            },
+            "subscores": {
+              "S1": 1,
+              "S2": 0.85,
+              "S3": 1,
+              "S4": 0,
+              "S5": 0.5,
+              "P1": 0.05,
+              "P2": 0,
+              "P3": 0
+            },
+            "support": {
+              "type": "structural",
+              "evidence_count": 0,
+              "has_complete_provenance": false,
+              "evidence_ids": []
+            },
+            "binding_valid": false,
+            "is_exempt": false,
+            "violations": [],
+            "warnings": [
+              {
+                "code": "NO_EVIDENCE_STRUCTURAL",
+                "message": "Structural claim for 'amir-al-shabi' has no reliability evidence. Claim is methodologically valid but unsupported by reliability data.",
+                "detail": {
+                  "narrator_id": "amir-al-shabi"
+                }
+              }
+            ]
+          },
+          {
+            "rank": 2,
+            "narrator_id": "fatimah-bint-qays",
+            "candidate_type": "common_link",
+            "pcl_mode": null,
+            "final_confidence": 0.4375,
+            "display_confidence": 0.4375,
+            "outcome": "uncertain",
+            "outcome_label": "Uncertain — Insufficient Data",
+            "structural_score": 0.4375,
+            "profile": "structural_only",
+            "contradiction_cap_active": false,
+            "reliability_prior": null,
+            "features": {
+              "fan_out": 3,
+              "bundle_coverage": 0.95,
+              "collector_diversity": 10,
+              "pre_single_strand_ratio": 0,
+              "bypass_ratio": 0,
+              "chronology_conflict_ratio": 0,
+              "matn_coherence": 0.5,
+              "provenance_completeness_ratio": 1
+            },
+            "subscores": {
+              "S1": 0,
+              "S2": 0.95,
+              "S3": 1,
+              "S4": 0,
+              "S5": 0.5,
+              "P1": 0,
+              "P2": 0,
+              "P3": 0
+            },
+            "support": {
+              "type": "structural",
+              "evidence_count": 0,
+              "has_complete_provenance": false,
+              "evidence_ids": []
+            },
+            "binding_valid": false,
+            "is_exempt": false,
+            "violations": [],
+            "warnings": [
+              {
+                "code": "NO_EVIDENCE_STRUCTURAL",
+                "message": "Structural claim for 'fatimah-bint-qays' has no reliability evidence. Claim is methodologically valid but unsupported by reliability data.",
+                "detail": {
+                  "narrator_id": "fatimah-bint-qays"
+                }
+              }
+            ]
+          },
+          {
+            "rank": 3,
+            "narrator_id": "abd-allah-ibn-buraydah",
+            "candidate_type": "partial_common_link",
+            "pcl_mode": "cl_anchored",
+            "final_confidence": 0.09,
+            "display_confidence": 0.09,
+            "outcome": "likely_weak_in_context",
+            "outcome_label": "Likely Weak in Context",
+            "structural_score": 0.09,
+            "profile": "structural_only",
+            "contradiction_cap_active": false,
+            "reliability_prior": null,
+            "features": {
+              "fan_out": 2,
+              "bundle_coverage": 0.2,
+              "collector_diversity": 3,
+              "pre_single_strand_ratio": 0.125,
+              "bypass_ratio": 0.3,
+              "chronology_conflict_ratio": 0,
+              "matn_coherence": 0.5,
+              "provenance_completeness_ratio": 1
+            },
+            "subscores": {
+              "S1": 0,
+              "S2": 0.2,
+              "S3": 0.166666666667,
+              "S4": 0.125,
+              "S5": 0.5,
+              "P1": 0.3,
+              "P2": 0,
+              "P3": 0
+            },
+            "support": {
+              "type": "structural",
+              "evidence_count": 0,
+              "has_complete_provenance": false,
+              "evidence_ids": []
+            },
+            "binding_valid": false,
+            "is_exempt": false,
+            "violations": [],
+            "warnings": [
+              {
+                "code": "NO_EVIDENCE_STRUCTURAL",
+                "message": "Structural claim for 'abd-allah-ibn-buraydah' has no reliability evidence. Claim is methodologically valid but unsupported by reliability data.",
+                "detail": {
+                  "narrator_id": "abd-allah-ibn-buraydah"
+                }
+              }
+            ]
+          }
+        ],
+        "uncertainty_candidates": [],
+        "excluded_claims": [],
+        "confidence_summary": {
+          "supported": 0,
+          "contested": 1,
+          "uncertain": 1,
+          "weak": 1
+        },
+        "conclusion_text": {
+          "summary": "1 candidate(s) are contested due to contradictory reliability evidence.",
+          "confidence_level": "contested",
+          "recommendation": "Resolve contradictory evidence before making definitive claims about transmission origins."
+        },
+        "methodology_note": "CL/PCL analysis is an interpretation layer. Map creation remains method-agnostic."
+      },
+      "audit_trail": [
+        {
+          "type": "ANALYSIS_START",
+          "subject": "CL/PCL Analysis",
+          "detail": "Analysis started with profile 'structural_only' for family 'unknown'.",
+          "evidence_refs": [],
+          "timestamp": "2026-10-26T17:12:31.621Z"
+        },
+        {
+          "type": "FAMILY_STATUS",
+          "subject": "cl_detected",
+          "detail": "Family status determined: cl_detected. 3 candidate(s) generated.",
+          "evidence_refs": [],
+          "timestamp": "2026-10-26T17:12:31.621Z"
+        },
+        {
+          "type": "CANDIDATE_RANKED",
+          "subject": "amir-al-shabi",
+          "detail": "common_link candidate with final_confidence=0.7025, outcome=contested.",
+          "evidence_refs": [],
+          "timestamp": "2026-10-26T17:12:31.621Z"
+        },
+        {
+          "type": "CANDIDATE_RANKED",
+          "subject": "fatimah-bint-qays",
+          "detail": "common_link candidate with final_confidence=0.4375, outcome=uncertain.",
+          "evidence_refs": [],
+          "timestamp": "2026-10-26T17:12:31.621Z"
+        },
+        {
+          "type": "CANDIDATE_RANKED",
+          "subject": "abd-allah-ibn-buraydah",
+          "detail": "partial_common_link candidate with final_confidence=0.09, outcome=likely_weak_in_context.",
+          "evidence_refs": [],
+          "timestamp": "2026-10-26T17:12:31.621Z"
+        },
+        {
+          "type": "ANALYSIS_COMPLETE",
+          "subject": "CL/PCL Analysis",
+          "detail": "Analysis complete. Report can be exported.",
+          "evidence_refs": [],
+          "timestamp": "2026-10-26T17:12:31.621Z"
+        }
+      ],
+      "uncertainty_section": {
+        "excluded_candidates": [
+          {
+            "narrator_id": "fatimah-bint-qays",
+            "candidate_type": "common_link",
+            "reason": "uncertain",
+            "detail": "Final confidence falls in uncertain band [0.35, 0.55)."
+          }
+        ],
+        "insufficient_data_families": [],
+        "unverified_evidence": [],
+        "blocking_violations": [],
+        "total_uncertain_count": 1
+      },
+      "can_export": true,
+      "blocking_violations": [],
+      "metadata": {
+        "generated_at": "2026-10-26T17:12:31.621Z",
+        "schema_version": 1,
+        "family_status": "cl_detected",
+        "candidate_count": 3
+      }
+    },
+    "canonical_uncertainty": {
+      "excluded_candidates": [],
+      "insufficient_data_families": [],
+      "unverified_evidence": [],
+      "blocking_violations": [],
+      "total_uncertain_count": 0
+    },
+    "canonical_audit_trail": []
+  },
+  "npm_run_check": {
+    "exit_code": 0,
+    "output": "npm notice run riwaq@1.1.0 check\nnpm notice run npm run verify:parity && npm test\nnpm notice run riwaq@1.1.0 verify:parity\nnpm notice run bash scripts/verify-parity.sh\nParity check passed.\nnpm notice run riwaq@1.1.0 test\nnpm notice run vitest run tests/node/\n\n RUN  v4.1.11 /home/meer/Projects/Isnad-builder\n\n\n Test Files  13 passed (13)\n      Tests  329 passed (329)\n   Start at  22:09:53\n   Duration  5.71s (transform 2.24s, setup 0ms, import 3.83s, tests 11.03s, environment 3ms)\n\n"
+  },
+  "canonical_export": {
+    "command": "node scripts/riwaq-cli.mjs export jassasa/jassasah-audited-import.json --format md --out /tmp/jassasah-review/canonical-report.md --profile structural_only",
+    "exit_code": 0,
+    "sha256": "79d210f6233c61cb299df54dcdb21e052029508848e77fc1fd2313d2115b7e68"
+  },
+  "application_code_changed": false
+}

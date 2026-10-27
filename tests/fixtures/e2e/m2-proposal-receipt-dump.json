@@ -1,7 +1,7 @@
 {
   "test_run_at": "2026-10-25T00:00:00.000Z",
   "proposal": {
-    "proposal_id": "prop-merge-1792955507161-vbwhf",
+    "proposal_id": "prop-merge-1793115704266-tad9k",
     "type": "PROPOSAL_NARRATOR_MERGE",
     "status": "committed",
     "payload": {
@@ -13,13 +13,13 @@
       "model": "gemini-1.5-pro",
       "prompt_id": "disambig-v1",
       "confidence": 0.95,
-      "timestamp": "2026-10-25T19:11:47.161Z"
+      "timestamp": "2026-10-27T15:41:44.266Z"
     },
-    "created_at": "2026-10-25T19:11:47.161Z",
+    "created_at": "2026-10-27T15:41:44.266Z",
     "receipt": {
       "receipt_version": 1,
-      "receipt_id": "rcpt-1792955507162-jvzhh",
-      "proposal_id": "prop-merge-1792955507161-vbwhf",
+      "receipt_id": "rcpt-1793115704267-yxy8m",
+      "proposal_id": "prop-merge-1793115704266-tad9k",
       "operation_type": "PROPOSAL_NARRATOR_MERGE",
       "model_provenance": {
         "model": "gemini-1.5-pro",
@@ -28,7 +28,7 @@
       },
       "reviewer": {
         "reviewer_id": "prof_motzki_verifier",
-        "signed_off_at": "2026-10-25T19:11:47.162Z",
+        "signed_off_at": "2026-10-27T15:41:44.267Z",
         "notes": "Verified against Tahdhib al-Kamal entries."
       },
       "state_proofs": {
@@ -36,17 +36,17 @@
         "after_hash": "9ba0b05f55f0c3fe697cca42042d4ab60f848717fe79aef65333b3d8af69ff6e"
       },
       "operation_details": {
-        "operation_id": "op-1792955507162-wm72s",
+        "operation_id": "op-1793115704267-6k6cs",
         "type": "MERGE",
         "payload": {
           "source_id": "aymen-unknown",
           "target_id": "hisham-ibn-urwah",
           "evidence_redistributed_count": 0
         },
-        "timestamp": "2026-10-25T19:11:47.162Z",
+        "timestamp": "2026-10-27T15:41:44.267Z",
         "receipt": {
           "receipt_version": 1,
-          "operation_id": "op-1792955507162-wm72s",
+          "operation_id": "op-1793115704267-6k6cs",
           "operation_type": "MERGE",
           "inputs": {
             "source_id": "aymen-unknown",
@@ -87,12 +87,12 @@
       },
       "status": "verified_and_accreted"
     },
-    "updated_at": "2026-10-25T19:11:47.162Z"
+    "updated_at": "2026-10-27T15:41:44.268Z"
   },
   "receipt": {
     "receipt_version": 1,
-    "receipt_id": "rcpt-1792955507162-jvzhh",
-    "proposal_id": "prop-merge-1792955507161-vbwhf",
+    "receipt_id": "rcpt-1793115704267-yxy8m",
+    "proposal_id": "prop-merge-1793115704266-tad9k",
     "operation_type": "PROPOSAL_NARRATOR_MERGE",
     "model_provenance": {
       "model": "gemini-1.5-pro",
@@ -101,7 +101,7 @@
     },
     "reviewer": {
       "reviewer_id": "prof_motzki_verifier",
-      "signed_off_at": "2026-10-25T19:11:47.162Z",
+      "signed_off_at": "2026-10-27T15:41:44.267Z",
       "notes": "Verified against Tahdhib al-Kamal entries."
     },
     "state_proofs": {
@@ -109,17 +109,17 @@
       "after_hash": "9ba0b05f55f0c3fe697cca42042d4ab60f848717fe79aef65333b3d8af69ff6e"
     },
     "operation_details": {
-      "operation_id": "op-1792955507162-wm72s",
+      "operation_id": "op-1793115704267-6k6cs",
       "type": "MERGE",
       "payload": {
         "source_id": "aymen-unknown",
         "target_id": "hisham-ibn-urwah",
         "evidence_redistributed_count": 0
       },
-      "timestamp": "2026-10-25T19:11:47.162Z",
+      "timestamp": "2026-10-27T15:41:44.267Z",
       "receipt": {
         "receipt_version": 1,
-        "operation_id": "op-1792955507162-wm72s",
+        "operation_id": "op-1793115704267-6k6cs",
         "operation_type": "MERGE",
         "inputs": {
           "source_id": "aymen-unknown",
@@ -162,11 +162,11 @@
   },
   "replayed_receipts": [
     {
-      "proposal_id": "prop-merge-1792955507161-vbwhf",
+      "proposal_id": "prop-merge-1793115704266-tad9k",
       "receipt": {
         "receipt_version": 1,
-        "receipt_id": "rcpt-1792955507162-jvzhh",
-        "proposal_id": "prop-merge-1792955507161-vbwhf",
+        "receipt_id": "rcpt-1793115704267-yxy8m",
+        "proposal_id": "prop-merge-1793115704266-tad9k",
         "operation_type": "PROPOSAL_NARRATOR_MERGE",
         "model_provenance": {
           "model": "gemini-1.5-pro",
@@ -175,7 +175,7 @@
         },
         "reviewer": {
           "reviewer_id": "prof_motzki_verifier",
-          "signed_off_at": "2026-10-25T19:11:47.162Z",
+          "signed_off_at": "2026-10-27T15:41:44.267Z",
           "notes": "Verified against Tahdhib al-Kamal entries."
         },
         "state_proofs": {
@@ -183,17 +183,17 @@
           "after_hash": "9ba0b05f55f0c3fe697cca42042d4ab60f848717fe79aef65333b3d8af69ff6e"
         },
         "operation_details": {
-          "operation_id": "op-1792955507162-wm72s",
+          "operation_id": "op-1793115704267-6k6cs",
           "type": "MERGE",
           "payload": {
             "source_id": "aymen-unknown",
             "target_id": "hisham-ibn-urwah",
             "evidence_redistributed_count": 0
           },
-          "timestamp": "2026-10-25T19:11:47.162Z",
+          "timestamp": "2026-10-27T15:41:44.267Z",
           "receipt": {
             "receipt_version": 1,
-            "operation_id": "op-1792955507162-wm72s",
+            "operation_id": "op-1793115704267-6k6cs",
             "operation_type": "MERGE",
             "inputs": {
               "source_id": "aymen-unknown",

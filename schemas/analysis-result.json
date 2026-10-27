@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/07/schema#",
-  "$id": "https://isnad-builder.app/schemas/analysis-result.json",
+  "$id": "https://raw.githubusercontent.com/munir-abbasi/riwaq/main/schemas/analysis-result.json",
   "title": "AnalysisResult",
   "description": "Output of a single candidate's CL/PCL analysis. Canonical output used by UI, analytics, and exports.",
   "type": "object",

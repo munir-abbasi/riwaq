@@ -1,0 +1,657 @@
+{
+  "verified_at": "2026-10-26T17:24:52.161Z",
+  "skills_used": [
+    "systematic-debugging",
+    "test-driven-development",
+    "verification-before-completion"
+  ],
+  "skill_sources": "/home/meer/.agents/skills; the selected SKILL.md files match their canonical unified-tree copies",
+  "changed_tracked_files": [
+    "scripts/canonical-report.js",
+    "scripts/export-md.js",
+    "tests/node/phase6.test.js",
+    "docs/ARCHITECTURE.md"
+  ],
+  "changed_file_hashes": {
+    "scripts/canonical-report.js": "e7d1c623e20e2436038f666622d6cd567bfe7eac2c6181fb545f0761ff2331cf",
+    "scripts/export-md.js": "621401f1c351f0105063fe06a97255b688c49a5040297a74eb291c40fc8a0155",
+    "tests/node/phase6.test.js": "b9c4c6e49e66ea1383e29027aa4d2d219adeb8a098f1fbdf5788953e1f7c7d0e",
+    "docs/ARCHITECTURE.md": "c6039bf3fba31126c513dad7fcdf5140da476bb9929b737412380f0ec2ab8a0a"
+  },
+  "structural_candidates_unchanged": true,
+  "original_research_files_unchanged": true,
+  "canonical_report": {
+    "schema_version": 1,
+    "generated_at": "2026-10-26T17:24:51.988Z",
+    "batch_metadata": {
+      "imported_at": "2026-10-26T16:57:48.936464+00:00",
+      "schema_version": 1,
+      "family_count": 1
+    },
+    "family_metadata": [
+      {
+        "family_id": "jassasah-tamim-family",
+        "record_count": 18,
+        "variant_count": 20,
+        "sources": [
+          "Sahih Muslim:Kitab al-Fitan wa-ashrat al-saah; Bab Qissat al-Jassasah; 2942a; https://sunnah.com/muslim:2942a",
+          "Sahih Muslim:Same book/chapter; 2942b; https://sunnah.com/muslim:2942b",
+          "Sahih Muslim:Same book/chapter; 2942c; https://sunnah.com/muslim:2942c",
+          "Sahih Muslim:Same book/chapter; 2942d; https://sunnah.com/muslim:2942d",
+          "Sunan Abi Dawud:Kitab al-Malahim; Bab fi khabar al-Jassasah; 4325; https://sunnah.com/abudawud:4325",
+          "Sunan Abi Dawud:Same book/chapter; 4326; https://sunnah.com/abudawud:4326",
+          "Sunan Abi Dawud:Same book/chapter; 4327; https://sunnah.com/abudawud:4327",
+          "Sunan Abi Dawud:Same book/chapter; 4328; https://sunnah.com/abudawud:4328",
+          "Jami al-Tirmidhi:Abwab al-Fitan; Hadith Tamim al-Dari fi al-Dajjal; 2253; https://sunnah.com/tirmidhi:2253",
+          "Sunan Ibn Majah:Kitab al-Fitan; Bab Fitnat al-Dajjal wa-khuruj Isa ibn Maryam wa-khuruj Yajuj wa-Majuj; 4074; https://sunnah.com/ibnmajah:4074",
+          "al-Sunan al-Kubra li-al-Nasai:Islamweb display: Kitab al-Manasik / Dur Makkah; 4453; vol. 5, p. 261 (page break); https://www.islamweb.net/ar/library/content/406/4489/دور-مكة",
+          "Musnad Ahmad:Musnad al-qabail; min hadith Fatimah bint Qays; Wikisource 26066; https://ar.wikisource.org/wiki/مسند_أحمد_بن_حنبل/مسند_القبائل/6",
+          "Musannaf Ibn Abi Shaybah:Kitab al-Fitan; Ma dhukira fi fitnat al-Dajjal; al-Shathri numbering 40425; site crosswalk Awamah 38791; displayed pp. 392-393; https://islamicurdubooks.com/hadith/hadith-.php?bookid=33&hadith_number=40425",
+          "Sahih Ibn Hibban:Kitab al-Tarikh; signs at release of al-Dajjal; 6787; vol. 15, pp. 194-195; https://www.islamweb.net/ar/library/content/314/6795/ذكر-الإخبار-عن-وصف-العلامتين-اللتين-تظهران-عند-خروج-المسيح-الدجال-من-وثاقه",
+          "Musnad Abi Dawud al-Tayalisi:Ma rawat Fatimah bint Qays; Islamweb 1751; vol. 3, pp. 216-217; hdith.com crosswalk 1756; https://www.islamweb.net/ar/library/content/1064/1747/ما-روت-فاطمة-بنت-قيس",
+          "al-Mujam al-Kabir li-al-Tabarani:Musnad al-nisa; Fatimah; Amir al-Shabi an Fatimah; 956; vol. 24, pp. 385-386; https://www.islamweb.net/ar/library/content/84/20558/عامر-الشعبي-عن-فاطمة-بنت-قيس",
+          "al-Mujam al-Kabir li-al-Tabarani:Same section; 960; vol. 24, pp. 392-393; https://www.islamweb.net/ar/library/content/84/20562/عامر-الشعبي-عن-فاطمة-بنت-قيس",
+          "al-Mujam al-Kabir li-al-Tabarani:Same section; 968; vol. 24, p. 401; https://www.islamweb.net/ar/library/content/84/20570/عامر-الشعبي-عن-فاطمة-بنت-قيس"
+        ],
+        "narrator_count": 71
+      }
+    ],
+    "analysis": {
+      "family_status": "cl_detected",
+      "profile": "structural_only",
+      "candidate_count": 3,
+      "methodology_note": "CL/PCL analysis is an interpretation layer. Map creation remains method-agnostic."
+    },
+    "candidates": [
+      {
+        "narrator_id": "amir-al-shabi",
+        "type": "common_link",
+        "outcome": "contested",
+        "confidence": 0.7025,
+        "confidence_4dp": 0.7025,
+        "profile": "structural_only",
+        "structural_score": 0.7025,
+        "reliability_prior": null,
+        "matn_coherence_basis": "default_constant_unmeasured",
+        "contradiction_cap": false,
+        "bundle_coverage": 0.85,
+        "fan_out": 9,
+        "collector_diversity": 9,
+        "bypass_ratio": 0.05,
+        "evidence_ids": []
+      },
+      {
+        "narrator_id": "fatimah-bint-qays",
+        "type": "common_link",
+        "outcome": "uncertain",
+        "confidence": 0.4375,
+        "confidence_4dp": 0.4375,
+        "profile": "structural_only",
+        "structural_score": 0.4375,
+        "reliability_prior": null,
+        "matn_coherence_basis": "default_constant_unmeasured",
+        "contradiction_cap": false,
+        "bundle_coverage": 0.95,
+        "fan_out": 3,
+        "collector_diversity": 10,
+        "bypass_ratio": 0,
+        "evidence_ids": []
+      },
+      {
+        "narrator_id": "abd-allah-ibn-buraydah",
+        "type": "partial_common_link",
+        "outcome": "likely_weak_in_context",
+        "confidence": 0.09,
+        "confidence_4dp": 0.09,
+        "profile": "structural_only",
+        "structural_score": 0.09,
+        "reliability_prior": null,
+        "matn_coherence_basis": "default_constant_unmeasured",
+        "contradiction_cap": false,
+        "bundle_coverage": 0.2,
+        "fan_out": 2,
+        "collector_diversity": 3,
+        "bypass_ratio": 0.3,
+        "evidence_ids": []
+      }
+    ],
+    "evidence_binding": {
+      "valid": true,
+      "analysis_can_proceed": true,
+      "binding_count": 3,
+      "blocking_violations": 0,
+      "bindings": [
+        {
+          "narrator_id": "amir-al-shabi",
+          "category": "outcome_claim",
+          "is_exempt": false,
+          "binding_valid": false,
+          "warnings": [
+            {
+              "code": "NO_EVIDENCE_STRUCTURAL",
+              "message": "Structural claim for 'amir-al-shabi' has no reliability evidence. Claim is methodologically valid but unsupported by reliability data.",
+              "detail": {
+                "narrator_id": "amir-al-shabi"
+              }
+            }
+          ],
+          "evidence_refs": [],
+          "violations": []
+        },
+        {
+          "narrator_id": "fatimah-bint-qays",
+          "category": "outcome_claim",
+          "is_exempt": false,
+          "binding_valid": false,
+          "warnings": [
+            {
+              "code": "NO_EVIDENCE_STRUCTURAL",
+              "message": "Structural claim for 'fatimah-bint-qays' has no reliability evidence. Claim is methodologically valid but unsupported by reliability data.",
+              "detail": {
+                "narrator_id": "fatimah-bint-qays"
+              }
+            }
+          ],
+          "evidence_refs": [],
+          "violations": []
+        },
+        {
+          "narrator_id": "abd-allah-ibn-buraydah",
+          "category": "outcome_claim",
+          "is_exempt": false,
+          "binding_valid": false,
+          "warnings": [
+            {
+              "code": "NO_EVIDENCE_STRUCTURAL",
+              "message": "Structural claim for 'abd-allah-ibn-buraydah' has no reliability evidence. Claim is methodologically valid but unsupported by reliability data.",
+              "detail": {
+                "narrator_id": "abd-allah-ibn-buraydah"
+              }
+            }
+          ],
+          "evidence_refs": [],
+          "violations": []
+        }
+      ]
+    },
+    "artifacts": {
+      "chain_count": 20,
+      "graph_nodes": 71,
+      "graph_edges": 82
+    },
+    "uncertainty": {
+      "excluded_candidates": [
+        {
+          "narrator_id": "fatimah-bint-qays",
+          "candidate_type": "common_link",
+          "reason": "uncertain",
+          "detail": "Final confidence falls in uncertain band [0.35, 0.55)."
+        }
+      ],
+      "insufficient_data_families": [],
+      "unverified_evidence": [],
+      "blocking_violations": [],
+      "total_uncertain_count": 1
+    },
+    "audit_trail": [
+      {
+        "type": "ANALYSIS_START",
+        "subject": "CL/PCL Analysis",
+        "detail": "Analysis started with profile 'structural_only' for family 'unknown'.",
+        "evidence_refs": [],
+        "timestamp": "2026-10-26T17:24:51.988Z"
+      },
+      {
+        "type": "FAMILY_STATUS",
+        "subject": "cl_detected",
+        "detail": "Family status determined: cl_detected. 3 candidate(s) generated.",
+        "evidence_refs": [],
+        "timestamp": "2026-10-26T17:24:51.988Z"
+      },
+      {
+        "type": "CANDIDATE_RANKED",
+        "subject": "amir-al-shabi",
+        "detail": "common_link candidate with final_confidence=0.7025, outcome=contested.",
+        "evidence_refs": [],
+        "timestamp": "2026-10-26T17:24:51.988Z"
+      },
+      {
+        "type": "CANDIDATE_RANKED",
+        "subject": "fatimah-bint-qays",
+        "detail": "common_link candidate with final_confidence=0.4375, outcome=uncertain.",
+        "evidence_refs": [],
+        "timestamp": "2026-10-26T17:24:51.988Z"
+      },
+      {
+        "type": "CANDIDATE_RANKED",
+        "subject": "abd-allah-ibn-buraydah",
+        "detail": "partial_common_link candidate with final_confidence=0.09, outcome=likely_weak_in_context.",
+        "evidence_refs": [],
+        "timestamp": "2026-10-26T17:24:51.988Z"
+      },
+      {
+        "type": "ANALYSIS_COMPLETE",
+        "subject": "CL/PCL Analysis",
+        "detail": "Analysis complete. Report can be exported.",
+        "evidence_refs": [],
+        "timestamp": "2026-10-26T17:24:51.988Z"
+      }
+    ],
+    "family_ids": [
+      "jassasah-tamim-family"
+    ],
+    "families": [
+      {
+        "family_id": "jassasah-tamim-family",
+        "metadata": {
+          "family_id": "jassasah-tamim-family",
+          "record_count": 18,
+          "variant_count": 20,
+          "sources": [
+            "Sahih Muslim:Kitab al-Fitan wa-ashrat al-saah; Bab Qissat al-Jassasah; 2942a; https://sunnah.com/muslim:2942a",
+            "Sahih Muslim:Same book/chapter; 2942b; https://sunnah.com/muslim:2942b",
+            "Sahih Muslim:Same book/chapter; 2942c; https://sunnah.com/muslim:2942c",
+            "Sahih Muslim:Same book/chapter; 2942d; https://sunnah.com/muslim:2942d",
+            "Sunan Abi Dawud:Kitab al-Malahim; Bab fi khabar al-Jassasah; 4325; https://sunnah.com/abudawud:4325",
+            "Sunan Abi Dawud:Same book/chapter; 4326; https://sunnah.com/abudawud:4326",
+            "Sunan Abi Dawud:Same book/chapter; 4327; https://sunnah.com/abudawud:4327",
+            "Sunan Abi Dawud:Same book/chapter; 4328; https://sunnah.com/abudawud:4328",
+            "Jami al-Tirmidhi:Abwab al-Fitan; Hadith Tamim al-Dari fi al-Dajjal; 2253; https://sunnah.com/tirmidhi:2253",
+            "Sunan Ibn Majah:Kitab al-Fitan; Bab Fitnat al-Dajjal wa-khuruj Isa ibn Maryam wa-khuruj Yajuj wa-Majuj; 4074; https://sunnah.com/ibnmajah:4074",
+            "al-Sunan al-Kubra li-al-Nasai:Islamweb display: Kitab al-Manasik / Dur Makkah; 4453; vol. 5, p. 261 (page break); https://www.islamweb.net/ar/library/content/406/4489/دور-مكة",
+            "Musnad Ahmad:Musnad al-qabail; min hadith Fatimah bint Qays; Wikisource 26066; https://ar.wikisource.org/wiki/مسند_أحمد_بن_حنبل/مسند_القبائل/6",
+            "Musannaf Ibn Abi Shaybah:Kitab al-Fitan; Ma dhukira fi fitnat al-Dajjal; al-Shathri numbering 40425; site crosswalk Awamah 38791; displayed pp. 392-393; https://islamicurdubooks.com/hadith/hadith-.php?bookid=33&hadith_number=40425",
+            "Sahih Ibn Hibban:Kitab al-Tarikh; signs at release of al-Dajjal; 6787; vol. 15, pp. 194-195; https://www.islamweb.net/ar/library/content/314/6795/ذكر-الإخبار-عن-وصف-العلامتين-اللتين-تظهران-عند-خروج-المسيح-الدجال-من-وثاقه",
+            "Musnad Abi Dawud al-Tayalisi:Ma rawat Fatimah bint Qays; Islamweb 1751; vol. 3, pp. 216-217; hdith.com crosswalk 1756; https://www.islamweb.net/ar/library/content/1064/1747/ما-روت-فاطمة-بنت-قيس",
+            "al-Mujam al-Kabir li-al-Tabarani:Musnad al-nisa; Fatimah; Amir al-Shabi an Fatimah; 956; vol. 24, pp. 385-386; https://www.islamweb.net/ar/library/content/84/20558/عامر-الشعبي-عن-فاطمة-بنت-قيس",
+            "al-Mujam al-Kabir li-al-Tabarani:Same section; 960; vol. 24, pp. 392-393; https://www.islamweb.net/ar/library/content/84/20562/عامر-الشعبي-عن-فاطمة-بنت-قيس",
+            "al-Mujam al-Kabir li-al-Tabarani:Same section; 968; vol. 24, p. 401; https://www.islamweb.net/ar/library/content/84/20570/عامر-الشعبي-عن-فاطمة-بنت-قيس"
+          ],
+          "narrator_count": 71
+        },
+        "analysis": {
+          "family_status": "cl_detected",
+          "profile": "structural_only",
+          "candidate_count": 3,
+          "methodology_note": "CL/PCL analysis is an interpretation layer. Map creation remains method-agnostic."
+        },
+        "candidates": [
+          {
+            "narrator_id": "amir-al-shabi",
+            "type": "common_link",
+            "outcome": "contested",
+            "confidence": 0.7025,
+            "confidence_4dp": 0.7025,
+            "profile": "structural_only",
+            "structural_score": 0.7025,
+            "reliability_prior": null,
+            "matn_coherence_basis": "default_constant_unmeasured",
+            "contradiction_cap": false,
+            "bundle_coverage": 0.85,
+            "fan_out": 9,
+            "collector_diversity": 9,
+            "bypass_ratio": 0.05,
+            "evidence_ids": []
+          },
+          {
+            "narrator_id": "fatimah-bint-qays",
+            "type": "common_link",
+            "outcome": "uncertain",
+            "confidence": 0.4375,
+            "confidence_4dp": 0.4375,
+            "profile": "structural_only",
+            "structural_score": 0.4375,
+            "reliability_prior": null,
+            "matn_coherence_basis": "default_constant_unmeasured",
+            "contradiction_cap": false,
+            "bundle_coverage": 0.95,
+            "fan_out": 3,
+            "collector_diversity": 10,
+            "bypass_ratio": 0,
+            "evidence_ids": []
+          },
+          {
+            "narrator_id": "abd-allah-ibn-buraydah",
+            "type": "partial_common_link",
+            "outcome": "likely_weak_in_context",
+            "confidence": 0.09,
+            "confidence_4dp": 0.09,
+            "profile": "structural_only",
+            "structural_score": 0.09,
+            "reliability_prior": null,
+            "matn_coherence_basis": "default_constant_unmeasured",
+            "contradiction_cap": false,
+            "bundle_coverage": 0.2,
+            "fan_out": 2,
+            "collector_diversity": 3,
+            "bypass_ratio": 0.3,
+            "evidence_ids": []
+          }
+        ],
+        "evidence_binding": {
+          "valid": true,
+          "analysis_can_proceed": true,
+          "binding_count": 3,
+          "blocking_violations": 0,
+          "bindings": [
+            {
+              "narrator_id": "amir-al-shabi",
+              "category": "outcome_claim",
+              "is_exempt": false,
+              "binding_valid": false,
+              "warnings": [
+                {
+                  "code": "NO_EVIDENCE_STRUCTURAL",
+                  "message": "Structural claim for 'amir-al-shabi' has no reliability evidence. Claim is methodologically valid but unsupported by reliability data.",
+                  "detail": {
+                    "narrator_id": "amir-al-shabi"
+                  }
+                }
+              ],
+              "evidence_refs": [],
+              "violations": []
+            },
+            {
+              "narrator_id": "fatimah-bint-qays",
+              "category": "outcome_claim",
+              "is_exempt": false,
+              "binding_valid": false,
+              "warnings": [
+                {
+                  "code": "NO_EVIDENCE_STRUCTURAL",
+                  "message": "Structural claim for 'fatimah-bint-qays' has no reliability evidence. Claim is methodologically valid but unsupported by reliability data.",
+                  "detail": {
+                    "narrator_id": "fatimah-bint-qays"
+                  }
+                }
+              ],
+              "evidence_refs": [],
+              "violations": []
+            },
+            {
+              "narrator_id": "abd-allah-ibn-buraydah",
+              "category": "outcome_claim",
+              "is_exempt": false,
+              "binding_valid": false,
+              "warnings": [
+                {
+                  "code": "NO_EVIDENCE_STRUCTURAL",
+                  "message": "Structural claim for 'abd-allah-ibn-buraydah' has no reliability evidence. Claim is methodologically valid but unsupported by reliability data.",
+                  "detail": {
+                    "narrator_id": "abd-allah-ibn-buraydah"
+                  }
+                }
+              ],
+              "evidence_refs": [],
+              "violations": []
+            }
+          ]
+        },
+        "artifacts": {
+          "chain_count": 20,
+          "graph_nodes": 71,
+          "graph_edges": 82
+        },
+        "uncertainty": {
+          "excluded_candidates": [
+            {
+              "narrator_id": "fatimah-bint-qays",
+              "candidate_type": "common_link",
+              "reason": "uncertain",
+              "detail": "Final confidence falls in uncertain band [0.35, 0.55)."
+            }
+          ],
+          "insufficient_data_families": [],
+          "unverified_evidence": [],
+          "blocking_violations": [],
+          "total_uncertain_count": 1
+        },
+        "audit_trail": [
+          {
+            "type": "ANALYSIS_START",
+            "subject": "CL/PCL Analysis",
+            "detail": "Analysis started with profile 'structural_only' for family 'unknown'.",
+            "evidence_refs": [],
+            "timestamp": "2026-10-26T17:24:51.988Z"
+          },
+          {
+            "type": "FAMILY_STATUS",
+            "subject": "cl_detected",
+            "detail": "Family status determined: cl_detected. 3 candidate(s) generated.",
+            "evidence_refs": [],
+            "timestamp": "2026-10-26T17:24:51.988Z"
+          },
+          {
+            "type": "CANDIDATE_RANKED",
+            "subject": "amir-al-shabi",
+            "detail": "common_link candidate with final_confidence=0.7025, outcome=contested.",
+            "evidence_refs": [],
+            "timestamp": "2026-10-26T17:24:51.988Z"
+          },
+          {
+            "type": "CANDIDATE_RANKED",
+            "subject": "fatimah-bint-qays",
+            "detail": "common_link candidate with final_confidence=0.4375, outcome=uncertain.",
+            "evidence_refs": [],
+            "timestamp": "2026-10-26T17:24:51.988Z"
+          },
+          {
+            "type": "CANDIDATE_RANKED",
+            "subject": "abd-allah-ibn-buraydah",
+            "detail": "partial_common_link candidate with final_confidence=0.09, outcome=likely_weak_in_context.",
+            "evidence_refs": [],
+            "timestamp": "2026-10-26T17:24:51.988Z"
+          },
+          {
+            "type": "ANALYSIS_COMPLETE",
+            "subject": "CL/PCL Analysis",
+            "detail": "Analysis complete. Report can be exported.",
+            "evidence_refs": [],
+            "timestamp": "2026-10-26T17:24:51.988Z"
+          }
+        ]
+      }
+    ]
+  },
+  "expected_reliability_refusal": {
+    "exit_code": 1,
+    "response": {
+      "ok": false,
+      "command": "pipeline",
+      "file": "jassasa/jassasah-audited-import.json",
+      "data": {
+        "stages": {
+          "validation": {
+            "control_type": "blocking_precondition",
+            "passed": true,
+            "warnings": 0
+          },
+          "quality_gates": {
+            "control_type": "observation",
+            "passed": true,
+            "quality_score": 58,
+            "gates": {
+              "provenanceScore": 89,
+              "diversityScore": 100,
+              "metadataScore": 27,
+              "reliabilityScore": 0,
+              "overallScore": 58,
+              "recordCount": 18,
+              "narratorCount": 71,
+              "totalVariants": 20
+            }
+          },
+          "anti_hallucination": {
+            "control_type": "observation",
+            "valid": true,
+            "can_proceed": true,
+            "violations": [],
+            "warnings": []
+          }
+        },
+        "report": {
+          "control_type": "publication_gate",
+          "authority": "CanonicalReport.canExport()",
+          "can_export": false,
+          "family_ids": [
+            "jassasah-tamim-family"
+          ],
+          "per_family": {
+            "jassasah-tamim-family": {
+              "analysis_can_proceed": false,
+              "violation_count": 3
+            }
+          },
+          "profile": "reliability_weighted",
+          "family_status": "cl_detected",
+          "candidate_count": 3,
+          "candidates": [
+            {
+              "narrator_id": "amir-al-shabi",
+              "type": "common_link",
+              "outcome": "contested",
+              "confidence": 0.631625,
+              "confidence_4dp": 0.6316,
+              "profile": "reliability_weighted",
+              "structural_score": 0.7025,
+              "reliability_prior": 0.5,
+              "matn_coherence_basis": "default_constant_unmeasured",
+              "contradiction_cap": false,
+              "bundle_coverage": 0.85,
+              "fan_out": 9,
+              "collector_diversity": 9,
+              "bypass_ratio": 0.05,
+              "evidence_ids": []
+            },
+            {
+              "narrator_id": "fatimah-bint-qays",
+              "type": "common_link",
+              "outcome": "uncertain",
+              "confidence": 0.459375,
+              "confidence_4dp": 0.4594,
+              "profile": "reliability_weighted",
+              "structural_score": 0.4375,
+              "reliability_prior": 0.5,
+              "matn_coherence_basis": "default_constant_unmeasured",
+              "contradiction_cap": false,
+              "bundle_coverage": 0.95,
+              "fan_out": 3,
+              "collector_diversity": 10,
+              "bypass_ratio": 0,
+              "evidence_ids": []
+            },
+            {
+              "narrator_id": "abd-allah-ibn-buraydah",
+              "type": "partial_common_link",
+              "outcome": "likely_weak_in_context",
+              "confidence": 0.2335,
+              "confidence_4dp": 0.2335,
+              "profile": "reliability_weighted",
+              "structural_score": 0.09,
+              "reliability_prior": 0.5,
+              "matn_coherence_basis": "default_constant_unmeasured",
+              "contradiction_cap": false,
+              "bundle_coverage": 0.2,
+              "fan_out": 2,
+              "collector_diversity": 3,
+              "bypass_ratio": 0.3,
+              "evidence_ids": []
+            }
+          ],
+          "blocking_violations": 3
+        }
+      }
+    }
+  },
+  "regression_red_output": "\n RUN  v4.1.11 /home/meer/Projects/Isnad-builder\n\n ❯ tests/node/phase6.test.js (22 tests | 1 failed | 21 skipped) 32ms\n       × exports uncertain structural claims with metrics, audit entries, and missing-evidence warnings 30ms\n\n⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯\n\n FAIL  tests/node/phase6.test.js > Phase 6 — E2E Pipeline > CanonicalReport — full pipeline integration > exports uncertain structural claims with metrics, audit entries, and missing-evidence warnings\nAssertionError: Expected values to be loosely deep-equal:\n\n{\n  audit: [],\n  category: 'outcome_claim',\n  metrics: [\n    undefined,\n    undefined,\n    undefined,\n    undefined\n  ],\n  uncertain: [],\n  warnings: undefined\n}\n\nshould loosely deep-equal\n\n{\n  audit: [\n    'ANALYSIS_START',\n    'FAMILY_STATUS',\n    'CANDIDATE_RANKED',\n    'ANALYSIS_COMPLETE'\n  ],\n  category: 'outcome_claim',\n  metrics: [\n    3,\n    1,\n    3,\n    0\n  ],\n  uncertain: [\n    'cl-narrator'\n  ],\n  warnings: [\n    'NO_EVIDENCE_STRUCTURAL'\n  ]\n}\n\n- Expected\n+ Received\n\n  {\n-   \"audit\": [\n-     \"ANALYSIS_START\",\n-     \"FAMILY_STATUS\",\n-     \"CANDIDATE_RANKED\",\n-     \"ANALYSIS_COMPLETE\",\n-   ],\n+   \"audit\": [],\n    \"category\": \"outcome_claim\",\n    \"metrics\": [\n-     3,\n-     1,\n-     3,\n-     0,\n-   ],\n-   \"uncertain\": [\n-     \"cl-narrator\",\n+     undefined,\n+     undefined,\n+     undefined,\n+     undefined,\n    ],\n-   \"warnings\": [\n-     \"NO_EVIDENCE_STRUCTURAL\",\n-   ],\n+   \"uncertain\": [],\n+   \"warnings\": undefined,\n  }\n\n ❯ tests/node/phase6.test.js:136:15\n    134|       const md = exportMarkdown(report);\n    135|       assert2.equal(report.canExport(), true);\n    136|       assert2.deepEqual({\n       |               ^\n    137|         uncertain: data.uncertainty.excluded_candidates.map(c => c.nar…\n    138|         metrics: [data.candidates[0].fan_out, data.candidates[0].bundl…\n\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯\n\n\n Test Files  1 failed (1)\n      Tests  1 failed | 21 skipped (22)\n   Start at  22:19:43\n   Duration  356ms (transform 115ms, setup 0ms, import 190ms, tests 32ms, environment 0ms)\n\n",
+  "full_check_output": "npm notice run riwaq@1.1.0 check\nnpm notice run npm run verify:parity && npm test\nnpm notice run riwaq@1.1.0 verify:parity\nnpm notice run bash scripts/verify-parity.sh\nParity check passed.\nnpm notice run riwaq@1.1.0 test\nnpm notice run vitest run tests/node/\n\n RUN  v4.1.11 /home/meer/Projects/Isnad-builder\n\n\n Test Files  13 passed (13)\n      Tests  329 passed (329)\n   Start at  22:23:22\n   Duration  5.57s (transform 2.01s, setup 0ms, import 3.51s, tests 10.67s, environment 3ms)\n\n",
+  "document_content_checks": {
+    "docx": {
+      "Fan-out:9": true,
+      "Bundlecoverage:85.0%": true,
+      "Collectordiversity:9": true,
+      "Bypassratio:5.0%": true,
+      "Category:outcome_claim": true,
+      "NO_EVIDENCE_STRUCTURAL": true,
+      "AuditTrail": true,
+      "ANALYSIS_COMPLETE": true,
+      "Excluded:": true
+    },
+    "pdf": {
+      "Fan-out:9": true,
+      "Bundlecoverage:85.0%": true,
+      "Collectordiversity:9": true,
+      "Bypassratio:5.0%": true,
+      "Category:outcome_claim": true,
+      "NO_EVIDENCE_STRUCTURAL": true,
+      "AuditTrail": true,
+      "ANALYSIS_COMPLETE": true,
+      "Excluded:": true
+    }
+  },
+  "syntax_checks": "node --check passed for both changed production modules and the changed test file",
+  "configured_lint_typecheck_complexity_commands": "None configured; no checker installed or rules bypassed",
+  "complexity_check": {
+    "method": "Local AST branch-count comparison using the existing @babel/parser; nested functions counted separately",
+    "acceptance": "Existing named functions must not increase; new named functions must have complexity at most 5",
+    "results": [
+      {
+        "path": "scripts/canonical-report.js",
+        "baseline": {
+          "buildReportData": 15,
+          "buildFamilyReportData": 3,
+          "_formatProvenance": 4
+        },
+        "current": {
+          "buildReportData": 15,
+          "buildFamilyReportData": 3,
+          "_formatProvenance": 4
+        }
+      },
+      {
+        "path": "scripts/export-md.js",
+        "baseline": {
+          "exportMarkdown": 2,
+          "exportMarkdownFromData": 1,
+          "_renderMarkdown": 1,
+          "_renderCover": 4,
+          "_renderFamilyMetadata": 3,
+          "_renderMethodology": 2,
+          "_renderCandidates": 13,
+          "_renderEvidenceBinding": 12,
+          "_renderNormalizedChains": 10,
+          "_renderUncertainty": 18,
+          "_renderFooter": 1,
+          "_formatDate": 3,
+          "_formatType": 2,
+          "_formatOutcome": 2,
+          "_fmtPct": 3
+        },
+        "current": {
+          "exportMarkdown": 2,
+          "exportMarkdownFromData": 1,
+          "_renderMarkdown": 1,
+          "_renderCover": 4,
+          "_renderFamilyMetadata": 3,
+          "_renderMethodology": 2,
+          "_renderCandidates": 13,
+          "_renderEvidenceBinding": 12,
+          "_renderBindingWarnings": 2,
+          "_renderNormalizedChains": 10,
+          "_renderUncertainty": 18,
+          "_renderAuditTrail": 3,
+          "_renderFooter": 1,
+          "_formatDate": 3,
+          "_formatType": 2,
+          "_formatOutcome": 2,
+          "_fmtPct": 3
+        }
+      }
+    ]
+  },
+  "artifact_paths": {
+    "corrected_markdown": "jassasa/jassasah-riwaq-export-corrected.md",
+    "regression_markdown": "/tmp/riwaq-reporting-regression.md"
+  },
+  "remaining_data_limits": "The batch has no matn_segments or sourced chronology/reliability layer; these fixes preserve reporting without supplying missing research data."
+}
