@@ -108,6 +108,19 @@ Riwaq is built as a 10-layer unidirectional Abstraction Tower ($L_0 \to L_9$) de
 - **Measured $S_5$ Matn Coherence ($L_4$):** Computes normalized token Jaccard overlap between variant pericopes across collector branches (`measured_token_jaccard`), replacing unmeasured defaults when text segments are present.
 - **Scholarly ICMA Benchmark Suite (`scripts/eval-harness.mjs`):** Automated evaluation harness testing graph topology recall (CL/PCL F1), narrator disambiguation precision, and matn alignment agreement against gold-standard classical hadith studies (Harald Motzki 1991, Gregor Schoeler 1996, Pavel Pavlovitch 2016).
 
+> [!TIP]
+> For autonomous multi-agent pipelines integrating Riwaq's MCP server into scholarly workflows, see the [masar-riwaq-skills](https://github.com/munir-abbasi/masar-riwaq-skills) repository.
+
+---
+
+## Agent Skills Ecosystem (masar-riwaq-skills)
+
+Riwaq pairs with the [masar-riwaq-skills](https://github.com/munir-abbasi/masar-riwaq-skills) repository to support end-to-end autonomous research workflows alongside Riwaq downstream integration:
+
+- **`masar-takhrij`:** Application skill for multi-signal takhrīj, CRF boundary bleed repair, false-positive quarantine, and verified bundle export (`schema_version: 1`).
+- **`riwaq-analysis`:** Application skill for 10-layer ICMA stemma analysis, transmission DAG derivation, and Common Link (CL/PCL) detection.
+- **`hadith-isnad-cum-matn-research`:** Mother skill orchestrator guiding an 8-phase research lifecycle with 4 human-in-the-loop approval gates and strict scholarly evidentiary standards.
+
 ---
 
 ## Requirements & Prerequisites
